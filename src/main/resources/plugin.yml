@@ -1,0 +1,15 @@
+name: FantasyMMO
+version: 0.0.1
+main: tomasborsje.plugin.fantasymmo.FantasyMMO
+author: Tomas Borsje
+api-version: 1.19
+load: STARTUP
+commands:
+  giveitem:
+    description: Gives FantasyMMO items.
+    usage: /<command> <item_id>
+    permission: fantasymmo.admin
+  spawnentity:
+    description: Spawns a FantasyMMO entity.
+    usage: /<command> <entity_id>
+    permission: fantasymmo.admin

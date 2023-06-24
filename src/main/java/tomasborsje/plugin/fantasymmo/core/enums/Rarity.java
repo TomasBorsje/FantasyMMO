@@ -3,7 +3,7 @@ package tomasborsje.plugin.fantasymmo.core.enums;
 import org.bukkit.ChatColor;
 
 public enum Rarity {
-    TRASH(ChatColor.GRAY),
+    JUNK(ChatColor.GRAY),
     COMMON(ChatColor.WHITE),
     UNCOMMON(ChatColor.GREEN),
     RARE(ChatColor.BLUE),

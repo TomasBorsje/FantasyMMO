@@ -1,17 +1,12 @@
 package tomasborsje.plugin.fantasymmo.core;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
-
-import java.util.List;
+import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 /**
  * A generic item class that does nothing.
@@ -55,26 +50,7 @@ public class GenericItem implements ICustomItem, IHasDescription {
 
     @Override
     public ItemStack createStack() {
-        net.minecraft.world.item.ItemStack nmsStack = new net.minecraft.world.item.ItemStack(baseItem);
-
-        // Create new CompoundTag
-        CompoundTag nbt = nmsStack.getOrCreateTag();
-        // Add ITEM_ID tag
-        nbt.putString("ITEM_ID", this.getCustomId());
-        nmsStack.setTag(nbt);
-
-        // Convert back to CraftItemStack
-        ItemStack newStack = CraftItemStack.asBukkitCopy(nmsStack);
-
-        List<String> lore = TooltipHelper.getTooltip(this);
-
-        // Set lore tooltip
-        ItemMeta meta = newStack.getItemMeta();
-        meta.setLore(lore); // Set tooltip lore
-        meta.setDisplayName(rarity.getColor() + name); // Set colored name
-        newStack.setItemMeta(meta);
-
-        return newStack;
+        return ItemUtil.createDefaultStack(this);
     }
 
     @Override
@@ -84,7 +60,7 @@ public class GenericItem implements ICustomItem, IHasDescription {
 
     @Override
     public ItemType getType() {
-        return null;
+        return ItemType.MISC;
     }
 
     @Override

@@ -5,6 +5,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Enchantment that does nothing but make the item glow.
+ */
 public class GlowEnchantment extends Enchantment {
     public GlowEnchantment(NamespacedKey key) {
         super(key);

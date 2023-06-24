@@ -30,6 +30,10 @@ public class ItemUtil {
         return nbt.contains("ITEM_ID");
     }
 
+    public static int Value(int gold, int silver, int copper) {
+        return (gold * 10000) + (silver * 100) + copper;
+    }
+
     public static ItemStack createDefaultStack(ICustomItem item) {
         net.minecraft.world.item.ItemStack nmsStack = new net.minecraft.world.item.ItemStack(item.getBaseItem());
 
@@ -50,8 +54,11 @@ public class ItemUtil {
         ItemMeta meta = newStack.getItemMeta();
         meta.setLore(lore); // Set tooltip lore
         meta.setDisplayName(displayName); // Set colored name
+        meta.setUnbreakable(true); // Unbreakable, we don't want durability bars (or do we?)
+        // TODO: Durability?
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         // Add glow enchantment if marked
         if(item instanceof IGlowingItem) {

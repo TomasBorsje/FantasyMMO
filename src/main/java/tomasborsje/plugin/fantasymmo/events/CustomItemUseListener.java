@@ -6,10 +6,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
 import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
+import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 /**
  * Handles custom item use events.
@@ -20,7 +22,10 @@ public class CustomItemUseListener implements Listener {
     public void OnPlayerUseItem(PlayerInteractEvent event) {
 
         // Doesn't apply to admins or off-hand items
-        if(event.getHand() == EquipmentSlot.OFF_HAND) { return; }
+        if(event.getHand() == EquipmentSlot.OFF_HAND) {
+            event.setCancelled(true);
+            return;
+        }
         // Only handle right clicks
         if(!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) { return; }
 
@@ -34,6 +39,9 @@ public class CustomItemUseListener implements Listener {
             return;
         }
 
+        // Get our player data
+        PlayerData playerData = PlayerHandler.instance.getPlayerData(event.getPlayer());
+
         // Get the custom item id
         String itemId = nmsStack.getTag().getString("ITEM_ID");
 
@@ -41,13 +49,17 @@ public class CustomItemUseListener implements Listener {
         ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
 
         // Check if it implements IUsable
-        if(customItem instanceof IUsable usableItem) {
+        if(customItem instanceof IUsable usableItem && playerData.useCooldown == 0) {
             // Cast to IUsable and use the item
             boolean success = usableItem.rightClick(event.getPlayer(), event.getItem());
 
-            // Cancel event if the custom item did its purpose
-            // This is so players cant open doors, etc. and use items at the same time
-            event.setCancelled(success);
+            if(success) {
+                // Set cooldown
+                playerData.useCooldown = usableItem.getTickCooldown();
+                event.getPlayer().setCooldown(event.getItem().getType(), usableItem.getTickCooldown());
+                // Cancel vanilla event
+                event.setCancelled(true);
+            }
         }
         else {
             event.setCancelled(true);

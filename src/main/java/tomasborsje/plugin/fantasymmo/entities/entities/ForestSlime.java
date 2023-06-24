@@ -6,16 +6,24 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
+import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
+import tomasborsje.plugin.fantasymmo.core.util.CustomLootTable;
 
 public class ForestSlime extends CustomEntity {
+    private static final CustomLootTable lootTable =
+            new CustomLootTable(ItemRegistry.SLIMEBALL, 0.5)
+            .andEntry(ItemRegistry.MISTWEAVE_ROBE, 0.1);
     public ForestSlime(Location location) {
         super(location);
         this.name = "Forest Slime";
-        this.level = 1;
-        this.currentHealth = 20;
-        this.maxHealth = 20;
         this.id = "FOREST_SLIME";
+        this.level = 1;
+        this.currentHealth = 40;
+        this.maxHealth = 40;
+        this.attackDamage = 5;
     }
 
     @Override
@@ -26,5 +34,15 @@ public class ForestSlime extends CustomEntity {
         slime.setPos(location.getX(), location.getY(), location.getZ());
 
         return slime;
+    }
+
+    @Override
+    public ItemStack[] getDroppedLoot(Player player) {
+        return lootTable.roll(player);
+    }
+
+    @Override
+    public int getKillXp() {
+        return 33;
     }
 }

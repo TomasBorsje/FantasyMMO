@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 public interface IUsable {
     public boolean rightClick(Player player, ItemStack item);
     public boolean leftClick(Player player, ItemStack item);
+    public int getTickCooldown();
     public default String getLeftClickDescription() {
         return "";
     };

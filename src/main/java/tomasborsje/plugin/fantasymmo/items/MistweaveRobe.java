@@ -11,15 +11,17 @@ import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IDyeable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
+import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class MistweaveRobe extends AbstractArmourItem implements IHasDescription, IDyeable, IGlowingItem {
-    static StatBoost stats = new StatBoost(0, 25, 50, 13);
-    static Color color = Color.fromRGB(70, 50, 168);
+    static final StatBoost stats = new StatBoost(0, 25, 50, 13);
+    static final Color color = Color.fromRGB(70, 50, 168);
     public MistweaveRobe() {
         this.customId = "MISTWEAVE_ROBE";
         this.name = "Mistweave Robe";
-        this.value = 789105;
+        this.value = ItemUtil.Value(1, 30, 79);
         this.rarity = Rarity.RARE;
+        this.itemScore = 35;
     }
     @Override
     public Item getBaseItem() {

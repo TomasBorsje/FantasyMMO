@@ -11,10 +11,10 @@ public interface IStatsProvider {
     public default StatBoost getStats() { return StatBoost.NONE; }
     public default EquipType getEquipType() { return EquipType.HELD; }
     public default void applyStats(PlayerData playerData) {
-        StatBoost held = this.getStats();
-        playerData.strength += held.strength;
-        playerData.intelligence += held.intelligence;
-        playerData.maxHealth += held.health;
-        playerData.defense += held.defense;
+        StatBoost stats = this.getStats();
+        playerData.strength += stats.strength;
+        playerData.intelligence += stats.intelligence;
+        playerData.maxHealth += stats.health;
+        playerData.defense += stats.defense;
     }
 }

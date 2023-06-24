@@ -36,6 +36,7 @@ public class WorldLoadListener implements Listener {
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world.setGameRule(GameRule.KEEP_INVENTORY, true);
         world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+        world.setGameRule(GameRule.NATURAL_REGENERATION, false);
         world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
     }
 }

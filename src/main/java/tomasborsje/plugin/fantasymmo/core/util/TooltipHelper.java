@@ -5,10 +5,7 @@ import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
-import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IStatsProvider;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
+import tomasborsje.plugin.fantasymmo.core.interfaces.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +18,12 @@ public class TooltipHelper {
     public static final String defenseIcon = "\uD83D\uDEE1";
     public static List<String> getTooltip(ICustomItem item) {
         List<String> tooltip = new ArrayList<String>(2);
+
+        // Add item rating in yellow text if item has a rating
+        if(item instanceof IHasItemScore itemLevelProvider) {
+            // Note we put this right under the item's name
+            tooltip.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Item Score " + itemLevelProvider.getItemScore());
+        }
 
         // Add stats if item gives stats
         if(item instanceof IStatsProvider statsProvider) {

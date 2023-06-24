@@ -5,9 +5,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.util.CraftChatMessage;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
+import tomasborsje.plugin.fantasymmo.handlers.EntityDeathHandler;
 
 /**
  * This class holds the custom entity information of an NMS entity.
@@ -20,9 +23,11 @@ public abstract class CustomEntity implements IHasId {
     public String id;
     public int level;
     public String name;
+    public int attackDamage = 1;
 
     public CustomEntity(Location location) {
         this.nmsEntity = getNMSEntity(location);
+        this.nmsEntity.setCustomNameVisible(true);
     }
 
     /**
@@ -45,12 +50,39 @@ public abstract class CustomEntity implements IHasId {
      * @return The amount of damage that was dealt
      */
     public float hurt(Entity source, CustomDamageType type, int amount) {
+        // Don't take damage if we're already dead
+        if(currentHealth <= 0) {
+            return 0;
+        }
+
+        // Reduce health and die if we have 0 or less
         currentHealth -= amount;
         if(currentHealth <= 0) {
             currentHealth = 0;
+            onDeath(source, type, amount);
         }
         nmsEntity.setHealth(getScaledEntityHealth());
         return amount;
+    }
+
+    /**
+     * Called when this entity kills another entity.
+     * @param victim The entity that was killed
+     */
+    public void onKill(CustomEntity victim) {
+        // Do nothing by default
+    }
+
+    public void onDeath(Entity source, CustomDamageType type, int killingDamage) {
+        EntityDeathHandler.instance.handleDeath(this, source);
+    }
+
+    public ItemStack[] getDroppedLoot(Player player) {
+        return new ItemStack[0];
+    }
+
+    public int getKillXp() {
+        return 0;
     }
 
     /**

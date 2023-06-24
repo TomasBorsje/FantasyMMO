@@ -53,8 +53,9 @@ public class FantasyMMO extends JavaPlugin {
         PluginManager pluginManager = this.getServer().getPluginManager();
         pluginManager.registerEvents(new CustomItemUseListener(), this);
         pluginManager.registerEvents(new WorldLoadListener(), this);
-        pluginManager.registerEvents(new EntityHurtListener(), this);
+        pluginManager.registerEvents(new EntityHurtEntityListener(), this);
         pluginManager.registerEvents(new SlimeSplitListener(), this);
+        pluginManager.registerEvents(new BlockBreakListener(), this);
 
         Bukkit.getLogger().info("Registered event listeners.");
     }

@@ -10,8 +10,9 @@ import tomasborsje.plugin.fantasymmo.core.CustomProjectile;
 
 public class TrainingWandProjectile extends CustomProjectile {
 
-    public TrainingWandProjectile(Player player, Location startPos, Vector velocity) {
+    public TrainingWandProjectile(Player player, int damage, Location startPos, Vector velocity) {
         super(player, startPos, velocity);
+        this.damage = damage;
         this.lifetime = 50;
         this.maxPenetrate = 0;
     }
@@ -38,7 +39,8 @@ public class TrainingWandProjectile extends CustomProjectile {
             double xOffset = (Math.random()-0.5f)*0.5f;
             double yOffset = (Math.random()-0.5f)*0.5f;
             double zOffset = (Math.random()-0.5f)*0.5f;
-            this.world.spawnParticle(Particle.FLAME, new Location(world, pos.getX()+xOffset, pos.getY()+yOffset, pos.getZ()+zOffset), 1,
+            // Spawn either flame or smoke particle at 80-20 ratio
+            this.world.spawnParticle(Math.random() < 0.2 ? Particle.SMOKE_NORMAL : Particle.FLAME, new Location(world, pos.getX()+xOffset, pos.getY()+yOffset, pos.getZ()+zOffset), 1,
                     0, 0, 0, 0);
         }
         // Tick

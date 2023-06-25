@@ -1,9 +1,11 @@
 package tomasborsje.plugin.fantasymmo.handlers;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
+import tomasborsje.plugin.fantasymmo.core.PlayerData;
 
 public class EntityDeathHandler {
     public static EntityDeathHandler instance = new EntityDeathHandler();
@@ -14,18 +16,20 @@ public class EntityDeathHandler {
 
         // If a player killed this, send message
         if(killer instanceof Player player) {
-            player.sendMessage("You killed " + deadEntity.name + "!");
+            int xp = deadEntity.getKillXp();
+            player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You killed " + deadEntity.name + "! (+" + xp + " xp)");
 
-            // Grant player xp
-            PlayerHandler.instance.loadPlayerData(player).gainExperience(deadEntity.getKillXp());
+            // Grab player data
+            PlayerData playerData = PlayerHandler.instance.loadPlayerData(player);
+
+            // Add xp to player
+            playerData.gainExperience(xp);
 
             // Lookup custom loot tables
             ItemStack[] droppedLoot = deadEntity.getDroppedLoot(player);
-            // Add item(s) to inventory, storing left over items that don't fit
-            var leftover = player.getInventory().addItem(droppedLoot);
 
-            // TODO: Put leftover items in lost and found or something
-
+            // Add item(s) to player inventory
+            playerData.giveItems(true, deadEntity, droppedLoot);
         }
         // Else if a custom entity killed this, do something
         else if (NPCHandler.instance.hasNPC(killer.getEntityId())) {

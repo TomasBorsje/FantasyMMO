@@ -11,6 +11,7 @@ import tomasborsje.plugin.fantasymmo.FantasyMMO;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IDyeable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
+import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 
 import java.util.List;
@@ -30,6 +31,19 @@ public class ItemUtil {
         return nbt.contains("ITEM_ID");
     }
 
+    public static ICustomItem GetAsCustomItem(ItemStack stack) {
+        if(!IsCustomItem(stack)) {
+            throw new IllegalArgumentException("ItemStack is not a custom item!");
+        }
+        return ItemRegistry.ITEMS.get(GetCustomId(stack));
+    }
+
+    public static String GetCustomId(ItemStack stack) {
+        net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+        net.minecraft.nbt.CompoundTag nbt = nmsStack.getTag();
+        return nbt.getString("ITEM_ID");
+    }
+
     public static int Value(int gold, int silver, int copper) {
         return (gold * 10000) + (silver * 100) + copper;
     }
@@ -41,6 +55,12 @@ public class ItemUtil {
         CompoundTag nbt = nmsStack.getOrCreateTag();
         // Add ITEM_ID tag
         nbt.putString("ITEM_ID", item.getCustomId());
+
+        // Add UUID tag if not stackable
+        if(!item.canStack()) {
+            nbt.putUUID("UUID", java.util.UUID.randomUUID());
+        }
+
         nmsStack.setTag(nbt);
 
         // Convert back to CraftItemStack

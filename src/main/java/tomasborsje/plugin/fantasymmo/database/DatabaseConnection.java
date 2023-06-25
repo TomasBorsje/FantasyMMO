@@ -28,16 +28,12 @@ public class DatabaseConnection {
     private final ReplaceOptions INSERT_OR_REPLACE = new ReplaceOptions().upsert(true);
     private MongoClient client;
     private MongoDatabase database;
-    private MongoCollection<Document> players;
     public DatabaseConnection() {
         // Connect to the cluster
         client = MongoClients.create(settings);
 
         // Store connection to our MMO database
         database = client.getDatabase("mmo");
-
-        // Store player collection
-        players = database.getCollection("players");
 
         // Log connection
         Bukkit.getLogger().info("Connected to database.");

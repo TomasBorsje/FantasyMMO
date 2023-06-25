@@ -34,6 +34,11 @@ public class GenericItem implements ICustomItem, IHasDescription {
     }
 
     @Override
+    public boolean canStack() {
+        return true;
+    }
+
+    @Override
     public String getName() {
         return name;
     }

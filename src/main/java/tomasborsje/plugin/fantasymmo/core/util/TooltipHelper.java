@@ -100,6 +100,10 @@ public class TooltipHelper {
     }
 
     public static String getItemDisplayName(ICustomItem item) {
+        // Legendary items have a bold name
+        if(item.getRarity() == Rarity.LEGENDARY) {
+            return item.getRarity().getColor() + "" + ChatColor.BOLD + item.getName();
+        }
         return item.getRarity().getColor() + item.getName();
     }
 

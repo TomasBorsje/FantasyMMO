@@ -43,4 +43,9 @@ public abstract class AbstractArmourItem implements ICustomItem, IStatsProvider,
     public int getValue() {
         return value;
     }
+
+    @Override
+    public boolean canStack() {
+        return false;
+    }
 }

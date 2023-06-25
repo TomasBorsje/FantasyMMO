@@ -10,6 +10,7 @@ import tomasborsje.plugin.fantasymmo.commands.SpawnCustomEntityCommand;
 import tomasborsje.plugin.fantasymmo.database.DatabaseConnection;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 import tomasborsje.plugin.fantasymmo.events.*;
+import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 import java.lang.reflect.Field;
 
@@ -75,6 +76,9 @@ public class FantasyMMO extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // Save player data
+        PlayerHandler.instance.saveAllPlayerData();
+        // Log
         Bukkit.getLogger().info("Disabled FantasyMMO.");
     }
 }

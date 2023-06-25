@@ -9,6 +9,8 @@ public interface ICustomItem extends IHasId {
     @Override
     public String getCustomId();
 
+    public boolean canStack();
+
     /**
      * Get the name of this item.
      * @return The name of this item.

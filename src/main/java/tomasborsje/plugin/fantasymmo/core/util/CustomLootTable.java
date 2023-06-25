@@ -26,7 +26,7 @@ public class CustomLootTable {
      * @param chance The chance of the item dropping.
      * @return The loot table instance.
      */
-    public CustomLootTable andEntry(ICustomItem item, double chance) {
+    public CustomLootTable addEntry(ICustomItem item, double chance) {
         this.entries.add(new LootTableEntry(item, chance));
         return this;
     }

@@ -10,11 +10,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
+import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatsProvider;
 import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
+
+import javax.annotation.Nullable;
 
 public class PlayerData {
     private final static int VANILLA_MAX_HEALTH = 20;
@@ -100,6 +103,41 @@ public class PlayerData {
         showActionBarStats();
     }
 
+    /**
+     * Gives items to a player. Any leftover items are stored in lost and found.
+     * Returns true if any items are leftover and couldn't be added.
+     * @param stacks The items to give to the player
+     * @return True if any items are leftover and couldn't be added
+     */
+    public boolean giveItems(boolean displayChatNotif, @Nullable CustomEntity source, ItemStack... stacks) {
+        if(displayChatNotif) {
+            // Display a chat message showing any loot above common rarity
+            for(ItemStack stack : stacks) {
+                ICustomItem item = ItemUtil.GetAsCustomItem(stack);
+                Rarity rarity = item.getRarity();
+                if(rarity == Rarity.COMMON || rarity == Rarity.JUNK) {
+                    continue;
+                }
+
+                String message = rarity.getColor() + "" + ChatColor.BOLD + rarity.name() + " DROP! " + ChatColor.RESET
+                        + ChatColor.WHITE;
+                if(source != null) {
+                    message += source.name + " dropped "; // Add entity source if applicable
+                }
+                message += rarity.getColor() + stack.getItemMeta().getDisplayName() + "!"; // Add item name
+
+                player.sendMessage(message);
+            }
+        }
+
+        // Add stacks to the player's inventory
+        var leftover = player.getInventory().addItem(stacks);
+
+        // TODO: Add leftover stacks to lost and found or something
+        return !leftover.isEmpty();
+    }
+
+
     public void gainExperience(int xp) {
         // Don't gain experience if player is max level
         if(level >= LEVEL_CAP) {
@@ -115,7 +153,7 @@ public class PlayerData {
             experience -= level * 50;
             level++;
             player.sendMessage(ChatColor.YELLOW+""+ChatColor.BOLD+"DING!" +ChatColor.RESET + " " +
-                    ChatColor.GREEN + "You leveled up to level " + level + "!");
+                    ChatColor.YELLOW + "You've reached Level " + level + "!");
             player.playSound(player, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
             if(level == LEVEL_CAP) {
                 player.sendMessage(ChatColor.GOLD+""+ChatColor.BOLD+"CONGRATS!"+ChatColor.RESET + "" + ChatColor.GOLD + " You've reached max level'!");

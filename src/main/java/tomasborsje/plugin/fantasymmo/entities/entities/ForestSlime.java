@@ -15,7 +15,8 @@ import tomasborsje.plugin.fantasymmo.core.util.CustomLootTable;
 public class ForestSlime extends CustomEntity {
     private static final CustomLootTable lootTable =
             new CustomLootTable(ItemRegistry.SLIMEBALL, 0.5)
-            .andEntry(ItemRegistry.MISTWEAVE_ROBE, 0.1);
+                    .addEntry(ItemRegistry.MISTWEAVE_ROBE, 0.6)
+                    .addEntry(ItemRegistry.TRAINING_WAND, 0.8);
     public ForestSlime(Location location) {
         super(location);
         this.name = "Forest Slime";

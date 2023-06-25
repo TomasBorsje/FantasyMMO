@@ -75,6 +75,11 @@ public class TrainingWand extends AbstractUsableItem implements IStatsProvider, 
     }
 
     @Override
+    public boolean canStack() {
+        return false;
+    }
+
+    @Override
     public Item getBaseItem() {
         return Items.STICK;
     }

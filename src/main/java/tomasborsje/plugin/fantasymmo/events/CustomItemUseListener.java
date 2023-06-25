@@ -40,7 +40,7 @@ public class CustomItemUseListener implements Listener {
         }
 
         // Get our player data
-        PlayerData playerData = PlayerHandler.instance.getPlayerData(event.getPlayer());
+        PlayerData playerData = PlayerHandler.instance.loadPlayerData(event.getPlayer());
 
         // Get the custom item id
         String itemId = nmsStack.getTag().getString("ITEM_ID");

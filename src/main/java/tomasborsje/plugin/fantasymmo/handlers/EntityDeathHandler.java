@@ -17,7 +17,7 @@ public class EntityDeathHandler {
             player.sendMessage("You killed " + deadEntity.name + "!");
 
             // Grant player xp
-            PlayerHandler.instance.getPlayerData(player).gainExperience(deadEntity.getKillXp());
+            PlayerHandler.instance.loadPlayerData(player).gainExperience(deadEntity.getKillXp());
 
             // Lookup custom loot tables
             ItemStack[] droppedLoot = deadEntity.getDroppedLoot(player);

@@ -7,6 +7,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import tomasborsje.plugin.fantasymmo.commands.GiveItemCommand;
 import tomasborsje.plugin.fantasymmo.commands.SpawnCustomEntityCommand;
+import tomasborsje.plugin.fantasymmo.database.DatabaseConnection;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 import tomasborsje.plugin.fantasymmo.events.*;
 
@@ -16,12 +17,16 @@ public class FantasyMMO extends JavaPlugin {
 
     public static FantasyMMO Plugin = null;
     public static ServerTickRunner serverTick;
+    public static DatabaseConnection databaseConnection;
 
     @Override
     public void onEnable() {
         Bukkit.getLogger().info("Enabled FantasyMMO.");
 
         Plugin = this;
+
+        // Connect to database
+        databaseConnection = new DatabaseConnection();
 
         // Register enchantments
         registerEnchantments();
@@ -56,6 +61,7 @@ public class FantasyMMO extends JavaPlugin {
         pluginManager.registerEvents(new EntityHurtEntityListener(), this);
         pluginManager.registerEvents(new SlimeSplitListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
+        pluginManager.registerEvents(new PlayerConnectionListener(), this);
 
         Bukkit.getLogger().info("Registered event listeners.");
     }

@@ -1,5 +1,6 @@
 package tomasborsje.plugin.fantasymmo.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftArmorStand;
@@ -11,6 +12,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 public class WorldLoadListener implements Listener {
     @EventHandler
     public void OnWorldLoad(WorldLoadEvent event) {
+        Bukkit.getLogger().info("Setting defaults on world load...");
         World world = event.getWorld();
         // Set game rules
         setWorldDefaults(world);

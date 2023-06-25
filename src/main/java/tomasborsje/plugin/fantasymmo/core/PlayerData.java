@@ -38,9 +38,8 @@ public class PlayerData {
 
     public PlayerData(Player player) {
         this.player = player;
-        this.username = player.getDisplayName();
+        this.username = player.getName();
 
-        // TODO: Load persistent stats from DB
         this.level = 1;
         this.experience = 0;
 
@@ -53,6 +52,31 @@ public class PlayerData {
         // Show level to player
         player.setLevel(level);
         player.setExp((float)experience / (level * 50));
+    }
+
+    public void fillHealthAndMana() {
+        this.currentHealth = maxHealth;
+        this.currentMana = maxMana;
+        updateVanillaHealthBar();
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+        player.setLevel(level);
+        player.setExp((float)experience / (level * 50));
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+        player.setExp((float)experience / (level * 50));
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getExperience() {
+        return experience;
     }
 
     public void tick() {
@@ -196,6 +220,10 @@ public class PlayerData {
             copper = MONEY_CAP - this.copper;
         }
         this.copper += copper;
+        return copper;
+    }
+
+    public int getMoney() {
         return copper;
     }
 

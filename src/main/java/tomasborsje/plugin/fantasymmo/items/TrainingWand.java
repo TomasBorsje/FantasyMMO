@@ -36,7 +36,7 @@ public class TrainingWand extends AbstractUsableItem implements IStatsProvider, 
     @Override
     public boolean rightClick(Player player, ItemStack item) {
         // Get player data
-        PlayerData playerData = PlayerHandler.instance.getPlayerData(player);
+        PlayerData playerData = PlayerHandler.instance.loadPlayerData(player);
 
         // Try and consume mana to cast a fireball
         if(playerData.tryConsumeMana(manaCost)) {

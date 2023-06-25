@@ -42,7 +42,7 @@ public class EntityHurtEntityListener implements Listener {
             player.sendMessage("You got hurt by a "+customAttacker.name+"!");
 
             // Get player data
-            PlayerData playerData = PlayerHandler.instance.getPlayerData(player);
+            PlayerData playerData = PlayerHandler.instance.loadPlayerData(player);
 
             playerData.hurt(customAttacker, customAttacker.attackDamage, CustomDamageType.PHYSICAL);
 

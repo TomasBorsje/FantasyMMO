@@ -29,10 +29,6 @@ public class DatabaseConnection {
     private MongoClient client;
     private MongoDatabase database;
     private MongoCollection<Document> players;
-
-    public static void main(String[] args) {
-        new DatabaseConnection();
-    }
     public DatabaseConnection() {
         // Connect to the cluster
         client = MongoClients.create(settings);

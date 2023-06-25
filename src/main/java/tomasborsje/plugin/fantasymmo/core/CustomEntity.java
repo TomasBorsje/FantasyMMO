@@ -8,15 +8,20 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
 import tomasborsje.plugin.fantasymmo.handlers.EntityDeathHandler;
 
+import java.util.ArrayList;
+
 /**
  * This class holds the custom entity information of an NMS entity.
+ * TODO: Big big todo.
+ * TODO: Create some interface that can be shared
+ * TODO: between players and CustomEntities so we can easily add buffs, health, etc.
  */
-public abstract class CustomEntity implements IHasId {
-
+public abstract class CustomEntity implements IHasId, IBuffable {
     public LivingEntity nmsEntity;
     public int maxHealth = 40;
     public int currentHealth = 40;
@@ -24,10 +29,26 @@ public abstract class CustomEntity implements IHasId {
     public int level;
     public String name;
     public int attackDamage = 1;
+    public int killMoney = 0;
+    public final ArrayList<Buff> buffs = new ArrayList<>();
 
     public CustomEntity(Location location) {
         this.nmsEntity = getNMSEntity(location);
         this.nmsEntity.setCustomNameVisible(true);
+    }
+
+    @Override
+    public void addBuff(Buff buff) {
+        buffs.add(buff);
+        buff.onApply(this);
+    }
+
+    @Override
+    public void removeAllBuffs() {
+        for(Buff buff : buffs) {
+            buff.onRemove(this);
+        }
+        buffs.clear();
     }
 
     /**

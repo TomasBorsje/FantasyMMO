@@ -6,6 +6,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import tomasborsje.plugin.fantasymmo.commands.GiveItemCommand;
+import tomasborsje.plugin.fantasymmo.commands.SetPlayerLevelCommand;
 import tomasborsje.plugin.fantasymmo.commands.SpawnCustomEntityCommand;
 import tomasborsje.plugin.fantasymmo.database.DatabaseConnection;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
@@ -70,6 +71,7 @@ public class FantasyMMO extends JavaPlugin {
     private void registerCommands() {
         getCommand("giveitem").setExecutor(new GiveItemCommand());
         getCommand("spawnentity").setExecutor(new SpawnCustomEntityCommand());
+        getCommand("setlevel").setExecutor(new SetPlayerLevelCommand());
 
         Bukkit.getLogger().info("Registered commands.");
     }

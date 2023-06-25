@@ -46,6 +46,16 @@ public class PlayerHandler {
         return playerDataMap.get(player.getName());
     }
 
+    public PlayerData getPlayerData(Player player) {
+        return getPlayerData(player.getName());
+    }
+    public PlayerData getPlayerData(String username) {
+        if(!playerDataMap.containsKey(username)) {
+            throw new IllegalArgumentException("No player data found for " + username);
+        }
+        return playerDataMap.get(username);
+    }
+
     public boolean hasPlayerInfo(Player player) {
         return playerDataMap.containsKey(player.getName());
     }
@@ -56,7 +66,7 @@ public class PlayerHandler {
             FantasyMMO.databaseConnection.savePlayerData(playerData);
         }
 
-        Bukkit.getLogger().info("Timer - Saved all player data to DB.");
+        Bukkit.getLogger().info("Saved all player data to DB.");
     }
 
     public void savePlayerData(Player player) {

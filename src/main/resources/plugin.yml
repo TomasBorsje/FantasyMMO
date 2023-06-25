@@ -13,3 +13,7 @@ commands:
     description: Spawns a FantasyMMO entity.
     usage: /<command> <entity_id>
     permission: fantasymmo.admin
+  setlevel:
+    description: Sets the level of a player.
+    usage: /<command> <player> <level> <experience percentage>
+    permission: fantasymmo.admin

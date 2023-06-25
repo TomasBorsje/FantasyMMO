@@ -2,8 +2,10 @@ package tomasborsje.plugin.fantasymmo.core;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +13,7 @@ import org.bukkit.inventory.PlayerInventory;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatsProvider;
 import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
@@ -18,12 +21,13 @@ import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
-public class PlayerData {
+public class PlayerData implements IBuffable {
     private final static int VANILLA_MAX_HEALTH = 20;
     private final static int LEVEL_CAP = 100;
     private final static int MONEY_CAP = ItemUtil.Value(100000,0,0); // Gold cap of 100,000 gold
-    private final Player player;
+    public final Player player;
     private final String username;
     private int level;
     private int experience;
@@ -38,6 +42,7 @@ public class PlayerData {
     public int defense;
     private int copper;
     private int regenTimer = 0;
+    public final ArrayList<Buff> buffs = new ArrayList<>();
 
     public PlayerData(Player player) {
         this.player = player;
@@ -48,13 +53,69 @@ public class PlayerData {
 
         // Recalc stats
         recalculateStats();
+
         // Start with max health and mana
         this.currentHealth = maxHealth;
         this.currentMana = maxMana;
 
         // Show level to player
         player.setLevel(level);
-        player.setExp((float)experience / (level * 50));
+        if(level == LEVEL_CAP) {
+            player.setExp(0.999f);
+        }
+        else {
+            player.setExp((float)experience / (level * 50));
+        }
+
+        initScoreboard();
+    }
+    private void initScoreboard() {
+        ServerPlayer nmsPlayer = ((CraftPlayer)player).getHandle();
+        // TODO
+    }
+    private void updateScoreboard() {
+
+    }
+
+    public void tick() {
+        // Tick each item in inventory if possible, etc
+        recalculateStats();
+
+        // Regen health and mana
+        regenStats();
+
+        // Tick buffs
+        for (int i = 0; i < buffs.size(); i++) {
+            Buff buff = buffs.get(i);
+            // Tick buff
+            buff.tick(this);
+            // Remove buff if expired
+            if(buff.isExpired()) {
+                buff.onRemove(this);
+                buffs.remove(i);
+                i--;
+            }
+        }
+
+        // Clamp stats so they aren't higher than max
+        clampStats();
+
+        // Visually display current health using vanilla health bar
+        updateVanillaHealthBar();
+
+        // Update scoreboard
+        updateScoreboard();
+
+        // Update xp bar to show level and progress
+        // TODO: Don't do this every tick if we can avoid it...
+        updateExpBar();
+
+        if(useCooldown > 0) {
+            useCooldown--;
+        }
+
+        // Display to player
+        showActionBarStats();
     }
 
     public void fillHealthAndMana() {
@@ -80,27 +141,6 @@ public class PlayerData {
 
     public int getExperience() {
         return experience;
-    }
-
-    public void tick() {
-        // Tick each item in inventory if possible, etc
-        recalculateStats();
-
-        // Regen health and mana
-        regenStats();
-
-        // Clamp stats so they aren't higher than max
-        clampStats();
-
-        // Visually display current health using vanilla health bar
-        updateVanillaHealthBar();
-
-        if(useCooldown > 0) {
-            useCooldown--;
-        }
-
-        // Display to player
-        showActionBarStats();
     }
 
     /**
@@ -137,16 +177,15 @@ public class PlayerData {
         return !leftover.isEmpty();
     }
 
-
     public void gainExperience(int xp) {
+        player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+
         // Don't gain experience if player is max level
         if(level >= LEVEL_CAP) {
             return;
         }
 
         experience += xp;
-
-        player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 
         // If player has enough experience to level up, level up
         if(experience >= level * 50) {
@@ -156,13 +195,17 @@ public class PlayerData {
                     ChatColor.YELLOW + "You've reached Level " + level + "!");
             player.playSound(player, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
             if(level == LEVEL_CAP) {
-                player.sendMessage(ChatColor.GOLD+""+ChatColor.BOLD+"CONGRATS!"+ChatColor.RESET + "" + ChatColor.GOLD + " You've reached max level'!");
+                player.sendMessage(ChatColor.GOLD+""+ChatColor.BOLD+"CONGRATS! You've reached max level!");
                 experience = 0;
             }
         }
         // Update experience bar
+        updateExpBar();
+    }
+
+    private void updateExpBar() {
+        player.setExp(level == LEVEL_CAP ? 0.999f : (float)experience / StatCalc.getExperienceForLevel(level));
         player.setLevel(level);
-        player.setExp((float)experience / (level * 50));
     }
 
     private void regenStats() {
@@ -198,11 +241,11 @@ public class PlayerData {
         String message = "";
 
         // Health
-        message += ChatColor.RED + "❤ " + ChatColor.WHITE + currentHealth + "/" + maxHealth + " ";
+        message += ChatColor.RED + "❤ " + ChatColor.WHITE + StatCalc.formatInt(currentHealth) + "/" + StatCalc.formatInt(maxHealth) + " ";
         // Shield emoji for defense
-        message += ChatColor.GREEN + "🛡 " + ChatColor.WHITE + defense + " ";
+        message += ChatColor.GREEN + "🛡 " + ChatColor.WHITE + StatCalc.formatInt(defense) + " ";
         // Mana
-        message += ChatColor.BLUE + "⭐ " + ChatColor.WHITE + currentMana + "/" + maxMana + " ";
+        message += ChatColor.BLUE + "⭐ " + ChatColor.WHITE + StatCalc.formatInt(currentMana) + "/" + StatCalc.formatInt(maxMana) + " ";
         // Spell damage multiplier
         message += ChatColor.LIGHT_PURPLE + "⚡ " + ChatColor.WHITE + (int)(spellDamageMultiplier*100) + "%";
 
@@ -267,6 +310,7 @@ public class PlayerData {
 
     public void onDeath() {
         player.sendMessage(ChatColor.RED+""+ChatColor.BOLD+"You died!");
+        // TODO: Lose money and send player to their spawn
         currentHealth = maxHealth;
     }
 
@@ -276,8 +320,18 @@ public class PlayerData {
         applyHeldItem();
         applyEquippedArmor();
 
+        // Apply buffs and debuffs
+        applyStatBuffs();
+
         // Calculate final stats
         calculateFinalStats();
+    }
+
+    private void applyStatBuffs() {
+        // Apply any stat changes from buffs
+        for(Buff buff : buffs) {
+            buff.modifyStats(this);
+        }
     }
 
     private void calculateFinalStats() {
@@ -361,5 +415,33 @@ public class PlayerData {
         // Note we add a minimum health of 0.001 so we can't die on Vanilla's side
         double vanillaHealth = Math.min((double)currentHealth / maxHealth * VANILLA_MAX_HEALTH + 0.001, VANILLA_MAX_HEALTH);
         player.setHealth(vanillaHealth);
+    }
+
+    @Override
+    public void addBuff(Buff newBuff) {
+        // If the buff isn't stackable, check the buff doesn't already exist first
+        if(!newBuff.isStackable) {
+            for(Buff existingBuff : buffs) {
+                if(existingBuff.getClass().equals(newBuff.getClass())) {
+                    // Buff already exists, don't add it again
+                    // Instead refresh duration if the new buff has a longer duration than what is left
+                    if(existingBuff.ticksLeft < newBuff.duration) {
+                        existingBuff.ticksLeft = newBuff.duration;
+                    }
+                    return;
+                }
+            }
+        }
+        // Otherwise, apply buff
+        newBuff.onApply(this);
+        this.buffs.add(newBuff);
+    }
+
+    @Override
+    public void removeAllBuffs() {
+        for(Buff buff : buffs) {
+            buff.onRemove(this);
+        }
+        this.buffs.clear();
     }
 }

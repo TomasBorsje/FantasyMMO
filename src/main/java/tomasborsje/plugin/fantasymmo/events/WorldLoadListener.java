@@ -3,7 +3,6 @@ package tomasborsje.plugin.fantasymmo.events;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,13 +15,10 @@ public class WorldLoadListener implements Listener {
         World world = event.getWorld();
         // Set game rules
         setWorldDefaults(world);
-        // Destroy all armor stands
+        // Remove ALL entities, or else we get leftover entities from the last time the server was running
+        // that are no longer stored in the custom NPC handler
         for(Entity entity : world.getEntities()) {
-            if(entity instanceof CraftArmorStand armorStand) {
-                if(armorStand.isCustomNameVisible()) {
-                    entity.remove();
-                }
-            }
+            entity.remove();
         }
     }
     void setWorldDefaults(World world) {

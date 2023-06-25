@@ -75,6 +75,7 @@ public class DatabaseConnection {
         }
 
         // Give player max health and mana on login
+        playerData.recalculateStats();
         playerData.fillHealthAndMana();
 
         Bukkit.getLogger().info("Loaded player data for " + username + " from database.");

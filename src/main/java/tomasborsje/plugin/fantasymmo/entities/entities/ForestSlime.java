@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.CustomLootTable;
+import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class ForestSlime extends CustomEntity {
     private static final CustomLootTable lootTable =
@@ -25,6 +26,7 @@ public class ForestSlime extends CustomEntity {
         this.currentHealth = 40;
         this.maxHealth = 40;
         this.attackDamage = 5;
+        this.killMoney = ItemUtil.Value(0, 0, 13);
     }
 
     @Override

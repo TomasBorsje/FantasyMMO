@@ -16,6 +16,12 @@ public class TooltipHelper {
     public static final String intelligenceIcon = "☆";
     public static final String healthIcon = "❤";
     public static final String defenseIcon = "\uD83D\uDEE1";
+
+    public static final String intelligenceLabel = ChatColor.BLUE + intelligenceIcon + " Intelligence";
+    public static final String strengthLabel = ChatColor.RED + strengthIcon + " Strength";
+    public static final String healthLabel = ChatColor.GREEN + healthIcon + " Health";
+    public static final String defenseLabel = ChatColor.WHITE + defenseIcon + " Defense";
+
     public static List<String> getTooltip(ICustomItem item) {
         List<String> tooltip = new ArrayList<String>(2);
 
@@ -46,18 +52,34 @@ public class TooltipHelper {
 
         // Add use description tooltips if they exist
         if(item instanceof IUsable usable) {
-            String leftClick = usable.getLeftClickDescription();
-            String rightClick = usable.getRightClickDescription();
+            String[] leftClick = usable.getLeftClickDescription().split("\n");
+            String[] rightClick = usable.getRightClickDescription().split("\n");
 
-            if(!leftClick.isEmpty() || !rightClick.isEmpty()) {
+            if(leftClick.length > 0 || rightClick.length > 0) {
                 tooltip.add(empty);
             }
 
-            if(!leftClick.isEmpty()) {
-                tooltip.add(ChatColor.YELLOW + empty + ChatColor.BOLD + "LEFT CLICK: " + ChatColor.RESET + empty + ChatColor.WHITE + leftClick);
+            // If the left click description exists, add it
+            if(!leftClick[0].equals(usable.getLeftClickDescription())) {
+                for(int i = 0; i < leftClick.length; i++) {
+                    if(i == 0) {
+                        tooltip.add(ChatColor.YELLOW + empty + ChatColor.BOLD + "LEFT CLICK: " + ChatColor.RESET + empty + ChatColor.WHITE + leftClick[i]);
+                    }
+                    else {
+                        tooltip.add(ChatColor.WHITE + leftClick[i]);
+                    }
+                }
             }
-            if(!rightClick.isEmpty()) {
-                tooltip.add(ChatColor.YELLOW + empty + ChatColor.BOLD + "RIGHT CLICK: " + ChatColor.RESET + empty + ChatColor.WHITE + rightClick);
+
+            if(!rightClick[0].equals(usable.getRightClickDescription())) {
+                for(int i = 0; i < rightClick.length; i++) {
+                    if(i == 0) {
+                        tooltip.add(ChatColor.YELLOW + empty + ChatColor.BOLD + "RIGHT CLICK: " + ChatColor.RESET + empty + ChatColor.WHITE + rightClick[i]);
+                    }
+                    else {
+                        tooltip.add(ChatColor.WHITE + rightClick[i]);
+                    }
+                }
             }
         }
 

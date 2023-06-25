@@ -16,6 +16,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasItemScore;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatsProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
 import tomasborsje.plugin.fantasymmo.entities.projectiles.TrainingWandProjectile;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
@@ -71,7 +72,9 @@ public class TrainingWand extends AbstractUsableItem implements IStatsProvider, 
 
     @Override
     public String getRightClickDescription() {
-        return "Cast a fireball dealing " + ChatColor.RED + damage + ChatColor.WHITE + " fire damage.";
+        return "Cast a fireball dealing " + ChatColor.RED + damage + ChatColor.WHITE + " fire damage.\n"
+                + "Hit an enemy to gain " + ChatColor.BLUE + "Intelligence Boost I" + ChatColor.WHITE + ",\n"
+                + "increasing "+ TooltipHelper.intelligenceLabel+ChatColor.WHITE+" by 10 for 5 seconds.";
     }
 
     @Override

@@ -6,7 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
 
+/**
+ * This class handles the deaths of custom entities.
+ * It will give the player who killed the entity xp, loot, and money.
+ */
 public class EntityDeathHandler {
     public static EntityDeathHandler instance = new EntityDeathHandler();
     private EntityDeathHandler() { }
@@ -17,7 +22,10 @@ public class EntityDeathHandler {
         // If a player killed this, send message
         if(killer instanceof Player player) {
             int xp = deadEntity.getKillXp();
-            player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You killed " + deadEntity.name + "! (+" + xp + " xp)");
+            int moneyDropped = deadEntity.killMoney;
+
+            player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You killed " + deadEntity.name +
+                    "! (+" + xp + " xp, +" + TooltipHelper.GetValueString(moneyDropped) + ChatColor.GRAY+")");
 
             // Grab player data
             PlayerData playerData = PlayerHandler.instance.loadPlayerData(player);
@@ -30,6 +38,9 @@ public class EntityDeathHandler {
 
             // Add item(s) to player inventory
             playerData.giveItems(true, deadEntity, droppedLoot);
+
+            // Give player money
+            playerData.addMoney(moneyDropped);
         }
         // Else if a custom entity killed this, do something
         else if (NPCHandler.instance.hasNPC(killer.getEntityId())) {

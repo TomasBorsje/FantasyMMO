@@ -22,6 +22,10 @@ public class PlayerHandler {
         // Tick players and calculate their stats
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
+            // If this is a custom NPC, ignore.
+            if(player.getName().contains("§")) {
+                continue;
+            }
             // Make sure each player has data stored
             PlayerData playerData = loadPlayerData(player);
             // Tick valid players

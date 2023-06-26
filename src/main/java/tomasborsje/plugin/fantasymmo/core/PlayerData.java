@@ -19,6 +19,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IStatsProvider;
 import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
+import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class PlayerData implements IBuffable {
     public int defense;
     private int copper;
     private int regenTimer = 0;
+    private @Nullable CustomGUIInstance currentGUI = null;
     public final ArrayList<Buff> buffs = new ArrayList<>();
 
     public PlayerData(Player player) {
@@ -68,6 +70,23 @@ public class PlayerData implements IBuffable {
         }
 
         initScoreboard();
+    }
+
+    public void openGUI(CustomGUIInstance gui) {
+        if(currentGUI != null) {
+            closeGUI();
+        }
+        currentGUI = gui;
+        currentGUI.show();
+    }
+
+    public CustomGUIInstance getCurrentGUI() {
+        return currentGUI;
+    }
+
+    public void closeGUI() {
+        this.currentGUI = null;
+        // TODO Figure out how to force close GUI (packet?)
     }
     private void initScoreboard() {
         ServerPlayer nmsPlayer = ((CraftPlayer)player).getHandle();
@@ -443,5 +462,9 @@ public class PlayerData implements IBuffable {
             buff.onRemove(this);
         }
         this.buffs.clear();
+    }
+
+    public boolean hasGUIOpen() {
+        return this.currentGUI != null;
     }
 }

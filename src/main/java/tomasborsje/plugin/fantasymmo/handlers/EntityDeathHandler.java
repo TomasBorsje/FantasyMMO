@@ -25,7 +25,7 @@ public class EntityDeathHandler {
             int moneyDropped = deadEntity.killMoney;
 
             player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You killed " + deadEntity.name +
-                    "! (+" + xp + " xp, +" + TooltipHelper.GetValueString(moneyDropped) + ChatColor.GRAY+")");
+                    "! (+" + xp + " xp, " + TooltipHelper.GetValueStringItalic(moneyDropped) + ChatColor.GRAY+")");
 
             // Grab player data
             PlayerData playerData = PlayerHandler.instance.loadPlayerData(player);
@@ -43,9 +43,9 @@ public class EntityDeathHandler {
             playerData.addMoney(moneyDropped);
         }
         // Else if a custom entity killed this, do something
-        else if (NPCHandler.instance.hasNPC(killer.getEntityId())) {
+        else if (EntityHandler.instance.hasEntity(killer.getEntityId())) {
             // Call onKill function
-            NPCHandler.instance.getNPC(killer.getEntityId()).onKill(deadEntity);
+            EntityHandler.instance.getEntity(killer.getEntityId()).onKill(deadEntity);
         }
     }
 }

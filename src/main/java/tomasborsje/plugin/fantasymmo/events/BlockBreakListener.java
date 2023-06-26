@@ -18,7 +18,6 @@ public class BlockBreakListener implements Listener {
         Vector blockPos = event.getBlock().getLocation().toVector();
         Player player = event.getPlayer();
 
-        // Check if there is a profession node at this position
-        // TODO:
+        // TODO: Check if there is a profession node at this position
     }
 }

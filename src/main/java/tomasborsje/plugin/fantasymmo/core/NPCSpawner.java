@@ -2,7 +2,7 @@ package tomasborsje.plugin.fantasymmo.core;
 
 import net.minecraft.world.entity.LivingEntity;
 import org.bukkit.Location;
-import tomasborsje.plugin.fantasymmo.handlers.NPCHandler;
+import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 
 /**
  * Represents a spawn point for entities.
@@ -30,7 +30,7 @@ public class NPCSpawner {
             }
             // Respawn entity if spawn delay has been reached
             if(spawnTimer == SPAWN_DELAY) {
-                nmsEntity = NPCHandler.instance.spawnNPC(spawnLoc, npcId).nmsEntity;
+                nmsEntity = EntityHandler.instance.spawnEntity(spawnLoc, npcId).nmsEntity;
                 spawnTimer = 0;
             }
         }

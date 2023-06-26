@@ -121,6 +121,10 @@ public class TooltipHelper {
                 + customEntity.currentHealth + "/" + customEntity.maxHealth;
     }
 
+    public static String getNPCDisplayPlate(String name) {
+        return ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + name;
+    }
+
     public static String getItemDisplayName(ICustomItem item) {
         // Legendary items have a bold name
         if(item.getRarity() == Rarity.LEGENDARY) {
@@ -137,5 +141,14 @@ public class TooltipHelper {
         return (gold > 0 ? (ChatColor.YELLOW + "◎"+ gold+" ") : "")
                 + (silver > 0 ? ChatColor.GRAY+ "◎" + silver+" " : "")
                 + ChatColor.GOLD + "◎" + copper;
+    }
+    public static String GetValueStringItalic(int value) {
+        int gold = Math.floorDiv(value, 10000);
+        int silver = Math.floorDiv(value - gold * 10000, 100);
+        int copper = value - gold * 10000 - silver * 100;
+
+        return (gold > 0 ? (ChatColor.YELLOW + "" + ChatColor.ITALIC + "◎" + gold+" ") : "")
+                + (silver > 0 ? ChatColor.GRAY + "" + ChatColor.ITALIC + "◎" + silver+" " : "")
+                + ChatColor.GOLD + "" + ChatColor.ITALIC + "◎" + copper;
     }
 }

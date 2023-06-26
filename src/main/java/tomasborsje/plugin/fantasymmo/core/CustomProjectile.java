@@ -6,9 +6,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
-import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
-import tomasborsje.plugin.fantasymmo.handlers.NPCHandler;
+import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -64,11 +63,11 @@ public abstract class CustomProjectile {
 
         // Get all custom entities we haven't hit yet
         var targets = (hitEntities.stream().filter((entity) ->
-                NPCHandler.instance.hasNPC(entity.getEntityId()) && !hitIds.contains(entity.getEntityId())));
+                EntityHandler.instance.hasEntity(entity.getEntityId()) && !hitIds.contains(entity.getEntityId())));
 
         targets.forEach((target) -> {
             // Pass custom entity to projectile
-            CustomEntity customTarget = NPCHandler.instance.getNPC(target.getEntityId());
+            CustomEntity customTarget = EntityHandler.instance.getEntity(target.getEntityId());
 
             if(showDamage) {
                 ((LivingEntity)target).damage(0);

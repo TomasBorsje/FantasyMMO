@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tomasborsje.plugin.fantasymmo.commands.GiveItemCommand;
 import tomasborsje.plugin.fantasymmo.commands.SetPlayerLevelCommand;
 import tomasborsje.plugin.fantasymmo.commands.SpawnCustomEntityCommand;
+import tomasborsje.plugin.fantasymmo.commands.SpawnNPCCommand;
 import tomasborsje.plugin.fantasymmo.database.DatabaseConnection;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 import tomasborsje.plugin.fantasymmo.events.*;
@@ -64,6 +65,9 @@ public class FantasyMMO extends JavaPlugin {
         pluginManager.registerEvents(new SlimeSplitListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
         pluginManager.registerEvents(new PlayerConnectionListener(), this);
+        pluginManager.registerEvents(new PlayerInteractPlayerListener(), this);
+        pluginManager.registerEvents(new InventoryItemClickListener(), this);
+        pluginManager.registerEvents(new InventoryCloseListener(), this);
 
         Bukkit.getLogger().info("Registered event listeners.");
     }
@@ -72,6 +76,7 @@ public class FantasyMMO extends JavaPlugin {
         getCommand("giveitem").setExecutor(new GiveItemCommand());
         getCommand("spawnentity").setExecutor(new SpawnCustomEntityCommand());
         getCommand("setlevel").setExecutor(new SetPlayerLevelCommand());
+        getCommand("spawnnpc").setExecutor(new SpawnNPCCommand());
 
         Bukkit.getLogger().info("Registered commands.");
     }

@@ -7,7 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
-import tomasborsje.plugin.fantasymmo.handlers.NPCHandler;
+import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 import javax.annotation.Nullable;
@@ -20,7 +20,7 @@ public class EntityHurtEntityListener implements Listener {
         event.setDamage(0);
 
         // Check if the hurt entity is in our NPCHandler
-        @Nullable CustomEntity customEntity = NPCHandler.instance.getNPC(event.getEntity().getEntityId());
+        @Nullable CustomEntity customEntity = EntityHandler.instance.getEntity(event.getEntity().getEntityId());
 
         // If the entity is custom, and the damager is a player, send a message
         if(customEntity != null && event.getDamager() instanceof Player player) {
@@ -46,7 +46,7 @@ public class EntityHurtEntityListener implements Listener {
         }
 
         // Check if the damaging entity is in our NPCHandler
-        CustomEntity customAttacker = NPCHandler.instance.getNPC(event.getDamager().getEntityId());
+        CustomEntity customAttacker = EntityHandler.instance.getEntity(event.getDamager().getEntityId());
 
         // If the entity is custom, and the entity getting hurt is a player, send a message and deal them damage
         if(customAttacker != null && event.getEntity() instanceof Player player) {

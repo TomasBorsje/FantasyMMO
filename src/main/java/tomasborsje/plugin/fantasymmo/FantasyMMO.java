@@ -5,10 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import tomasborsje.plugin.fantasymmo.commands.GiveItemCommand;
-import tomasborsje.plugin.fantasymmo.commands.SetPlayerLevelCommand;
-import tomasborsje.plugin.fantasymmo.commands.SpawnCustomEntityCommand;
-import tomasborsje.plugin.fantasymmo.commands.SpawnNPCCommand;
+import tomasborsje.plugin.fantasymmo.commands.*;
 import tomasborsje.plugin.fantasymmo.database.DatabaseConnection;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 import tomasborsje.plugin.fantasymmo.events.*;
@@ -77,6 +74,8 @@ public class FantasyMMO extends JavaPlugin {
         getCommand("spawnentity").setExecutor(new SpawnCustomEntityCommand());
         getCommand("setlevel").setExecutor(new SetPlayerLevelCommand());
         getCommand("spawnnpc").setExecutor(new SpawnNPCCommand());
+        getCommand("craft").setExecutor(new OpenCraftingMenuCommand());
+        getCommand("learnrecipe").setExecutor(new LearnRecipeCommand());
 
         Bukkit.getLogger().info("Registered commands.");
     }

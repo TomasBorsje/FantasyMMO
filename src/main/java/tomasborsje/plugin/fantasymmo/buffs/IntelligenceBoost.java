@@ -7,22 +7,25 @@ import tomasborsje.plugin.fantasymmo.core.Buff;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.util.EffectUtil;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
 
-public class BasicIntelligenceBoost extends Buff {
-    public BasicIntelligenceBoost() {
+public class IntelligenceBoost extends Buff {
+    private final int intelligenceBoost;
+    public IntelligenceBoost(int intelligenceBoost) {
         super("Intelligence Boost", 100);
+        this.intelligenceBoost = intelligenceBoost;
     }
 
     @Override
     public void onApply(IBuffable buffHolder) {
         if(buffHolder instanceof PlayerData playerData) {
-            playerData.player.sendMessage(ChatColor.BLUE+"You feel smarter! (+100 Intelligence)");
+            playerData.player.sendMessage(ChatColor.BLUE+"You feel smarter! (+"+intelligenceBoost+" "+TooltipHelper.intelligenceLabel+")");
         }
     }
 
     @Override
     public void modifyStats(PlayerData playerStats) {
-        playerStats.intelligence += 100;
+        playerStats.intelligence += this.intelligenceBoost;
     }
 
     @Override

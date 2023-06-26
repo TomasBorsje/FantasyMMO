@@ -15,6 +15,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.mongodb.client.model.Filters.eq;
 
 public class DatabaseConnection {
@@ -70,6 +73,10 @@ public class DatabaseConnection {
 
             int money = playerDoc.getInteger("money");
             playerData.addMoney(money);
+
+            List<String> knownRecipes = playerDoc.getList("knownRecipes", String.class);
+            // Need to be careful of null values returned if player knows no recipes
+            playerData.knownRecipeIds = knownRecipes == null ? new ArrayList<>() : knownRecipes;
         } catch (Exception e) {
             Bukkit.getLogger().info("Error loading player data for " + username + ": " + e.getMessage());
         }
@@ -102,6 +109,7 @@ public class DatabaseConnection {
         playerDoc.append("level", playerData.getLevel());
         playerDoc.append("experience", playerData.getExperience());
         playerDoc.append("money", playerData.getMoney());
+        playerDoc.append("knownRecipes", playerData.knownRecipeIds);
 
         Bson query = eq("username", username);
 

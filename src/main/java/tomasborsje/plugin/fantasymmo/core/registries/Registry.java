@@ -2,6 +2,7 @@ package tomasborsje.plugin.fantasymmo.core.registries;
 
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -25,6 +26,10 @@ public class Registry<T extends IHasId> {
         }
         registry.put(id, entry);
         return registry.get(id);
+    }
+
+    public Collection<T> getAllValues() {
+        return registry.values();
     }
 
     /**

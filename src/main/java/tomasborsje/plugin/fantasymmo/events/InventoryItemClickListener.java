@@ -1,5 +1,6 @@
 package tomasborsje.plugin.fantasymmo.events;
 
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,7 +15,7 @@ import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
  */
 public class InventoryItemClickListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
-    public void InventoryItemClickListener(InventoryClickEvent event) {
+    public void OnInventoryItemClick(InventoryClickEvent event) {
         // Don't handle null invs
         if(event.getClickedInventory() == null || event.getClickedInventory().getHolder() == null) {
             return;
@@ -26,8 +27,8 @@ public class InventoryItemClickListener implements Listener {
             event.setCancelled(true);
             // Get player data
             PlayerData playerData = PlayerHandler.instance.getPlayerData(event.getWhoClicked().getName());
-            // If the player is in a GUI, pass in the slot click
-            if(playerData.hasGUIOpen()) {
+            // If the player is in a GUI, pass in the slot click if they have an empty hand
+            if(playerData.hasGUIOpen() && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
                 playerData.getCurrentGUI().onClickSlot(event.getSlot());
             }
         }

@@ -23,6 +23,7 @@ import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerData implements IBuffable {
     private final static int VANILLA_MAX_HEALTH = 20;
@@ -43,6 +44,7 @@ public class PlayerData implements IBuffable {
     public int defense;
     private int copper;
     private int regenTimer = 0;
+    public List<String> knownRecipeIds = new ArrayList<>();
     private @Nullable CustomGUIInstance currentGUI = null;
     public final ArrayList<Buff> buffs = new ArrayList<>();
 

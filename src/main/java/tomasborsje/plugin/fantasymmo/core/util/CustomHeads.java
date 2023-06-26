@@ -10,8 +10,9 @@ import java.util.UUID;
 
 public class CustomHeads {
     static UUID fireHead = UUID.randomUUID();
+    static UUID craftingArrowHead = UUID.randomUUID();
     static String fireTexture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkwMWYwNzg1ZDIyMmU5YWZhNTA1NmNkZGFmZGI3YTMzYTRhYTljODllOTEyZWU3MWYzM2I2ZDc2MzEwNTRkIn19fQ==";
-
+    static String craftingArrowTexture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTNmYzUyMjY0ZDhhZDllNjU0ZjQxNWJlZjAxYTIzOTQ3ZWRiY2NjY2Y2NDkzNzMyODliZWE0ZDE0OTU0MWY3MCJ9fX0=";
     public static ItemStack GetFireHead() {
         ItemStack head = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
 
@@ -28,6 +29,30 @@ public class CustomHeads {
 
         }
         catch (IllegalArgumentException|NoSuchFieldException|SecurityException | IllegalAccessException error)
+        {
+            error.printStackTrace();
+        }
+
+        head.setItemMeta(meta);
+        return head;
+    }
+
+    public static ItemStack GetCraftingArrowHead() {
+        ItemStack head = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
+
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        // set skull owner
+        GameProfile profile = new GameProfile(craftingArrowHead, null);
+        profile.getProperties().put("textures", new Property("textures", craftingArrowTexture));
+
+        try
+        {
+            Field profileField = meta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(meta, profile);
+
+        }
+        catch (IllegalArgumentException|NoSuchFieldException|SecurityException|IllegalAccessException error)
         {
             error.printStackTrace();
         }

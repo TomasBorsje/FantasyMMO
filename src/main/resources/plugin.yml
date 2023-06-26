@@ -21,3 +21,10 @@ commands:
     description: Spawns a FantasyMMO NPC.
     usage: /<command> <npc_id>
     permission: fantasymmo.admin
+  craft:
+    description: Opens the crafting menu.
+    usage: /<command>
+  learnrecipe:
+    description: Learns a recipe.
+    usage: /<command> <recipe_id>
+    permission: fantasymmo.admin

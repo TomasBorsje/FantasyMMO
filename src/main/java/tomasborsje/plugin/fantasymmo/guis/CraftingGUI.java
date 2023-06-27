@@ -110,9 +110,10 @@ public class CraftingGUI extends CustomGUIInstance {
         }
 
         // Craft and set in cursor slot
-        playerInv.addItem(recipe.craft(playerInv));
+        ItemStack output = recipe.craft(playerInv);
+        playerInv.addItem(output);
 
-        playerData.player.sendMessage("Crafted recipe " + recipe.getCustomId());
+        playerData.player.sendMessage(ChatColor.LIGHT_PURPLE + "You crafted " + output.getItemMeta().getDisplayName() + ChatColor.LIGHT_PURPLE + "!");
 
         // Re-Render, so recipe outputs update
         // TODO: Fix 'craftable' lores not updating properly

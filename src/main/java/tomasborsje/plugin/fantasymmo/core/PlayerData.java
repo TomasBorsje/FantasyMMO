@@ -20,6 +20,8 @@ import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
+import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
+import tomasborsje.plugin.fantasymmo.quests.KillForestSlimesQuest;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class PlayerData implements IBuffable {
     private final static int VANILLA_MAX_HEALTH = 20;
     private final static int LEVEL_CAP = 100;
     private final static int MONEY_CAP = ItemUtil.Value(100000,0,0); // Gold cap of 100,000 gold
+    private static final int COMBAT_COOLDOWN = 20 * 10; // 10 seconds
     public final Player player;
     private final String username;
     private int level;
@@ -44,9 +47,11 @@ public class PlayerData implements IBuffable {
     public int defense;
     private int copper;
     private int regenTimer = 0;
-    public List<String> knownRecipeIds = new ArrayList<>();
-    private @Nullable CustomGUIInstance currentGUI = null;
-    public final ArrayList<Buff> buffs = new ArrayList<>();
+    private int timeSinceLastCombat;
+    public List<String> knownRecipeIds = new ArrayList<>(); // Stores IDs of recipes the player knows
+    private @Nullable CustomGUIInstance currentGUI = null; // The currently open GUI
+    public final ArrayList<Buff> buffs = new ArrayList<>(); // List of buffs currently active on the player
+    public final ArrayList<AbstractQuestInstance> activeQuests = new ArrayList<>(); // List of active quests
 
     public PlayerData(Player player) {
         this.player = player;
@@ -55,12 +60,17 @@ public class PlayerData implements IBuffable {
         this.level = 1;
         this.experience = 0;
 
+        // TODO: Save and load quests
+        activeQuests.add(new KillForestSlimesQuest());
+
         // Recalc stats
         recalculateStats();
 
         // Start with max health and mana
         this.currentHealth = maxHealth;
         this.currentMana = maxMana;
+
+        this.timeSinceLastCombat = COMBAT_COOLDOWN;
 
         // Show level to player
         player.setLevel(level);
@@ -102,6 +112,9 @@ public class PlayerData implements IBuffable {
         // Tick each item in inventory if possible, etc
         recalculateStats();
 
+        // Tick combat
+        timeSinceLastCombat++;
+
         // Regen health and mana
         regenStats();
 
@@ -122,15 +135,16 @@ public class PlayerData implements IBuffable {
         clampStats();
 
         // Visually display current health using vanilla health bar
-        updateVanillaHealthBar();
+        updateVanillaHealthBarDisplay();
 
-        // Update scoreboard
+        // Update scoreboard to show money, quests, etc.
         updateScoreboard();
 
         // Update xp bar to show level and progress
-        // TODO: Don't do this every tick if we can avoid it...
+        // TODO: Don't do this every tick if we can avoid it, only on xp gain
         updateExpBar();
 
+        // Reduce player use cooldown if on cooldown
         if(useCooldown > 0) {
             useCooldown--;
         }
@@ -139,10 +153,21 @@ public class PlayerData implements IBuffable {
         showActionBarStats();
     }
 
+    /**
+     * Progresses each quest the player has using the killed entity, if applicable.
+     * @param killed The entity that was killed
+     */
+    public void registerKillForQuests(CustomEntity killed) {
+        // Attempt progress on each quest with this killed enemy
+        for (AbstractQuestInstance quest : activeQuests) {
+            quest.registerKill(killed);
+        }
+    }
+
     public void fillHealthAndMana() {
         this.currentHealth = maxHealth;
         this.currentMana = maxMana;
-        updateVanillaHealthBar();
+        updateVanillaHealthBarDisplay();
     }
 
     public void setLevel(int level) {
@@ -231,18 +256,26 @@ public class PlayerData implements IBuffable {
 
     private void regenStats() {
         // Every second, regen
+        // Much less regen if the player is in combat
         if(++regenTimer > 20) {
             regenTimer = 0;
 
+            // 3% hp regen out of combat, 5% mana regen out of combat
+            float healthRegenAmount = 0.03f;
+            float manaRegenAmount = 0.05f;
+
+            // Health regen reduced to 20% in combat
+            // Mana regen reduced to 50% in combat
+            if(isInCombat()) {
+                healthRegenAmount *= 0.2f;
+                manaRegenAmount *= 0.5f;
+            }
+
             // Regen 3% of health per second
-            heal((int) Math.max(maxHealth*0.03f, 1));
+            heal((int) Math.max(maxHealth*healthRegenAmount, 1));
 
             // Regen 5% of mana per second
-            currentMana += Math.max(maxMana*0.05f, 1);
-            // Clamp mana
-            if(currentMana > maxMana) {
-                currentMana = maxMana;
-            }
+            currentMana += Math.max(maxMana*manaRegenAmount, 1);
         }
     }
 
@@ -258,8 +291,9 @@ public class PlayerData implements IBuffable {
     }
 
     private void showActionBarStats() {
-        // Build action bar message
-        String message = "";
+        boolean inCombat = isInCombat();
+        // Build action bar message, with a red exclamation mark if in combat
+        String message = inCombat ? ChatColor.RED + "!! " : "";
 
         // Health
         message += ChatColor.RED + "❤ " + ChatColor.WHITE + StatCalc.formatInt(currentHealth) + "/" + StatCalc.formatInt(maxHealth) + " ";
@@ -269,6 +303,11 @@ public class PlayerData implements IBuffable {
         message += ChatColor.BLUE + "⭐ " + ChatColor.WHITE + StatCalc.formatInt(currentMana) + "/" + StatCalc.formatInt(maxMana) + " ";
         // Spell damage multiplier
         message += ChatColor.LIGHT_PURPLE + "⚡ " + ChatColor.WHITE + (int)(spellDamageMultiplier*100) + "%";
+
+        if(inCombat) {
+            // Show combat status
+            message += ChatColor.RED + " !!";
+        }
 
         // Send to player
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
@@ -283,11 +322,37 @@ public class PlayerData implements IBuffable {
         }
     }
 
-    public void hurt(CustomEntity attacker, int amount, CustomDamageType type) {
+    /**
+     * Damages a player, reducing their health.
+     * Marks them as being in combat if the attacker is not null.
+     * @param attacker The entity that attacked the player
+     * @param amount The amount of damage to deal to the player
+     * @param type The type of damage to deal to the player
+     */
+    public void hurt(@Nullable CustomEntity attacker, int amount, CustomDamageType type) {
+        if(attacker != null) {
+            markCombat();
+        }
         this.currentHealth -= amount;
         if(this.currentHealth <= 0) {
             onDeath();
         }
+    }
+
+    /**
+     * Returns if a player is in combat.
+     * This is if they attacked or were hurt in the last 10 seconds.
+     * @return True if the player is in combat
+     */
+    public boolean isInCombat() {
+        return timeSinceLastCombat < COMBAT_COOLDOWN;
+    }
+
+    /**
+     * Marks a player as in combat.
+     */
+    public void markCombat() {
+        timeSinceLastCombat = 0;
     }
 
     public boolean tryConsumeMana(int amount) {
@@ -432,7 +497,7 @@ public class PlayerData implements IBuffable {
     public boolean isValid() {
         return player.isValid();
     }
-    private void updateVanillaHealthBar() {
+    private void updateVanillaHealthBarDisplay() {
         // Note we add a minimum health of 0.001 so we can't die on Vanilla's side
         double vanillaHealth = Math.min((double)currentHealth / maxHealth * VANILLA_MAX_HEALTH + 0.001, VANILLA_MAX_HEALTH);
         player.setHealth(vanillaHealth);

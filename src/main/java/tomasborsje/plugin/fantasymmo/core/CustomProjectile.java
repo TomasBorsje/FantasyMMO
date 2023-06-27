@@ -5,9 +5,11 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
+import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -82,7 +84,12 @@ public abstract class CustomProjectile {
         });
 
     }
-    protected abstract void hitEntity(CustomEntity hitEntity);
+    protected void hitEntity(CustomEntity hitEntity) {
+        if(owner instanceof Player p) {
+            // Mark combat as we hit an enemy
+            PlayerHandler.instance.getPlayerData(p).markCombat();
+        }
+    };
     public void kill() {
         alive = false;
     }

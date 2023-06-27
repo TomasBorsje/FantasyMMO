@@ -41,6 +41,9 @@ public class EntityDeathHandler {
 
             // Give player money
             playerData.addMoney(moneyDropped);
+
+            // Register kill for quest progress
+            playerData.registerKillForQuests(deadEntity);
         }
         // Else if a custom entity killed this, do something
         else if (EntityHandler.instance.hasEntity(killer.getEntityId())) {

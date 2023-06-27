@@ -42,6 +42,9 @@ public class EntityHurtEntityListener implements Listener {
             // Damage the custom entity
             customEntity.hurt(player, CustomDamageType.PHYSICAL, 1);
 
+            // Set player in combat
+            playerData.markCombat();
+
             return;
         }
 

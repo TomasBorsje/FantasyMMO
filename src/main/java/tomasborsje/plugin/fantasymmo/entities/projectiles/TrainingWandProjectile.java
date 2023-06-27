@@ -21,6 +21,7 @@ public class TrainingWandProjectile extends CustomProjectile {
 
     @Override
     protected void hitEntity(CustomEntity hitEntity) {
+        super.hitEntity(hitEntity);
         // Damage the entity
         hitEntity.hurt(owner, damageType, this.damage);
         PlayerHandler.instance.getPlayerData((Player) owner).addBuff(new IntelligenceBoost(10));

@@ -6,6 +6,7 @@ import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.*;
+import tomasborsje.plugin.fantasymmo.recipes.RecipeScrollItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,10 @@ public class TooltipHelper {
 
         // Add lore tooltip if it exists
         if(item instanceof IHasDescription description) {
-            tooltip.add(empty);
+            // Add empty line for non-recipe scroll items
+            if(!(item instanceof RecipeScrollItem)) {
+                tooltip.add(empty);
+            }
 
             String[] lines = description.getDescription().split("\n");
             for(String line : lines) {
@@ -104,7 +108,7 @@ public class TooltipHelper {
         Rarity rarity = item.getRarity();
         ItemType type = item.getType();
         tooltip.add("");
-        tooltip.add(rarity.getColor()+empty+ChatColor.BOLD+"- "+rarity.name()+ (type == ItemType.MISC ? "" : " " + type.name()) + " -");
+        tooltip.add(rarity.getColor()+empty+ChatColor.BOLD+"- "+rarity.name()+ (type == ItemType.MISC ? "" : " " + type.name().replace("_", " ")) + " -");
 
         return tooltip;
     }

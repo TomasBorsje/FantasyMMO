@@ -78,8 +78,8 @@ public class PlayerData implements IBuffable {
         if(currentGUI != null) {
             closeGUI();
         }
+        gui.show();
         currentGUI = gui;
-        currentGUI.show();
     }
 
     public CustomGUIInstance getCurrentGUI() {

@@ -16,6 +16,7 @@ public abstract class CustomGUIInstance {
     protected int size;
     protected String name;
     protected final PlayerData playerData;
+    protected Inventory display;
     protected final ItemStack emptyPane = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 
     public CustomGUIInstance(PlayerData playerData, int size, String inventoryName) {
@@ -30,7 +31,7 @@ public abstract class CustomGUIInstance {
     }
 
     protected Inventory renderInventory() {
-        Inventory display = Bukkit.createInventory(DenyInvHolder.INSTANCE, size, name);
+        display = Bukkit.createInventory(DenyInvHolder.INSTANCE, size, name);
         fillWithBlank(display);
         return display;
     }

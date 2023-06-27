@@ -17,7 +17,7 @@ public class InventoryItemClickListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void OnInventoryItemClick(InventoryClickEvent event) {
         // Don't handle null invs
-        if(event.getClickedInventory() == null || event.getClickedInventory().getHolder() == null) {
+        if(event.getSlot() == -999 || event.getClickedInventory() == null || event.getClickedInventory().getHolder() == null) {
             return;
         }
 

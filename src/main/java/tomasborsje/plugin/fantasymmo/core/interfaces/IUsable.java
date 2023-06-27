@@ -4,9 +4,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public interface IUsable {
-    public boolean rightClick(Player player, ItemStack item);
-    public boolean leftClick(Player player, ItemStack item);
-    public int getTickCooldown();
+    public default boolean rightClick(Player player, ItemStack item) {return false;};
+    public default boolean leftClick(Player player, ItemStack item) {return false;};
+    public default int getTickCooldown() {return 20;}
+    public default boolean isConsumable() { return false; }
     public default String getLeftClickDescription() {
         return "";
     };

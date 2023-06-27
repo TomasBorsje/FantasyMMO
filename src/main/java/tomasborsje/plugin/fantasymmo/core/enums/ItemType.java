@@ -9,5 +9,6 @@ public enum ItemType {
     CHESTPLATE,
     LEGGINGS,
     BOOTS,
-    MISC
+    MISC,
+    RECIPE_SCROLL
 }

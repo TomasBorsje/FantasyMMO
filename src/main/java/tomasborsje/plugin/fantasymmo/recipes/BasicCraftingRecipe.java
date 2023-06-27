@@ -19,6 +19,11 @@ public class BasicCraftingRecipe implements ICustomRecipe {
     }
 
     @Override
+    public ICustomItem getOutputItem() {
+        return output;
+    }
+
+    @Override
     public ItemStack getResult() {
         return output.createStack();
     }
@@ -67,6 +72,11 @@ public class BasicCraftingRecipe implements ICustomRecipe {
             }
         }
         return getResult();
+    }
+
+    @Override
+    public ProfessionType getProfessionType() {
+        return type;
     }
 
     @Override

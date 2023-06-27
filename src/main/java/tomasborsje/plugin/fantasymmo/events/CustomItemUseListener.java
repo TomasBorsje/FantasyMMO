@@ -54,9 +54,15 @@ public class CustomItemUseListener implements Listener {
             boolean success = usableItem.rightClick(event.getPlayer(), event.getItem());
 
             if(success) {
-                // Set cooldown
-                playerData.useCooldown = usableItem.getTickCooldown();
-                event.getPlayer().setCooldown(event.getItem().getType(), usableItem.getTickCooldown());
+                // Set cooldown if item has a cooldown
+                if(usableItem.getTickCooldown() > 0) {
+                    playerData.useCooldown = usableItem.getTickCooldown();
+                    event.getPlayer().setCooldown(event.getItem().getType(), usableItem.getTickCooldown());
+                }
+                // Reduce itemstack count if consumable
+                if(usableItem.isConsumable()) {
+                    event.getItem().setAmount(event.getItem().getAmount() - 1);
+                }
                 // Cancel vanilla event
                 event.setCancelled(true);
             }

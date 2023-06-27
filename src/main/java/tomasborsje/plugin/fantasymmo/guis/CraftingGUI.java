@@ -32,7 +32,7 @@ public class CraftingGUI extends CustomGUIInstance {
 
     @Override
     protected Inventory renderInventory() {
-        Inventory inv = super.renderInventory();
+        super.renderInventory();
 
         for(int i = 0; i < knownRecipes.size() && i < 8; i++) {
             // Slot index offset for each row
@@ -58,16 +58,16 @@ public class CraftingGUI extends CustomGUIInstance {
 
             // Set slots to display ingredients and result
             if(i < 4) {
-                inv.setItem(LEFT_INGREDIENT_COLUMN + rowOffset, ingredientDisplay);
-                inv.setItem(LEFT_ARROW_COLUMN + rowOffset, arrow);
-                inv.setItem(LEFT_RESULT_COLUMN + rowOffset, result);
+                display.setItem(LEFT_INGREDIENT_COLUMN + rowOffset, ingredientDisplay);
+                display.setItem(LEFT_ARROW_COLUMN + rowOffset, arrow);
+                display.setItem(LEFT_RESULT_COLUMN + rowOffset, result);
             } else {
-                inv.setItem(RIGHT_INGREDIENT_COLUMN + rowOffset, ingredientDisplay);
-                inv.setItem(RIGHT_ARROW_COLUMN + rowOffset, arrow);
-                inv.setItem(RIGHT_RESULT_COLUMN + rowOffset, result);
+                display.setItem(RIGHT_INGREDIENT_COLUMN + rowOffset, ingredientDisplay);
+                display.setItem(RIGHT_ARROW_COLUMN + rowOffset, arrow);
+                display.setItem(RIGHT_RESULT_COLUMN + rowOffset, result);
             }
         }
-        return inv;
+        return display;
     }
 
     private ItemStack getIngredientsDisplay(IIngredient[] ingredients) {
@@ -104,17 +104,18 @@ public class CraftingGUI extends CustomGUIInstance {
         ICustomRecipe recipe = knownRecipes.get(recipeIndex-1);
         Inventory playerInv = playerData.player.getInventory();
 
-        // If can't craft, don't
+        // If we can't craft, don't
         if(!recipe.canCraft(playerInv)) {
             return;
         }
 
-        playerData.player.sendMessage("Crafting recipe " + recipe.getCustomId());
         // Craft and set in cursor slot
-        playerData.player.setItemOnCursor(recipe.craft(playerInv));
+        playerInv.addItem(recipe.craft(playerInv));
+
+        playerData.player.sendMessage("Crafted recipe " + recipe.getCustomId());
 
         // Re-Render, so recipe outputs update
         // TODO: Fix 'craftable' lores not updating properly
-        this.renderInventory();
+        playerData.openGUI(this);
     }
 }

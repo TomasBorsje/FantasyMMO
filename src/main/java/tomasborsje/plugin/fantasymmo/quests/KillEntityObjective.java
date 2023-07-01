@@ -1,6 +1,9 @@
 package tomasborsje.plugin.fantasymmo.quests;
 
+import org.bukkit.ChatColor;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
+
+import java.util.List;
 
 /**
  * A quest objective for killing mobs.
@@ -11,7 +14,6 @@ public class KillEntityObjective implements IQuestObjective {
     private final String plural;
     public final int amount;
     public int progress = 0;
-
     public KillEntityObjective(String mobId, String mobName, int amount) {
         this.mobId = mobId;
         this.mobName = mobName;
@@ -41,6 +43,19 @@ public class KillEntityObjective implements IQuestObjective {
 
     @Override
     public String getStatusString() {
-        return "Kill "+amount+" "+mobName+plural+ " ("+progress+"/"+amount+")";
+        return ChatColor.GRAY+"Kill "+amount+" "+mobName+plural+ ChatColor.DARK_GRAY+" ("+progress+"/"+amount+")";
+    }
+
+    @Override
+    public void load(List<Integer> loadArgs) {
+        if(loadArgs.size() != 1) {
+            throw new IllegalArgumentException("KillEntityObjective requires 1 argument");
+        }
+        this.progress = loadArgs.get(0);
+    }
+
+    @Override
+    public List<Integer> getLoadData() {
+        return List.of(progress);
     }
 }

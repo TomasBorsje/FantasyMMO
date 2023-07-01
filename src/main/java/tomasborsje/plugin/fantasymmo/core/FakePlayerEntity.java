@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import tomasborsje.plugin.fantasymmo.core.enums.FakePlayerSkin;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +39,7 @@ public class FakePlayerEntity extends ServerPlayer {
     public FakePlayerEntity(Location loc, String name, FakePlayerSkin skin, ItemStack heldItem) {
         // Pass world and game profile to vanilla constructor
         super(((CraftWorld)loc.getWorld()).getHandle().getServer(),((CraftWorld)loc.getWorld()).getHandle(),
-                new GameProfile(UUID.randomUUID(), TooltipHelper.getNPCDisplayPlate(name)));
+                new GameProfile(UUID.randomUUID(), TooltipUtil.getNPCDisplayPlate(name)));
         // Set player position
         this.setPos(loc.getX(), loc.getY(), loc.getZ());
         // Add our skin

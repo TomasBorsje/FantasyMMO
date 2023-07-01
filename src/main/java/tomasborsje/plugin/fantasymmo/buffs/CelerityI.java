@@ -1,43 +1,41 @@
 package tomasborsje.plugin.fantasymmo.buffs;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Particle;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.Buff;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.util.EffectUtil;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
 
-public class IntelligenceBoost extends Buff {
-    private final int intelligenceBoost;
-    public IntelligenceBoost(int intelligenceBoost) {
-        super("Intelligence Boost", 100);
-        this.intelligenceBoost = intelligenceBoost;
+public class CelerityI extends Buff {
+    private final float manaRegenBuff = 0.25f;
+    public CelerityI() {
+        super("Celerity I", 200);
     }
 
     @Override
     public void onApply(IBuffable buffHolder) {
         if(buffHolder instanceof PlayerData playerData) {
-            playerData.player.sendMessage(ChatColor.BLUE+"You feel smarter! (+"+intelligenceBoost+" "+TooltipHelper.intelligenceLabel+")");
+            playerData.player.sendMessage(ChatColor.BLUE+"Your mana surges! (+"+(int)(manaRegenBuff*100)+"% Mana Regeneration)");
         }
     }
 
     @Override
     public void modifyStats(PlayerData playerStats) {
-        playerStats.intelligence += this.intelligenceBoost;
+        playerStats.manaRegenMultiplier += manaRegenBuff;
+        playerStats.moveSpeedMultiplier += 1f;
     }
 
     @Override
     public void tick(IBuffable buffHolder) {
         super.tick(buffHolder);
 
-        // Spawn a particle every 2 ticks
+        // Spawn a blue particle every 2 ticks
         if(this.ticksLeft % 2 == 0) {
             Player player = ((PlayerData) buffHolder).player;
             // Spawn blue particles around player
-            player.getWorld().spawnParticle(Particle.REDSTONE, EffectUtil.getPointAroundPlayer(player.getLocation()),
-                    0, 1, 0, 0, 0, new Particle.DustOptions(org.bukkit.Color.BLUE, 0.7f));
+            EffectUtil.spawnColoredParticleAroundPlayer(player, Color.BLUE);
         }
     }
 }

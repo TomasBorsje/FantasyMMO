@@ -12,22 +12,25 @@ public abstract class Buff {
     public final String name;
     public int duration;
     public int ticksLeft;
+    public int maxStacks;
     public final boolean negative;
-    public final boolean isStackable;
+    public int currentStacks;
+    public boolean refreshOnApply = true;
 
     /**
      * Creates a new buff with the given name, duration, debuff status, and stackability.
      * @param name The name of the buff
      * @param duration The duration of the buff in ticks
      * @param isDebuff Whether or not the buff is a debuff
-     * @param isStackable Whether or not the buff is stackable
+     * @param maxStacks The maximum number of stacks the buff can have
      */
-    public Buff(String name, int duration, boolean isDebuff, boolean isStackable) {
+    public Buff(String name, int duration, boolean isDebuff, int maxStacks) {
         this.name = name;
         this.duration = duration;
         this.ticksLeft = duration;
         this.negative = isDebuff;
-        this.isStackable = isStackable;
+        this.maxStacks = maxStacks;
+        this.currentStacks = 1;
     }
 
     /**
@@ -37,7 +40,7 @@ public abstract class Buff {
      * @param isDebuff Whether or not the buff is a debuff
      */
     public Buff(String name, int duration, boolean isDebuff) {
-        this(name, duration, isDebuff, false);
+        this(name, duration, isDebuff, 1);
     }
 
     /**
@@ -46,7 +49,7 @@ public abstract class Buff {
      * @param duration The duration of the buff in ticks
      */
     public Buff(String name, int duration) {
-        this(name, duration, false, false);
+        this(name, duration, false, 1);
     }
 
     public void modifyStats(PlayerData playerStats) { }
@@ -58,6 +61,7 @@ public abstract class Buff {
         return ticksLeft <= 0;
     }
     public void onApply(IBuffable buffHolder) { }
+    public void onRefresh(IBuffable buffHolder) { }
     public void onRemove(IBuffable buffHolder) { }
     public void onHitEnemy(IBuffable buffHolder, IBuffable victim) { }
     public void onHitAlly(PlayerData buffHolder, PlayerData ally) { }

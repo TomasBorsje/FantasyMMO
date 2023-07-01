@@ -6,18 +6,20 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.registries.QuestRegistry;
+import tomasborsje.plugin.fantasymmo.core.util.GUIUtil;
 
 import java.util.List;
 
-public class InfoGUI extends CustomGUIInstance {
-    private final static int MIDDLE_SLOT = 22;
-    public InfoGUI(PlayerData playerData) {
-        super(playerData, 54, "Info");
+public class MainMenuGUI extends CustomGUIInstance {
+    private final static int MIDDLE_SLOT = GUIUtil.GetSlot(5, 3);
+    public MainMenuGUI(PlayerData playerData) {
+        super(playerData, 54, "Menu");
     }
 
     @Override
     protected Inventory renderInventory() {
-        Inventory i = super.renderInventory();
+        Inventory inv = super.renderInventory();
 
         // Put INFO/dialog in the center
         ItemStack infoBook = new ItemStack(Material.BOOK);
@@ -27,15 +29,16 @@ public class InfoGUI extends CustomGUIInstance {
         meta.setDisplayName(ChatColor.GOLD+""+ChatColor.BOLD+"FantasyMMO");
         infoBook.setItemMeta(meta);
         // Show the info book in the middle
-        i.setItem(MIDDLE_SLOT, infoBook);
+        inv.setItem(MIDDLE_SLOT, infoBook);
 
-        return i;
+        return inv;
     }
 
     @Override
     public void onClickSlot(int slot) {
         if(slot == MIDDLE_SLOT) {
             playerData.player.sendMessage(ChatColor.GOLD+"Welcome to FantasyMMO!");
+            playerData.addQuest(QuestRegistry.KILL_FOREST_SLIMES.apply(playerData));
         }
     }
 }

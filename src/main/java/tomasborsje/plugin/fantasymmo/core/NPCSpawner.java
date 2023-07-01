@@ -10,7 +10,7 @@ import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
  * for a certain amount of time.
  */
 public class NPCSpawner {
-    private final static int SPAWN_DELAY = 20 * 5; // 5 seconds
+    private final static int SPAWN_DELAY = 20 * 1; // 5 seconds
     private final static int DEFAULT_LEASH_RANGE = 30*30; // 30 block range, squared so we don't need to sqrt
     private int spawnTimer = 0;
     private final String npcId;

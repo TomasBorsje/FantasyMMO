@@ -14,6 +14,8 @@ import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.registries.QuestRegistry;
+import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,20 +83,29 @@ public class DatabaseConnection {
             Bukkit.getLogger().info("Error loading player data for " + username + ": " + e.getMessage());
         }
 
+        // Load each quest instance the player has
+        List<Document> questInstances = (List<Document>) playerDoc.get("quests");
+
+        if(questInstances != null) {
+            for(Document questInstance : questInstances) {
+                AbstractQuestInstance quest = QuestRegistry.QUESTS.get(questInstance.getString("questId")).apply(playerData);
+                // Get quest stage
+                int stage = questInstance.getInteger("stage");
+                // Get objective progress array
+                List<Integer> objectiveProgress = questInstance.getList("objectiveProgress", Integer.class);
+                // Load quest instance
+                quest.load(stage, objectiveProgress);
+                // Add to player's quests again
+                playerData.addQuest(quest);
+            }
+        }
+
         // Give player max health and mana on login
         playerData.recalculateStats();
         playerData.fillHealthAndMana();
 
         Bukkit.getLogger().info("Loaded player data for " + username + " from database.");
         return playerData;
-    }
-
-    public boolean playerExistsInDB(String username) {
-        return getPlayers().countDocuments(eq("username", username)) > 0;
-    }
-
-    private MongoCollection<Document> getPlayers() {
-        return database.getCollection("players");
     }
 
     public void savePlayerData(PlayerData playerData) {
@@ -111,11 +122,33 @@ public class DatabaseConnection {
         playerDoc.append("money", playerData.getMoney());
         playerDoc.append("knownRecipes", playerData.knownRecipeIds);
 
+        // Transform quests into documents
+        List<Document> questInstances = new ArrayList<>();
+        for(AbstractQuestInstance quest : playerData.activeQuests) {
+            Document questInstance = new Document();
+            questInstance.append("questId", quest.getCustomId());
+            questInstance.append("stage", quest.getStage());
+            questInstance.append("objectiveProgress", quest.getLoadData());
+            questInstances.add(questInstance);
+        }
+
+        // Store quest array to player document
+        playerDoc.append("quests", questInstances);
+
+
         Bson query = eq("username", username);
 
         // Save document to database
         getPlayers().replaceOne(query, playerDoc, INSERT_OR_REPLACE);
 
         Bukkit.getLogger().info("Saved player data for " + username + " to database.");
+    }
+
+    public boolean playerExistsInDB(String username) {
+        return getPlayers().countDocuments(eq("username", username)) > 0;
+    }
+
+    private MongoCollection<Document> getPlayers() {
+        return database.getCollection("players");
     }
 }

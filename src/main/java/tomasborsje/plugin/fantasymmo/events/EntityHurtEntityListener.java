@@ -4,9 +4,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
+import tomasborsje.plugin.fantasymmo.core.AbstractMeleeWeapon;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
+import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
+import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
@@ -27,6 +31,8 @@ public class EntityHurtEntityListener implements Listener {
 
             // Get player data
             PlayerData playerData = PlayerHandler.instance.getPlayerData(player);
+            // Grab itemstack
+            ItemStack stack = player.getInventory().getItemInMainHand();
 
             // Apply player on attack effects for each buff
             playerData.buffs.forEach((buff) -> {
@@ -38,9 +44,22 @@ public class EntityHurtEntityListener implements Listener {
                 buff.onReceiveDamage(customEntity, playerData, 1);
             });
 
-            // TODO: Calculate damage if using a custom item with an attack damage
+            // If the player attacked with a custom item, apply its effects
+            int damage = 1; // Default unarmed damage is 1
+
+            if(ItemUtil.IsCustomItem(stack)) {
+                ICustomItem customItem = ItemUtil.GetAsCustomItem(stack);
+                // Check if it is a melee weapon
+                if(customItem instanceof AbstractMeleeWeapon meleeWeapon) {
+                    // Call the onAttack method
+                    meleeWeapon.onAttack(playerData, player.getItemInUse(), customEntity);
+                    damage = meleeWeapon.getDamage();
+                }
+            }
+            // TODO: Armor calculations, etc
+
             // Damage the custom entity
-            customEntity.hurt(player, CustomDamageType.PHYSICAL, 1);
+            customEntity.hurt(player, CustomDamageType.PHYSICAL, damage);
 
             // Set player in combat
             playerData.markCombat();

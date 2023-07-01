@@ -3,7 +3,7 @@ package tomasborsje.plugin.fantasymmo.recipes;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 
 /**
  * Represents a crafting ingredient that checks if an item has a specific ITEM_ID NBT tag.
@@ -44,12 +44,12 @@ public class GenericIngredient implements IIngredient {
 
     public GenericIngredient(ICustomItem item, int requiredCount) {
         this.itemID = item.getCustomId();
-        this.ingredientName = TooltipHelper.getItemDisplayName(item);
+        this.ingredientName = TooltipUtil.getItemDisplayName(item);
         this.requiredCount = requiredCount;
     }
     public GenericIngredient(ICustomItem item) {
         this.itemID = item.getCustomId();
-        this.ingredientName = TooltipHelper.getItemDisplayName(item);
+        this.ingredientName = TooltipUtil.getItemDisplayName(item);
         this.requiredCount = 1;
     }
 

@@ -79,5 +79,14 @@ public class PlayerHandler {
         // Save player data
         FantasyMMO.databaseConnection.savePlayerData(playerData);
     }
+
+    public void unloadPlayer(Player player) {
+        // Save player data
+        savePlayerData(player);
+        // Remove player data
+        playerDataMap.remove(player.getName());
+        // Log
+        Bukkit.getLogger().info("Unloaded player " +player.getName());
+    }
 }
 

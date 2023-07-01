@@ -28,7 +28,7 @@ public class ItemUtil {
         if (nbt == null) {
             return false;
         }
-        return nbt.contains("ITEM_ID");
+        return nbt.contains("ITEM_ID") && ItemRegistry.ITEMS.exists(nbt.getString("ITEM_ID"));
     }
 
     public static ICustomItem GetAsCustomItem(ItemStack stack) {
@@ -67,8 +67,8 @@ public class ItemUtil {
         ItemStack newStack = CraftItemStack.asBukkitCopy(nmsStack);
 
         // Get lore and display name
-        List<String> lore = TooltipHelper.getTooltip(item);
-        String displayName = TooltipHelper.getItemDisplayName(item);
+        List<String> lore = TooltipUtil.getTooltip(item);
+        String displayName = TooltipUtil.getItemDisplayName(item);
 
         // Set lore tooltip
         ItemMeta meta = newStack.getItemMeta();

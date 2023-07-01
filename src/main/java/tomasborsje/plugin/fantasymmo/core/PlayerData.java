@@ -21,7 +21,6 @@ import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
-import tomasborsje.plugin.fantasymmo.quests.KillForestSlimesQuest;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -31,7 +30,8 @@ public class PlayerData implements IBuffable {
     private final static int VANILLA_MAX_HEALTH = 20;
     private final static int LEVEL_CAP = 100;
     private final static int MONEY_CAP = ItemUtil.Value(100000,0,0); // Gold cap of 100,000 gold
-    private static final int COMBAT_COOLDOWN = 20 * 10; // 10 seconds
+    private final static int COMBAT_COOLDOWN = 20 * 10; // 10 seconds
+    private final static float DEFAULT_MOVESPEED = 0.2f;
     public final Player player;
     private final String username;
     private int level;
@@ -43,6 +43,8 @@ public class PlayerData implements IBuffable {
     public int currentHealth;
     public int currentMana;
     public float spellDamageMultiplier;
+    public float manaRegenMultiplier;
+    public float moveSpeedMultiplier;
     public int useCooldown;
     public int defense;
     private int copper;
@@ -59,9 +61,6 @@ public class PlayerData implements IBuffable {
 
         this.level = 1;
         this.experience = 0;
-
-        // TODO: Save and load quests
-        activeQuests.add(new KillForestSlimesQuest());
 
         // Recalc stats
         recalculateStats();
@@ -84,6 +83,17 @@ public class PlayerData implements IBuffable {
         initScoreboard();
     }
 
+    /**
+     * Adds a quest to the player's active quest list.
+     * @param quest The quest to add
+     */
+    public void addQuest(AbstractQuestInstance quest) {
+        // If we don't have this quest yet, add it
+        if(activeQuests.stream().noneMatch(q -> q.getCustomId().equals(quest.getCustomId()))) {
+            activeQuests.add(quest);
+        }
+    }
+
     public void openGUI(CustomGUIInstance gui) {
         if(currentGUI != null) {
             closeGUI();
@@ -92,6 +102,7 @@ public class PlayerData implements IBuffable {
         currentGUI = gui;
     }
 
+    @Nullable
     public CustomGUIInstance getCurrentGUI() {
         return currentGUI;
     }
@@ -147,6 +158,13 @@ public class PlayerData implements IBuffable {
         // Reduce player use cooldown if on cooldown
         if(useCooldown > 0) {
             useCooldown--;
+        }
+
+        // Print quests
+        if(player.isSneaking()) {
+            for (AbstractQuestInstance quest : activeQuests) {
+                player.sendMessage(quest.getName() + ": " + quest.getQuestStatus());
+            }
         }
 
         // Display to player
@@ -262,7 +280,7 @@ public class PlayerData implements IBuffable {
 
             // 3% hp regen out of combat, 5% mana regen out of combat
             float healthRegenAmount = 0.03f;
-            float manaRegenAmount = 0.05f;
+            float manaRegenAmount = 0.05f * manaRegenMultiplier;
 
             // Health regen reduced to 20% in combat
             // Mana regen reduced to 50% in combat
@@ -423,6 +441,8 @@ public class PlayerData implements IBuffable {
     private void calculateFinalStats() {
         this.maxMana += (int) (intelligence*2.5f);
         this.spellDamageMultiplier += intelligence * 0.75/100; // 75% more spell damage for every 100 intelligence
+        // Set move speed
+        player.setWalkSpeed(0.2f * moveSpeedMultiplier);
     }
 
     private void applyEquippedArmor() {
@@ -481,15 +501,8 @@ public class PlayerData implements IBuffable {
         this.maxMana = StatCalc.getBaseManaAtLevel(level);
         this.defense = 0;
         this.spellDamageMultiplier = 1;
-    }
-    @Override
-    public String toString() {
-        return "PlayerData{" +
-                "strength=" + strength +
-                ", intelligence=" + intelligence +
-                ", maxHealth=" + maxHealth +
-                ", defense=" + defense +
-                '}';
+        this.manaRegenMultiplier = 1;
+        this.moveSpeedMultiplier = 1;
     }
     public String getUsername() {
         return username;
@@ -505,20 +518,23 @@ public class PlayerData implements IBuffable {
 
     @Override
     public void addBuff(Buff newBuff) {
-        // If the buff isn't stackable, check the buff doesn't already exist first
-        if(!newBuff.isStackable) {
-            for(Buff existingBuff : buffs) {
-                if(existingBuff.getClass().equals(newBuff.getClass())) {
-                    // Buff already exists, don't add it again
-                    // Instead refresh duration if the new buff has a longer duration than what is left
-                    if(existingBuff.ticksLeft < newBuff.duration) {
-                        existingBuff.ticksLeft = newBuff.duration;
-                    }
-                    return;
+        // Check if an instance of the buff already exists first (to stack, refresh, etc.)
+        for(Buff existingBuff : buffs) {
+            if(existingBuff.getClass().equals(newBuff.getClass())) {
+                // Buff already exists, don't add it again
+                // Instead refresh duration if the new buff has a longer duration than what is left
+                if(existingBuff.currentStacks+1<=existingBuff.maxStacks) {
+                    existingBuff.currentStacks++;
                 }
+                if(existingBuff.refreshOnApply && existingBuff.ticksLeft < newBuff.duration) {
+                    existingBuff.ticksLeft = newBuff.duration;
+                    existingBuff.onRefresh(this);
+                }
+                return;
             }
         }
-        // Otherwise, apply buff
+
+        // No existing instance, just add a new one
         newBuff.onApply(this);
         this.buffs.add(newBuff);
     }
@@ -533,5 +549,15 @@ public class PlayerData implements IBuffable {
 
     public boolean hasGUIOpen() {
         return this.currentGUI != null;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerData{" +
+                "strength=" + strength +
+                ", intelligence=" + intelligence +
+                ", maxHealth=" + maxHealth +
+                ", defense=" + defense +
+                '}';
     }
 }

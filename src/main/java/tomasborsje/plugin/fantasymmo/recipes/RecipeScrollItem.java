@@ -5,18 +5,19 @@ import net.minecraft.world.item.Items;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tomasborsje.plugin.fantasymmo.core.AbstractUsableItem;
+import tomasborsje.plugin.fantasymmo.core.AbstractCustomItem;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ProfessionType;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 import java.util.List;
 
-public class RecipeScrollItem extends AbstractUsableItem implements IHasDescription {
+public class RecipeScrollItem extends AbstractCustomItem implements IUsable, IHasDescription {
     private final ProfessionType type;
     private final ICustomRecipe recipe;
     public RecipeScrollItem(ICustomRecipe recipe, Rarity rarity) {
@@ -58,6 +59,10 @@ public class RecipeScrollItem extends AbstractUsableItem implements IHasDescript
         return ItemType.RECIPE_SCROLL;
     }
 
+    public ProfessionType getProfessionType() {
+        return type;
+    }
+
     @Override
     public boolean isConsumable() {
         return true;
@@ -67,8 +72,8 @@ public class RecipeScrollItem extends AbstractUsableItem implements IHasDescript
     public String getDescription() {
         String description = ChatColor.LIGHT_PURPLE+""+ChatColor.BOLD+"Unlocks the following recipe:\n";
         // Add item display name and lore
-        description += TooltipHelper.getItemDisplayName(recipe.getOutputItem())+"\n";
-        List<String> itemLore = TooltipHelper.getTooltip(recipe.getOutputItem());
+        description += TooltipUtil.getItemDisplayName(recipe.getOutputItem())+"\n";
+        List<String> itemLore = TooltipUtil.getTooltip(recipe.getOutputItem());
         for (String line : itemLore) {
             description += line+"\n";
         }

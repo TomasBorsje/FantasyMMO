@@ -6,26 +6,22 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tomasborsje.plugin.fantasymmo.core.AbstractUsableItem;
+import tomasborsje.plugin.fantasymmo.core.AbstractCustomItem;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IHasItemScore;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IStatsProvider;
+import tomasborsje.plugin.fantasymmo.core.interfaces.*;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
 import tomasborsje.plugin.fantasymmo.entities.projectiles.TrainingWandProjectile;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 
-public class TrainingWand extends AbstractUsableItem implements IStatsProvider, IHasDescription, IHasItemScore, IGlowingItem {
+public class NoviceWand extends AbstractCustomItem implements IUsable, IStatsProvider, IHasDescription, IHasItemScore, IGlowingItem {
     private final StatBoost heldStats = new StatBoost(0, 13, 0, 0);
-    public TrainingWand() {
-        this.customId = "TRAINING_WAND";
-        this.name = "Training Wand";
+    public NoviceWand() {
+        this.customId = "NOVICE_WAND";
+        this.name = "Novice Wand";
         this.rarity = Rarity.UNCOMMON;
         this.value = ItemUtil.Value(0, 0, 50);
         this.baseItem = Items.STICK;
@@ -72,9 +68,7 @@ public class TrainingWand extends AbstractUsableItem implements IStatsProvider, 
 
     @Override
     public String getRightClickDescription() {
-        return "Cast a fireball dealing " + ChatColor.RED + damage + ChatColor.WHITE + " fire damage.\n"
-                + "Hit an enemy to gain " + ChatColor.BLUE + "Intelligence Boost I" + ChatColor.WHITE + ",\n"
-                + "increasing "+ TooltipHelper.intelligenceLabel+ChatColor.WHITE+" by 10 for 5 seconds.";
+        return "Cast a fireball dealing " + ChatColor.RED + damage + ChatColor.WHITE + " magic damage.";
     }
 
     @Override

@@ -47,7 +47,7 @@ public class RecipeRegistry {
     }
 
     public static final ICustomRecipe SLIME_TO_TRAINING_WAND =
-            RECIPES.register(new BasicCraftingRecipe("SLIME_TO_TRAINING_WAND", ProfessionType.BLACKSMITHING, ItemRegistry.TRAINING_WAND, Ingredients.SLIMEBALL.withCount(5)));
+            RECIPES.register(new BasicCraftingRecipe("SLIME_TO_TRAINING_WAND", ProfessionType.BLACKSMITHING, ItemRegistry.NOVICE_WAND, Ingredients.SLIMEBALL.withCount(5)));
 
     public static final ICustomRecipe TRAINING_WAND_TO_ROBE =
             RECIPES.register(new BasicCraftingRecipe("TRAINING_WAND_TO_ROBE", ProfessionType.BLACKSMITHING, ItemRegistry.MISTWEAVE_ROBE, Ingredients.TRAINING_WAND));

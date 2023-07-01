@@ -5,10 +5,8 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import tomasborsje.plugin.fantasymmo.buffs.IntelligenceBoost;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.CustomProjectile;
-import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 public class TrainingWandProjectile extends CustomProjectile {
 
@@ -24,7 +22,6 @@ public class TrainingWandProjectile extends CustomProjectile {
         super.hitEntity(hitEntity);
         // Damage the entity
         hitEntity.hurt(owner, damageType, this.damage);
-        PlayerHandler.instance.getPlayerData((Player) owner).addBuff(new IntelligenceBoost(10));
         // Play a sound
         world.playSound(pos, Sound.ENTITY_BLAZE_SHOOT, 0.6f, 1.7f);
     }

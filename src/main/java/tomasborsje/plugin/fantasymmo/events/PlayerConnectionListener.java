@@ -16,10 +16,8 @@ public class PlayerConnectionListener implements Listener {
 
     @EventHandler
     public void onPlayerDisconnect(PlayerQuitEvent event) {
-        // If the player contains a custom character, don't handle them
-        // This means they are a custom NPC
         // Save player data as they leave
-        PlayerHandler.instance.savePlayerData(event.getPlayer());
+        PlayerHandler.instance.unloadPlayer(event.getPlayer());
     }
 
     private boolean isCustomNpc(Player player) {

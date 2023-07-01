@@ -1,6 +1,7 @@
 package tomasborsje.plugin.fantasymmo.core.util;
 
 import org.bukkit.ChatColor;
+import tomasborsje.plugin.fantasymmo.core.AbstractMeleeWeapon;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
@@ -11,7 +12,7 @@ import tomasborsje.plugin.fantasymmo.recipes.RecipeScrollItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TooltipHelper {
+public class TooltipUtil {
     private static final String empty = "";
     public static final String strengthIcon = "\uD83D\uDDE1";
     public static final String intelligenceIcon = "☆";
@@ -24,12 +25,18 @@ public class TooltipHelper {
     public static final String defenseLabel = ChatColor.WHITE + defenseIcon + " Defense";
 
     public static List<String> getTooltip(ICustomItem item) {
-        List<String> tooltip = new ArrayList<String>(2);
+        List<String> tooltip = new ArrayList<>(2);
 
         // Add item rating in yellow text if item has a rating
         if(item instanceof IHasItemScore itemLevelProvider) {
             // Note we put this right under the item's name
             tooltip.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Item Score " + itemLevelProvider.getItemScore());
+        }
+
+        // Add damage indicator if item is melee weapon
+        if(item instanceof AbstractMeleeWeapon meleeWeapon) {
+            tooltip.add(empty);
+            tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + meleeWeapon.getDamage());
         }
 
         // Add stats if item gives stats
@@ -38,16 +45,32 @@ public class TooltipHelper {
 
             StatBoost stats = statsProvider.getStats();
             if(stats.defense != 0) {
-                tooltip.add(ChatColor.WHITE + defenseIcon + " Defense: " + getSign(stats.defense) + stats.defense);
+                tooltip.add(ChatColor.WHITE + defenseIcon + " Defense: " + ChatColor.WHITE + getSign(stats.defense) + stats.defense);
             }
             if(stats.health != 0) {
-                tooltip.add(ChatColor.GREEN + healthIcon + " Health: " + getSign(stats.health) + stats.health);
+                tooltip.add(ChatColor.GREEN + healthIcon + " Health: " + ChatColor.WHITE + getSign(stats.health) + stats.health);
             }
             if(stats.strength != 0) {
-                tooltip.add(ChatColor.RED + strengthIcon + " Strength: " + getSign(stats.strength) + stats.strength);
+                tooltip.add(ChatColor.RED + strengthIcon + " Strength: " + ChatColor.WHITE + getSign(stats.strength) + stats.strength);
             }
             if(stats.intelligence != 0) {
-                tooltip.add(ChatColor.BLUE + intelligenceIcon + " Intelligence: " + getSign(stats.intelligence) + stats.intelligence);
+                tooltip.add(ChatColor.BLUE + intelligenceIcon + " Intelligence: " + ChatColor.WHITE + getSign(stats.intelligence) + stats.intelligence);
+            }
+        }
+
+        // Add on attack effect if item has one
+        if(item instanceof AbstractMeleeWeapon meleeWeapon) {
+            if(meleeWeapon.getAttackDescription() != null) {
+                tooltip.add(empty);
+                String[] attackDesc = meleeWeapon.getAttackDescription().split("\n");
+                for(int i = 0; i < attackDesc.length; i++) {
+                    if(i == 0) {
+                        tooltip.add(ChatColor.YELLOW + empty + ChatColor.BOLD + "ON ATTACK: " + ChatColor.RESET + empty + ChatColor.WHITE + attackDesc[i]);
+                    }
+                    else {
+                        tooltip.add(ChatColor.WHITE + attackDesc[i]);
+                    }
+                }
             }
         }
 
@@ -56,12 +79,12 @@ public class TooltipHelper {
             String[] leftClick = usable.getLeftClickDescription().split("\n");
             String[] rightClick = usable.getRightClickDescription().split("\n");
 
-            if(leftClick.length > 0 || rightClick.length > 0) {
+            if(!leftClick[0].isEmpty() || !rightClick[0].isBlank()) {
                 tooltip.add(empty);
             }
 
             // If the left click description exists, add it
-            if(!leftClick[0].equals(usable.getLeftClickDescription())) {
+            if(!leftClick[0].isBlank()) {
                 for(int i = 0; i < leftClick.length; i++) {
                     if(i == 0) {
                         tooltip.add(ChatColor.YELLOW + empty + ChatColor.BOLD + "LEFT CLICK: " + ChatColor.RESET + empty + ChatColor.WHITE + leftClick[i]);
@@ -71,8 +94,8 @@ public class TooltipHelper {
                     }
                 }
             }
-
-            if(!rightClick[0].equals(usable.getRightClickDescription())) {
+            // If the right click description exists, add it
+            if(!rightClick[0].isBlank()) {
                 for(int i = 0; i < rightClick.length; i++) {
                     if(i == 0) {
                         tooltip.add(ChatColor.YELLOW + empty + ChatColor.BOLD + "RIGHT CLICK: " + ChatColor.RESET + empty + ChatColor.WHITE + rightClick[i]);
@@ -86,8 +109,12 @@ public class TooltipHelper {
 
         // Add lore tooltip if it exists
         if(item instanceof IHasDescription description) {
-            // Add empty line for non-recipe scroll items
-            if(!(item instanceof RecipeScrollItem)) {
+            if(item instanceof RecipeScrollItem recipe) {
+                // Add recipe type line
+                tooltip.add(ChatColor.GRAY+recipe.getProfessionType().getTitleCase() + " Recipe");
+            }
+            else {
+                // Add empty line for non-recipe scroll items
                 tooltip.add(empty);
             }
 

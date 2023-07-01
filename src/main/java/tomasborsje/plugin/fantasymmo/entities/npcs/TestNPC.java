@@ -5,7 +5,7 @@ import net.minecraft.world.item.Items;
 import org.bukkit.Location;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.guis.InfoGUI;
+import tomasborsje.plugin.fantasymmo.guis.MainMenuGUI;
 
 public class TestNPC extends CustomNPC {
     /**
@@ -24,6 +24,6 @@ public class TestNPC extends CustomNPC {
     @Override
     public void interact(PlayerData playerData) {
         // Open GUI if not opened
-        playerData.openGUI(new InfoGUI(playerData));
+        playerData.openGUI(new MainMenuGUI(playerData));
     }
 }

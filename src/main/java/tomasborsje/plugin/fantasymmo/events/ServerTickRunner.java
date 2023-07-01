@@ -1,5 +1,6 @@
 package tomasborsje.plugin.fantasymmo.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import tomasborsje.plugin.fantasymmo.FantasyMMO;
@@ -32,7 +33,9 @@ public class ServerTickRunner extends BukkitRunnable {
         saveTimer++;
         if(saveTimer >= SAVE_INTERVAL) {
             saveTimer = 0;
-            PlayerHandler.instance.saveAllPlayerData();
+            if(!Bukkit.getOnlinePlayers().isEmpty()) {
+                PlayerHandler.instance.saveAllPlayerData();
+            }
         }
     }
 }

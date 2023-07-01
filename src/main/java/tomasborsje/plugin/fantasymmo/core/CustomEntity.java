@@ -10,7 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
+import tomasborsje.plugin.fantasymmo.core.util.HologramUtil;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 import tomasborsje.plugin.fantasymmo.handlers.EntityDeathHandler;
 
 import java.util.ArrayList;
@@ -67,23 +68,28 @@ public abstract class CustomEntity implements IHasId, IBuffable {
      * Applies armor, etc. if applicable.
      * @param source The entity that is dealing the damage
      * @param type The type of damage being dealt
-     * @param amount The amount of damage being dealt
+     * @param damageAmount The amount of damage being dealt
      * @return The amount of damage that was dealt
      */
-    public float hurt(Entity source, CustomDamageType type, int amount) {
+    public float hurt(Entity source, CustomDamageType type, int damageAmount) {
         // Don't take damage if we're already dead
         if(currentHealth <= 0) {
             return 0;
         }
 
+        // TODO: Calculate armor and damage reduction etc
+
+        // Spawn damage indicator
+        HologramUtil.SpawnDamageIndicator(this.nmsEntity.getBukkitEntity().getLocation().add(0, nmsEntity.getEyeHeight()+0.8, 0), 1, type, damageAmount);
+
         // Reduce health and die if we have 0 or less
-        currentHealth -= amount;
+        currentHealth -= damageAmount;
         if(currentHealth <= 0) {
             currentHealth = 0;
-            onDeath(source, type, amount);
+            onDeath(source, type, damageAmount);
         }
         nmsEntity.setHealth(getScaledEntityHealth());
-        return amount;
+        return damageAmount;
     }
 
     /**
@@ -125,7 +131,7 @@ public abstract class CustomEntity implements IHasId, IBuffable {
      */
     public void tick() {
         // Update name plate to reflect health, etc.
-        nmsEntity.setCustomName(CraftChatMessage.fromStringOrNull(TooltipHelper.getDisplayPlate(this)));
+        nmsEntity.setCustomName(CraftChatMessage.fromStringOrNull(TooltipUtil.getDisplayPlate(this)));
     }
     public String getCustomId() {
         return id;

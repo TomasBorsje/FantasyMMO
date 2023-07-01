@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipHelper;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 
 /**
  * This class handles the deaths of custom entities.
@@ -25,7 +25,7 @@ public class EntityDeathHandler {
             int moneyDropped = deadEntity.killMoney;
 
             player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You killed " + deadEntity.name +
-                    "! (+" + xp + " xp, " + TooltipHelper.GetValueStringItalic(moneyDropped) + ChatColor.GRAY+")");
+                    "! (+" + xp + " xp, " + TooltipUtil.GetValueStringItalic(moneyDropped) + ChatColor.GRAY+")");
 
             // Grab player data
             PlayerData playerData = PlayerHandler.instance.loadPlayerData(player);

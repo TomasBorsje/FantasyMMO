@@ -1,32 +1,43 @@
-package tomasborsje.plugin.fantasymmo.core.registries;
+package tomasborsje.plugin.fantasymmo.core;
 
-import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.function.Function;
 
 /**
  * Registry class that holds entries of type IHasId.
  * @param <T> Any type that has custom ids.
  */
-public class PlayerDataFuncRegistry<T extends IHasId> {
+public class Registry<T extends IHasId> {
     /**
      * The registry that holds all entries.
      */
-    private final HashMap<String, Function<PlayerData, T>> registry = new HashMap<>();
+    private final HashMap<String, T> registry = new HashMap<>();
 
     /**
      * Registers an entry with a given id and IHasId instance.
      * @param id The id to register the entry with.
      * @param entry The entry to register.
      */
-    public Function<PlayerData, T> register(String id, Function<PlayerData, T> entry) {
+    public T register(String id, T entry) {
         if(registry.containsKey(id)) {
             throw new IllegalArgumentException("Entry with id " + id + " is already registered!");
         }
         registry.put(id, entry);
         return registry.get(id);
+    }
+
+    public Collection<T> getAllValues() {
+        return registry.values();
+    }
+
+    /**
+     * Registers an entry with the id of the IHasId instance.
+     * @param entry The entry to register.
+     */
+    public T register(T entry) {
+        return register(entry.getCustomId(), entry);
     }
 
     /**
@@ -42,7 +53,7 @@ public class PlayerDataFuncRegistry<T extends IHasId> {
      * Get an entry by its id.
      * @param id The id of the entry to get.
      */
-    public Function<PlayerData, T> get(String id) {
+    public T get(String id) {
         if(!registry.containsKey(id)) {
             throw new IllegalArgumentException("Entry with id " + id + " is not registered!");
         }

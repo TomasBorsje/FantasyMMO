@@ -14,7 +14,7 @@ import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.registries.QuestRegistry;
+import tomasborsje.plugin.fantasymmo.registries.QuestRegistry;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 
 import java.util.ArrayList;

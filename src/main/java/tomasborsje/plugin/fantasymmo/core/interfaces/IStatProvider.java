@@ -7,7 +7,7 @@ import tomasborsje.plugin.fantasymmo.core.PlayerData;
 /**
  * Provides stats to the player while held or equipped.
  */
-public interface IStatsProvider {
+public interface IStatProvider {
     public default StatBoost getStats() { return StatBoost.NONE; }
     public default EquipType getEquipType() { return EquipType.HELD; }
     public default void applyStats(PlayerData playerData) {

@@ -4,10 +4,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.bukkit.Color;
 import tomasborsje.plugin.fantasymmo.core.AbstractArmourItem;
+import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
-import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IDyeable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
@@ -21,7 +21,6 @@ public class MistweaveRobe extends AbstractArmourItem implements IHasDescription
         this.name = "Mistweave Robe";
         this.value = ItemUtil.Value(1, 30, 79);
         this.rarity = Rarity.RARE;
-        this.itemScore = 35;
     }
     @Override
     public Item getBaseItem() {

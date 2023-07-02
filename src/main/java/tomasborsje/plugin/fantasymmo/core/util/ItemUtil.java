@@ -1,6 +1,7 @@
 package tomasborsje.plugin.fantasymmo.core.util;
 
 import net.minecraft.nbt.CompoundTag;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemFlag;
@@ -11,7 +12,7 @@ import tomasborsje.plugin.fantasymmo.FantasyMMO;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IDyeable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
-import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
+import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 
 import java.util.List;
@@ -92,5 +93,16 @@ public class ItemUtil {
         newStack.setItemMeta(meta);
 
         return newStack;
+    }
+
+    public static ItemStack addPurchaseLabel(ItemStack stack, int price) {
+        ItemMeta meta = stack.getItemMeta();
+        // Get lore and add purchase price label
+        List<String> lore = meta.getLore();
+        String priceLabel = ChatColor.WHITE + ChatColor.BOLD.toString() + "Price: " + ChatColor.RESET + TooltipUtil.GetValueString(price);
+        lore.add(priceLabel);
+        meta.setLore(lore);
+        stack.setItemMeta(meta);
+        return stack;
     }
 }

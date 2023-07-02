@@ -1,6 +1,7 @@
 package tomasborsje.plugin.fantasymmo.quests;
 
 import org.bukkit.ChatColor;
+import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 
 import java.util.List;
@@ -14,10 +15,12 @@ public class KillEntityObjective implements IQuestObjective {
     private final String plural;
     public final int amount;
     public int progress = 0;
-    public KillEntityObjective(String mobId, String mobName, int amount) {
+    public final Vector location;
+    public KillEntityObjective(String mobId, String mobName, int amount, Vector loc) {
         this.mobId = mobId;
         this.mobName = mobName;
         this.amount = amount;
+        this.location = loc;
         plural = amount > 1 ? "s" : "";
     }
 
@@ -57,5 +60,10 @@ public class KillEntityObjective implements IQuestObjective {
     @Override
     public List<Integer> getLoadData() {
         return List.of(progress);
+    }
+
+    @Override
+    public Vector getLocation() {
+        return location;
     }
 }

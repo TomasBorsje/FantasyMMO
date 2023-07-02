@@ -1,7 +1,8 @@
-package tomasborsje.plugin.fantasymmo.core.registries;
+package tomasborsje.plugin.fantasymmo.registries;
 
 import net.minecraft.world.item.Items;
 import tomasborsje.plugin.fantasymmo.core.GenericItem;
+import tomasborsje.plugin.fantasymmo.core.Registry;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;

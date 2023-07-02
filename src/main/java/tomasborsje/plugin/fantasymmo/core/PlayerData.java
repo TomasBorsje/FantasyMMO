@@ -2,10 +2,9 @@ package tomasborsje.plugin.fantasymmo.core;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.level.ServerPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,8 +14,9 @@ import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IStatsProvider;
-import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
+import tomasborsje.plugin.fantasymmo.quests.KillForestSlimesQuest;
+import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
@@ -34,6 +34,7 @@ public class PlayerData implements IBuffable {
     private final static float DEFAULT_MOVESPEED = 0.2f;
     public final Player player;
     private final String username;
+    private long ticksPlayed = 0;
     private int level;
     private int experience;
     public int strength;
@@ -42,14 +43,19 @@ public class PlayerData implements IBuffable {
     public int maxMana;
     public int currentHealth;
     public int currentMana;
-    public float spellDamageMultiplier;
-    public float manaRegenMultiplier;
+    public float spellDamageMultiplier; // Spell damage multiplier (1.0 = 100%)
+    private float healthRegenMultiplier; // Health regen per tick multiplier
+    public float manaRegenMultiplier; // Mana regen per tick multiplier
+    public int healthRegenFlat; // Health regen per tick increase above natural
+    public int manaRegenFlat; // Mana regen per tick increase above natural
     public float moveSpeedMultiplier;
     public int useCooldown;
     public int defense;
-    private int copper;
+    private int money; // The player's money, in copper
     private int regenTimer = 0;
     private int timeSinceLastCombat;
+    private PlayerScoreboard scoreboard;
+    private PlayerBossBar bossBar;
     public List<String> knownRecipeIds = new ArrayList<>(); // Stores IDs of recipes the player knows
     private @Nullable CustomGUIInstance currentGUI = null; // The currently open GUI
     public final ArrayList<Buff> buffs = new ArrayList<>(); // List of buffs currently active on the player
@@ -72,15 +78,34 @@ public class PlayerData implements IBuffable {
         this.timeSinceLastCombat = COMBAT_COOLDOWN;
 
         // Show level to player
-        player.setLevel(level);
-        if(level == LEVEL_CAP) {
-            player.setExp(0.999f);
-        }
-        else {
-            player.setExp((float)experience / (level * 50));
+        updateExpBar();
+
+        addQuest(new KillForestSlimesQuest(this));
+
+        scoreboard = new PlayerScoreboard(this);
+        bossBar = new PlayerBossBar(this);
+    }
+
+    /**
+     * Gives item(s) to the player. If they don't have room in their inventory,
+     * they will receive the leftover items in the mail.
+     * @param items The item stacks to give
+     */
+    public void giveItem(ItemStack... items) {
+        // Print a received message for each item
+        for (ItemStack item : items) {
+            if(item.hasItemMeta()) {
+                player.sendMessage(ChatColor.GRAY + "You received " + item.getAmount() + "x " + item.getItemMeta().getDisplayName() + ChatColor.GRAY + ".");
+            }
         }
 
-        initScoreboard();
+        // Add items to the player's inventory and get the leftover items
+        var leftoverItems = player.getInventory().addItem(items);
+
+        if(!leftoverItems.isEmpty()) {
+            // TODO: Send item in mail
+            return;
+        }
     }
 
     /**
@@ -111,15 +136,9 @@ public class PlayerData implements IBuffable {
         this.currentGUI = null;
         // TODO Figure out how to force close GUI (packet?)
     }
-    private void initScoreboard() {
-        ServerPlayer nmsPlayer = ((CraftPlayer)player).getHandle();
-        // TODO
-    }
-    private void updateScoreboard() {
-
-    }
 
     public void tick() {
+        ticksPlayed++;
         // Tick each item in inventory if possible, etc
         recalculateStats();
 
@@ -148,8 +167,12 @@ public class PlayerData implements IBuffable {
         // Visually display current health using vanilla health bar
         updateVanillaHealthBarDisplay();
 
-        // Update scoreboard to show money, quests, etc.
-        updateScoreboard();
+        // Update scoreboard and boss bar every 5 ticks
+        if(ticksPlayed % 2 == 0) {
+            // Update scoreboard to show money, quests, etc.
+            scoreboard.render();
+            bossBar.render();
+        }
 
         // Update xp bar to show level and progress
         // TODO: Don't do this every tick if we can avoid it, only on xp gain
@@ -158,13 +181,6 @@ public class PlayerData implements IBuffable {
         // Reduce player use cooldown if on cooldown
         if(useCooldown > 0) {
             useCooldown--;
-        }
-
-        // Print quests
-        if(player.isSneaking()) {
-            for (AbstractQuestInstance quest : activeQuests) {
-                player.sendMessage(quest.getName() + ": " + quest.getQuestStatus());
-            }
         }
 
         // Display to player
@@ -259,7 +275,7 @@ public class PlayerData implements IBuffable {
                     ChatColor.YELLOW + "You've reached Level " + level + "!");
             player.playSound(player, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
             if(level == LEVEL_CAP) {
-                player.sendMessage(ChatColor.GOLD+""+ChatColor.BOLD+"CONGRATS! You've reached max level!");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "CONGRATS! "+ChatColor.YELLOW+""+ChatColor.BOLD+username+" has reached Level 100!");
                 experience = 0;
             }
         }
@@ -278,25 +294,26 @@ public class PlayerData implements IBuffable {
         if(++regenTimer > 20) {
             regenTimer = 0;
 
-            // 3% hp regen out of combat, 5% mana regen out of combat
+            // 3% hp regen out of combat, 3% mana regen at all times
             float healthRegenAmount = 0.03f;
-            float manaRegenAmount = 0.05f * manaRegenMultiplier;
+            float manaRegenAmount = 0.03f;
 
-            // Health regen reduced to 20% in combat
-            // Mana regen reduced to 50% in combat
+            // Health regen reduced to 10% in combat
             if(isInCombat()) {
-                healthRegenAmount *= 0.2f;
-                manaRegenAmount *= 0.5f;
+                healthRegenAmount *= 0.1f;
             }
 
-            // Regen 3% of health per second
-            heal((int) Math.max(maxHealth*healthRegenAmount, 1));
+            // Regen health based on flat amount and multiplier
+            heal((int) ((maxHealth*healthRegenAmount+healthRegenFlat)*healthRegenMultiplier));
 
-            // Regen 5% of mana per second
-            currentMana += Math.max(maxMana*manaRegenAmount, 1);
+            // Regen mana based on flat amount and multiplier
+            currentMana += (int)((maxMana*manaRegenAmount+manaRegenFlat)*manaRegenMultiplier);
         }
     }
 
+    /**
+     * Clamps health and mana to their maximum values.
+     */
     private void clampStats() {
         // Clamp health
         if(this.currentHealth > maxHealth) {
@@ -308,6 +325,9 @@ public class PlayerData implements IBuffable {
         }
     }
 
+    /**
+     * Displays the player's health, mana, armor, and spell damage multiplier in the action bar.
+     */
     private void showActionBarStats() {
         boolean inCombat = isInCombat();
         // Build action bar message, with a red exclamation mark if in combat
@@ -331,6 +351,10 @@ public class PlayerData implements IBuffable {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 
+    /**
+     * Heals a player, increasing their health.
+     * @param amount The amount of health to heal the player
+     */
     public void heal(int amount) {
         // Increase current health
         this.currentHealth += amount;
@@ -373,6 +397,11 @@ public class PlayerData implements IBuffable {
         timeSinceLastCombat = 0;
     }
 
+    /**
+     * Tries to consume mana from this player. Returns true if mana was consumed.
+     * @param amount The amount of mana to consume
+     * @return True if mana was consumed
+     */
     public boolean tryConsumeMana(int amount) {
         if(currentMana >= amount) {
             currentMana -= amount;
@@ -387,8 +416,8 @@ public class PlayerData implements IBuffable {
      * @return True if the player had enough money
      */
     public boolean tryConsumeMoney(int copper) {
-        if(this.copper >= copper) {
-            this.copper -= copper;
+        if(this.money >= copper) {
+            this.money -= copper;
             return true;
         }
         return false;
@@ -401,23 +430,34 @@ public class PlayerData implements IBuffable {
      */
     public int addMoney(int copper) {
         // Clamp copper to money cap
-        if(this.copper + copper > MONEY_CAP) {
-            copper = MONEY_CAP - this.copper;
+        if(this.money + copper > MONEY_CAP) {
+            copper = MONEY_CAP - this.money;
         }
-        this.copper += copper;
+        this.money += copper;
         return copper;
     }
 
+    /**
+     * Returns the amount of money this player has, in copper.
+     * @return The amount of money this player has, in copper
+     */
     public int getMoney() {
-        return copper;
+        return money;
     }
 
+    /**
+     * Called when the player dies.
+     * Respawns the player and applies penalties.
+     */
     public void onDeath() {
         player.sendMessage(ChatColor.RED+""+ChatColor.BOLD+"You died!");
         // TODO: Lose money and send player to their spawn
         currentHealth = maxHealth;
     }
 
+    /**
+     * Calculates the player's stats for this tick.
+     */
     public void recalculateStats() {
         resetTransientStats();
         // Calculate equipped stat buffs
@@ -431,6 +471,10 @@ public class PlayerData implements IBuffable {
         calculateFinalStats();
     }
 
+    /**
+     * Applies any stat changes from the player's buffs and debuffs.
+     * Called every tick.
+     */
     private void applyStatBuffs() {
         // Apply any stat changes from buffs
         for(Buff buff : buffs) {
@@ -438,13 +482,19 @@ public class PlayerData implements IBuffable {
         }
     }
 
+    /**
+     * Calculate mana, spell damage multipliers, etc. from the player's primary stats.
+     */
     private void calculateFinalStats() {
         this.maxMana += (int) (intelligence*2.5f);
         this.spellDamageMultiplier += intelligence * 0.75/100; // 75% more spell damage for every 100 intelligence
         // Set move speed
-        player.setWalkSpeed(0.2f * moveSpeedMultiplier);
+        player.setWalkSpeed(DEFAULT_MOVESPEED * moveSpeedMultiplier);
     }
 
+    /**
+     * Applies the stats from the player's equipped armor for this tick.
+     */
     private void applyEquippedArmor() {
         PlayerInventory playerInv = player.getInventory();
         // Calculate held item stats
@@ -465,13 +515,16 @@ public class PlayerData implements IBuffable {
             ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
 
             // If it provides stats when equipped as armour, apply those stats
-            if(customItem instanceof IStatsProvider statsProvider && statsProvider.getEquipType() == EquipType.ARMOUR) {
+            if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.ARMOUR) {
                 // Cast to IStatsProvider and apply stats
                 statsProvider.applyStats(this);
             }
         }
     }
 
+    /**
+     * Applies the stats from the player's held item for this tick.
+     */
     private void applyHeldItem() {
         // Calculate held item stats
         ItemStack heldItem = player.getInventory().getItemInMainHand();
@@ -488,11 +541,15 @@ public class PlayerData implements IBuffable {
         ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
 
         // If it provides stats when held, apply those stats
-        if(customItem instanceof IStatsProvider statsProvider && statsProvider.getEquipType() == EquipType.HELD) {
+        if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.HELD) {
             // Cast to IStatsProvider and apply stats
             statsProvider.applyStats(this);
         }
     }
+
+    /**
+     * Resets all transient stats to their default values for this tick.
+     */
     private void resetTransientStats() {
         // Reset all stats to defaults so we can recalculate
         this.strength = 0;
@@ -501,8 +558,11 @@ public class PlayerData implements IBuffable {
         this.maxMana = StatCalc.getBaseManaAtLevel(level);
         this.defense = 0;
         this.spellDamageMultiplier = 1;
+        this.healthRegenMultiplier = 1;
         this.manaRegenMultiplier = 1;
         this.moveSpeedMultiplier = 1;
+        this.healthRegenFlat = 1; //  We regen 1 health flat per tick by default, as sometimes 3% of max hp is <1
+        this.manaRegenFlat = 1; // Ditto for mana
     }
     public String getUsername() {
         return username;
@@ -516,6 +576,10 @@ public class PlayerData implements IBuffable {
         player.setHealth(vanillaHealth);
     }
 
+    /**
+     * Adds a buff to the player.
+     * @param newBuff The buff to add
+     */
     @Override
     public void addBuff(Buff newBuff) {
         // Check if an instance of the buff already exists first (to stack, refresh, etc.)

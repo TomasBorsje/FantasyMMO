@@ -40,7 +40,7 @@ public class TooltipUtil {
         }
 
         // Add stats if item gives stats
-        if(item instanceof IStatsProvider statsProvider) {
+        if(item instanceof IStatProvider statsProvider) {
             tooltip.add(empty);
 
             StatBoost stats = statsProvider.getStats();
@@ -163,7 +163,6 @@ public class TooltipUtil {
         }
         return item.getRarity().getColor() + item.getName();
     }
-
     public static String GetValueString(int value) {
         int gold = Math.floorDiv(value, 10000);
         int silver = Math.floorDiv(value - gold * 10000, 100);
@@ -173,6 +172,16 @@ public class TooltipUtil {
                 + (silver > 0 ? ChatColor.GRAY+ "◎" + silver+" " : "")
                 + ChatColor.GOLD + "◎" + copper;
     }
+    public static String GetPlayerMoneyString(int value) {
+        int gold = Math.floorDiv(value, 10000);
+        int silver = Math.floorDiv(value - gold * 10000, 100);
+        int copper = value - gold * 10000 - silver * 100;
+
+        return (ChatColor.YELLOW + "◎" + gold + " "
+                + (silver > 0 ? ChatColor.GRAY+ "◎" + silver+" " : "")
+                + ChatColor.GOLD + "◎" + copper);
+    }
+
     public static String GetValueStringItalic(int value) {
         int gold = Math.floorDiv(value, 10000);
         int silver = Math.floorDiv(value - gold * 10000, 100);

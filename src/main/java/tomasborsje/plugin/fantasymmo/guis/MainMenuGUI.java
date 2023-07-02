@@ -6,7 +6,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.registries.QuestRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.GUIUtil;
 
 import java.util.List;
@@ -38,7 +37,6 @@ public class MainMenuGUI extends CustomGUIInstance {
     public void onClickSlot(int slot) {
         if(slot == MIDDLE_SLOT) {
             playerData.player.sendMessage(ChatColor.GOLD+"Welcome to FantasyMMO!");
-            playerData.addQuest(QuestRegistry.KILL_FOREST_SLIMES.apply(playerData));
         }
     }
 }

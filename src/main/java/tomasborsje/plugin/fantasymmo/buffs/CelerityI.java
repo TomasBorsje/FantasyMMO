@@ -9,7 +9,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.util.EffectUtil;
 
 public class CelerityI extends Buff {
-    private final float manaRegenBuff = 0.25f;
+    private final int flatManaRegenBuff = 2;
     public CelerityI() {
         super("Celerity I", 200);
     }
@@ -17,14 +17,13 @@ public class CelerityI extends Buff {
     @Override
     public void onApply(IBuffable buffHolder) {
         if(buffHolder instanceof PlayerData playerData) {
-            playerData.player.sendMessage(ChatColor.BLUE+"Your mana surges! (+"+(int)(manaRegenBuff*100)+"% Mana Regeneration)");
+            playerData.player.sendMessage(ChatColor.BLUE+"Your mana surges! (+"+flatManaRegenBuff+"/s Mana Regeneration)");
         }
     }
 
     @Override
     public void modifyStats(PlayerData playerStats) {
-        playerStats.manaRegenMultiplier += manaRegenBuff;
-        playerStats.moveSpeedMultiplier += 1f;
+        playerStats.manaRegenFlat += flatManaRegenBuff;
     }
 
     @Override

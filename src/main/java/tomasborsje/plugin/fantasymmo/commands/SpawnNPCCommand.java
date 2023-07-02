@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import tomasborsje.plugin.fantasymmo.core.registries.EntityRegistry;
+import tomasborsje.plugin.fantasymmo.registries.EntityRegistry;
 import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 
 public class SpawnNPCCommand implements CommandExecutor {

@@ -7,14 +7,17 @@ import tomasborsje.plugin.fantasymmo.buffs.CelerityI;
 import tomasborsje.plugin.fantasymmo.core.AbstractMeleeWeapon;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasItemScore;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
-public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescription, IHasItemScore, IGlowingItem {
+public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescription, IHasItemScore, IGlowingItem, IStatProvider {
+    private final StatBoost stats = new StatBoost(0, 1, 0, 0);
     public NoviceSpellblade() {
         this.customId = "NOVICE_SPELLBLADE";
         this.name = "Novice Spellblade";
@@ -22,6 +25,11 @@ public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescrip
         this.value = ItemUtil.Value(0, 0, 50);
         this.baseItem = Items.GOLDEN_SWORD;
         this.damage = 9;
+    }
+
+    @Override
+    public StatBoost getStats() {
+        return stats;
     }
 
     @Override
@@ -38,10 +46,6 @@ public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescrip
     public ItemType getType() {
         return ItemType.SWORD;
     }
-    @Override
-    public int getItemScore() {
-        return 5;
-    }
 
     @Override
     public void onAttack(PlayerData player, ItemStack stack, CustomEntity target) {
@@ -51,6 +55,6 @@ public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescrip
     @Override
     public String getAttackDescription() {
         return "Strike an enemy to gain "+ ChatColor.BLUE+"Celerity I"+ChatColor.WHITE+",\n" +
-                "increasing Mana Regeneration by 25% for 10 seconds.";
+                "increasing Mana Regeneration by 2/s for 10 seconds.";
     }
 }

@@ -1,8 +1,9 @@
-package tomasborsje.plugin.fantasymmo.core.registries;
+package tomasborsje.plugin.fantasymmo.registries;
 
 import org.bukkit.Location;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
+import tomasborsje.plugin.fantasymmo.core.FuncRegistry;
 import tomasborsje.plugin.fantasymmo.entities.entities.ForestSlime;
 import tomasborsje.plugin.fantasymmo.entities.npcs.TestNPC;
 

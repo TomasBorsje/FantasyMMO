@@ -17,8 +17,8 @@ import tomasborsje.plugin.fantasymmo.entities.projectiles.TrainingWandProjectile
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 
-public class NoviceWand extends AbstractCustomItem implements IUsable, IStatsProvider, IHasDescription, IHasItemScore, IGlowingItem {
-    private final StatBoost heldStats = new StatBoost(0, 13, 0, 0);
+public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProvider, IHasDescription, IHasItemScore, IGlowingItem {
+    private final StatBoost heldStats = new StatBoost(0, 3, 0, 0);
     public NoviceWand() {
         this.customId = "NOVICE_WAND";
         this.name = "Novice Wand";
@@ -26,7 +26,6 @@ public class NoviceWand extends AbstractCustomItem implements IUsable, IStatsPro
         this.value = ItemUtil.Value(0, 0, 50);
         this.baseItem = Items.STICK;
     }
-
     private final int manaCost = 10;
     private final int damage = 20;
 
@@ -84,10 +83,5 @@ public class NoviceWand extends AbstractCustomItem implements IUsable, IStatsPro
     @Override
     public ItemType getType() {
         return ItemType.WAND;
-    }
-
-    @Override
-    public int getItemScore() {
-        return 5;
     }
 }

@@ -1,6 +1,6 @@
 package tomasborsje.plugin.fantasymmo.recipes;
 
-import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
+import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 
 public class Ingredients {
     public static GenericIngredient SLIMEBALL = new GenericIngredient(ItemRegistry.SLIMEBALL);

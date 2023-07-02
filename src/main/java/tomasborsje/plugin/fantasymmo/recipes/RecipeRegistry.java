@@ -3,8 +3,8 @@ package tomasborsje.plugin.fantasymmo.recipes;
 import org.bukkit.inventory.Inventory;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ProfessionType;
-import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
-import tomasborsje.plugin.fantasymmo.core.registries.Registry;
+import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
+import tomasborsje.plugin.fantasymmo.core.Registry;
 
 import java.util.ArrayList;
 import java.util.List;

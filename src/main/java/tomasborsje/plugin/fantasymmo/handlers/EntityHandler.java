@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
-import tomasborsje.plugin.fantasymmo.core.registries.EntityRegistry;
+import tomasborsje.plugin.fantasymmo.registries.EntityRegistry;
 
 import java.util.HashMap;
 

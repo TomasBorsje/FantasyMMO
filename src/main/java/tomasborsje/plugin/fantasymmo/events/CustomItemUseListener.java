@@ -9,7 +9,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
-import tomasborsje.plugin.fantasymmo.core.registries.ItemRegistry;
+import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 

@@ -1,6 +1,7 @@
-package tomasborsje.plugin.fantasymmo.core.registries;
+package tomasborsje.plugin.fantasymmo.registries;
 
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.PlayerDataFuncRegistry;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 import tomasborsje.plugin.fantasymmo.quests.KillForestSlimesQuest;
 

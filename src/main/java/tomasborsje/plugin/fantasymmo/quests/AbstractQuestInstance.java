@@ -2,6 +2,7 @@ package tomasborsje.plugin.fantasymmo.quests;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
@@ -68,7 +69,7 @@ public abstract class AbstractQuestInstance implements IHasId {
     }
 
     public String getQuestStatus() {
-        return completed ? ChatColor.YELLOW + "Complete" : ChatColor.WHITE + getCurrentObjective().getStatusString();
+        return completed ? ChatColor.YELLOW + "Complete!" : ChatColor.WHITE + getCurrentObjective().getStatusString();
     }
 
     /**
@@ -100,7 +101,11 @@ public abstract class AbstractQuestInstance implements IHasId {
         p.addMoney(moneyReward);
         p.gainExperience(xpReward);
         ItemStack[] rewardStacks = Arrays.stream(itemRewards).map(ICustomItem::createStack).toArray(ItemStack[]::new);
-        p.player.getInventory().addItem(rewardStacks);
+        p.giveItem(rewardStacks);
+    }
+
+    public Vector getObjectiveLocation() {
+        return getCurrentObjective().getLocation();
     }
 
     public String getName() {

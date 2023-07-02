@@ -10,5 +10,5 @@ public enum ItemType {
     LEGGINGS,
     BOOTS,
     MISC,
-    RECIPE_SCROLL
+    FOOD, RECIPE_SCROLL
 }

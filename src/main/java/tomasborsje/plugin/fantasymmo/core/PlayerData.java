@@ -50,6 +50,7 @@ public class PlayerData implements IBuffable {
     public int manaRegenFlat; // Mana regen per tick increase above natural
     public float moveSpeedMultiplier;
     public int useCooldown;
+    private boolean inCombat = false;
     public int defense;
     private int money; // The player's money, in copper
     private int regenTimer = 0;
@@ -142,8 +143,18 @@ public class PlayerData implements IBuffable {
         // Tick each item in inventory if possible, etc
         recalculateStats();
 
-        // Tick combat
+        // Tick combat status
         timeSinceLastCombat++;
+        if(timeSinceLastCombat > COMBAT_COOLDOWN) {
+            // If in combat, trigger leaving combat effects
+            if(inCombat) {
+                // Trigger each buff leaving combat
+                for (Buff buff : buffs) {
+                    buff.onLeaveCombat(this);
+                }
+            }
+            inCombat = false;
+        }
 
         // Regen health and mana
         regenStats();
@@ -329,7 +340,6 @@ public class PlayerData implements IBuffable {
      * Displays the player's health, mana, armor, and spell damage multiplier in the action bar.
      */
     private void showActionBarStats() {
-        boolean inCombat = isInCombat();
         // Build action bar message, with a red exclamation mark if in combat
         String message = inCombat ? ChatColor.RED + "!! " : "";
 
@@ -387,7 +397,7 @@ public class PlayerData implements IBuffable {
      * @return True if the player is in combat
      */
     public boolean isInCombat() {
-        return timeSinceLastCombat < COMBAT_COOLDOWN;
+        return inCombat;
     }
 
     /**
@@ -395,6 +405,11 @@ public class PlayerData implements IBuffable {
      */
     public void markCombat() {
         timeSinceLastCombat = 0;
+        inCombat = true;
+        // Mark each buff as entering combat
+        for(Buff buff : buffs) {
+            buff.onEnterCombat(this);
+        }
     }
 
     /**

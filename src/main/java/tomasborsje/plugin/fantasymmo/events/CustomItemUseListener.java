@@ -51,7 +51,7 @@ public class CustomItemUseListener implements Listener {
         // Check if it implements IUsable
         if(customItem instanceof IUsable usableItem && playerData.useCooldown == 0) {
             // Cast to IUsable and use the item
-            boolean success = usableItem.rightClick(event.getPlayer(), event.getItem());
+            boolean success = usableItem.rightClick(playerData, event.getItem());
 
             if(success) {
                 // Set cooldown if item has a cooldown

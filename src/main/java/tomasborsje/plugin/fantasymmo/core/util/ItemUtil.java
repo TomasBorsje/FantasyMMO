@@ -2,18 +2,20 @@ package tomasborsje.plugin.fantasymmo.core.util;
 
 import net.minecraft.nbt.CompoundTag;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import tomasborsje.plugin.fantasymmo.FantasyMMO;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IDyeable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
-import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
+import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 
 import java.util.List;
 
@@ -37,6 +39,19 @@ public class ItemUtil {
             throw new IllegalArgumentException("ItemStack is not a custom item!");
         }
         return ItemRegistry.ITEMS.get(GetCustomId(stack));
+    }
+
+    /**
+     * Adds a custom colour to potion stacks.
+     * @param stack Potion stack
+     * @param color Colour to add
+     */
+    public static void AddPotionColourMeta(ItemStack stack, Color color) {
+        if(!(stack.getItemMeta() instanceof PotionMeta meta)) {
+            throw new IllegalArgumentException("ItemStack is not a potion item!");
+        }
+        meta.setColor(color);
+        stack.setItemMeta(meta);
     }
 
     public static String GetCustomId(ItemStack stack) {
@@ -80,6 +95,7 @@ public class ItemUtil {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_DYE);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
         // Add glow enchantment if marked
         if(item instanceof IGlowingItem) {

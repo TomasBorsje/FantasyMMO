@@ -17,6 +17,8 @@ public abstract class Buff {
     public int currentStacks;
     public boolean refreshOnApply = true;
 
+    public boolean nonCombat = false;
+
     /**
      * Creates a new buff with the given name, duration, debuff status, and stackability.
      * @param name The name of the buff
@@ -63,6 +65,17 @@ public abstract class Buff {
     public void onApply(IBuffable buffHolder) { }
     public void onRefresh(IBuffable buffHolder) { }
     public void onRemove(IBuffable buffHolder) { }
+
+    /**
+     * By default, buffs are removed when the holder enters combat if they are noncombat buffs.
+     * @param buffHolder The entity that holds the buff
+     */
+    public void onEnterCombat(IBuffable buffHolder) {
+        if(nonCombat) {
+            ticksLeft = 0;
+        }
+    }
+    public void onLeaveCombat(IBuffable buffHolder) { }
     public void onHitEnemy(IBuffable buffHolder, IBuffable victim) { }
     public void onHitAlly(PlayerData buffHolder, PlayerData ally) { }
     public void onReceiveDamage(IBuffable buffHolder, IBuffable attacker, int damage) { }

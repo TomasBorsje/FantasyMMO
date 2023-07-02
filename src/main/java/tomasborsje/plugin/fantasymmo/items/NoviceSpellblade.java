@@ -55,6 +55,6 @@ public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescrip
     @Override
     public String getAttackDescription() {
         return "Strike an enemy to gain "+ ChatColor.BLUE+"Celerity I"+ChatColor.WHITE+",\n" +
-                "increasing Mana Regeneration by 2/s for 10 seconds.";
+                "increasing Mana Regeneration by 2/s for "+ChatColor.YELLOW+"10"+ChatColor.WHITE+" seconds.";
     }
 }

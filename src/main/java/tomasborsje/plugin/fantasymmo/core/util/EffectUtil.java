@@ -16,8 +16,17 @@ public class EffectUtil {
         return loc.clone().add(xOffset, yOffset, zOffset);
     }
 
-    public static void spawnColoredParticleAroundPlayer(Player player, Color color) {
+    public static void SpawnColoredRedstoneAroundPlayer(Player player, Color color) {
         player.getWorld().spawnParticle(Particle.REDSTONE, EffectUtil.getPointAroundPlayer(player.getLocation()),
                 0, 1, 0, 0, 0, new Particle.DustOptions(color, 0.7f));
+    }
+
+    public static void SpawnColoredSwirlAroundPlayer(Player player, Color color) {
+        player.getWorld().spawnParticle(Particle.SPELL_MOB, EffectUtil.getPointAroundPlayer(player.getLocation()), 0,
+                color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1);
+    }
+
+    public static void SpawnParticleAroundPlayer(Player player, Particle p) {
+        player.getWorld().spawnParticle(p, EffectUtil.getPointAroundPlayer(player.getLocation()),1);
     }
 }

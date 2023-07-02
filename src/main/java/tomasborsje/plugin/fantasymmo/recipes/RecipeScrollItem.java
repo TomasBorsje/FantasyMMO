@@ -13,7 +13,6 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ProfessionType;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
-import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 import java.util.List;
 
@@ -30,9 +29,9 @@ public class RecipeScrollItem extends AbstractCustomItem implements IUsable, IHa
     }
 
     @Override
-    public boolean rightClick(Player player, ItemStack item) {
+    public boolean rightClick(PlayerData playerData, ItemStack item) {
         // Get player data
-        PlayerData playerData = PlayerHandler.instance.getPlayerData(player);
+        Player player = playerData.player;
         // Check if player already has recipe
         if (playerData.knownRecipeIds.contains(this.recipe.getCustomId())) {
             player.sendMessage(ChatColor.LIGHT_PURPLE+"You already know this recipe!");

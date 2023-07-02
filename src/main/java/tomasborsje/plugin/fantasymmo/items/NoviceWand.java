@@ -14,7 +14,6 @@ import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.*;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.entities.projectiles.TrainingWandProjectile;
-import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 
 public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProvider, IHasDescription, IHasItemScore, IGlowingItem {
@@ -30,10 +29,9 @@ public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProv
     private final int damage = 20;
 
     @Override
-    public boolean rightClick(Player player, ItemStack item) {
+    public boolean rightClick(PlayerData playerData, ItemStack item) {
         // Get player data
-        PlayerData playerData = PlayerHandler.instance.loadPlayerData(player);
-
+        Player player = playerData.player;
         // Try and consume mana to cast a fireball
         if(playerData.tryConsumeMana(manaCost)) {
             int damage = (int) (playerData.spellDamageMultiplier * this.damage);
@@ -46,7 +44,7 @@ public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProv
     }
 
     @Override
-    public boolean leftClick(Player player, ItemStack item) {
+    public boolean leftClick(PlayerData player, ItemStack item) {
         return false;
     }
 

@@ -65,6 +65,7 @@ public class FantasyMMO extends JavaPlugin {
         pluginManager.registerEvents(new PlayerInteractPlayerListener(), this);
         pluginManager.registerEvents(new InventoryItemClickListener(), this);
         pluginManager.registerEvents(new InventoryCloseListener(), this);
+        pluginManager.registerEvents(new FoodLevelChangeListener(), this);
 
         Bukkit.getLogger().info("Registered event listeners.");
     }

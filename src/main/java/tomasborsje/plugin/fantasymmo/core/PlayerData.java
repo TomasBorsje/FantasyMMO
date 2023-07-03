@@ -61,7 +61,6 @@ public class PlayerData implements IBuffable {
     private @Nullable CustomGUIInstance currentGUI = null; // The currently open GUI
     public final ArrayList<Buff> buffs = new ArrayList<>(); // List of buffs currently active on the player
     public final ArrayList<AbstractQuestInstance> activeQuests = new ArrayList<>(); // List of active quests
-
     public PlayerData(Player player) {
         this.player = player;
         this.username = player.getName();
@@ -207,6 +206,26 @@ public class PlayerData implements IBuffable {
         for (AbstractQuestInstance quest : activeQuests) {
             quest.registerKill(killed);
         }
+        checkQuestCompletion();
+    }
+
+    /**
+     * Check each quest to see if it's completed. If it is, provide its rewards.
+     */
+    private void checkQuestCompletion() {
+        // Check each quest for completion
+        for (int i = 0; i < activeQuests.size(); i++) {
+            AbstractQuestInstance quest = activeQuests.get(i);
+            if (quest.isCompleted()) {
+                // Send completion message
+                player.sendMessage(ChatColor.WHITE + "You completed the quest " + ChatColor.YELLOW + quest.getName() + ChatColor.WHITE + "!");
+                // Give rewards
+                quest.grantRewards(this);
+                // Remove quest
+                activeQuests.remove(quest);
+                i--;
+            }
+        }
     }
 
     public void fillHealthAndMana() {
@@ -278,9 +297,9 @@ public class PlayerData implements IBuffable {
 
         experience += xp;
 
-        // If player has enough experience to level up, level up
-        if(experience >= level * 50) {
-            experience -= level * 50;
+        // While the player has enough experience to level up, level up
+        while(experience >= StatCalc.getExperienceForLevel(level)) {
+            experience -= StatCalc.getExperienceForLevel(level);
             level++;
             player.sendMessage(ChatColor.YELLOW+""+ChatColor.BOLD+"DING!" +ChatColor.RESET + " " +
                     ChatColor.YELLOW + "You've reached Level " + level + "!");
@@ -377,11 +396,12 @@ public class PlayerData implements IBuffable {
     /**
      * Damages a player, reducing their health.
      * Marks them as being in combat if the attacker is not null.
+     *
      * @param attacker The entity that attacked the player
-     * @param amount The amount of damage to deal to the player
-     * @param type The type of damage to deal to the player
+     * @param type     The type of damage to deal to the player
+     * @param amount   The amount of damage to deal to the player
      */
-    public void hurt(@Nullable CustomEntity attacker, int amount, CustomDamageType type) {
+    public void hurt(@Nullable CustomEntity attacker, CustomDamageType type, int amount) {
         if(attacker != null) {
             markCombat();
         }

@@ -58,6 +58,10 @@ public abstract class Buff {
 
     public void tick(IBuffable buffHolder) {
         ticksLeft--;
+        // Cancel if the buff is non-combat and the holder is in combat
+        if(nonCombat && buffHolder instanceof PlayerData pd && pd.isInCombat()) {
+            ticksLeft = 0;
+        }
     }
     public boolean isExpired() {
         return ticksLeft <= 0;

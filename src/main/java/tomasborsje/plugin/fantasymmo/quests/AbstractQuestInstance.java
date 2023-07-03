@@ -5,10 +5,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,7 +23,7 @@ public abstract class AbstractQuestInstance implements IHasId {
     protected int stage = 0;
     protected String id;
     boolean completed = false;
-    protected ICustomItem[] itemRewards;
+    protected ItemStack[] itemRewards;
     public AbstractQuestInstance(PlayerData pd, IQuestObjective... objectives) {
         this.playerData = pd;
         this.objectives = objectives;
@@ -50,7 +48,7 @@ public abstract class AbstractQuestInstance implements IHasId {
 
     /**
      * Returns the load data for the current objective.
-     * @return
+     * @return The load data for the current objective.
      */
     public List<Integer> getLoadData() {
         return objectives[stage].getLoadData();
@@ -97,11 +95,16 @@ public abstract class AbstractQuestInstance implements IHasId {
         return false;
     }
 
+    /**
+     * Grants rewards of the quest to the player.
+     * @param p The player to grant rewards to.
+     */
     public void grantRewards(PlayerData p) {
         p.addMoney(moneyReward);
         p.gainExperience(xpReward);
-        ItemStack[] rewardStacks = Arrays.stream(itemRewards).map(ICustomItem::createStack).toArray(ItemStack[]::new);
-        p.giveItem(rewardStacks);
+        if(itemRewards.length > 0) {
+            p.giveItem(itemRewards);
+        }
     }
 
     public Vector getObjectiveLocation() {
@@ -124,7 +127,7 @@ public abstract class AbstractQuestInstance implements IHasId {
         return xpReward;
     }
 
-    public ICustomItem[] getItemRewards() {
+    public ItemStack[] getItemRewards() {
         return itemRewards;
     }
 

@@ -30,7 +30,13 @@ public class PlayerHandler {
             PlayerData playerData = loadPlayerData(player);
             // Tick valid players
             if(playerData.isValid()) {
-                playerData.tick();
+                try {
+                    playerData.tick();
+                }
+                catch (Exception e) {
+                    Bukkit.getLogger().warning("Error ticking player " + player.getName() + ": " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
             else {
                 // Remove players who have left

@@ -88,6 +88,7 @@ public class DatabaseConnection {
 
         if(questInstances != null) {
             for(Document questInstance : questInstances) {
+                try {
                 AbstractQuestInstance quest = QuestRegistry.QUESTS.get(questInstance.getString("questId")).apply(playerData);
                 // Get quest stage
                 int stage = questInstance.getInteger("stage");
@@ -96,7 +97,10 @@ public class DatabaseConnection {
                 // Load quest instance
                 quest.load(stage, objectiveProgress);
                 // Add to player's quests again
-                playerData.addQuest(quest);
+                playerData.addQuest(quest); }
+                catch (Exception e) {
+                    Bukkit.getLogger().info("Error loading quest instance for " + username + ": " + e.getMessage());
+                }
             }
         }
 

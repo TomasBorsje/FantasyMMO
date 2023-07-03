@@ -32,6 +32,17 @@ public interface ICustomItem extends IHasId {
     public ItemStack createStack();
 
     /**
+     * Create a new ItemStack of this item with a specified amount.
+     * @param amount The amount of this item to create.
+     * @return A new ItemStack of this item.
+     */
+    public default ItemStack createStack(int amount) {
+        ItemStack stack = createStack();
+        stack.setAmount(amount);
+        return stack;
+    }
+
+    /**
      * An item's value in copper.
      * @return The value of this item in copper coins.
      */

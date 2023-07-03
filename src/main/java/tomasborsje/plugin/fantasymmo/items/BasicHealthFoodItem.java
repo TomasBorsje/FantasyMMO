@@ -32,13 +32,13 @@ public class BasicHealthFoodItem extends AbstractCustomItem implements IUsable, 
     public boolean rightClick(PlayerData pd, ItemStack item) {
         pd.addBuff(new FoodHealthRegenBuff(name, durationSec*20, healthPerSec));
         SoundUtil.PlayEatSound(pd.player);
-        pd.player.sendMessage(ChatColor.GREEN+"You ate "+name+". (+"+healthPerSec+ChatColor.GREEN+" hp/s)");
+        pd.player.sendMessage(ChatColor.GREEN+"You ate "+name+". (+"+healthPerSec+ChatColor.GREEN+" Health Regeneration)");
         return true;
     }
 
     @Override
     public String getRightClickDescription() {
-        return ChatColor.WHITE+"Restores "+ChatColor.RED+healthPerSec+ChatColor.WHITE+" health per second for "+ChatColor.YELLOW+durationSec+ChatColor.WHITE+" seconds.\nRestoration stops upon entering combat.";
+        return ChatColor.WHITE+"Restores "+ChatColor.RED+healthPerSec*durationSec+" Health"+ChatColor.WHITE+" over "+ChatColor.YELLOW+durationSec+ChatColor.WHITE+" seconds.\nRestoration stops upon entering combat.";
     }
 
     @Override

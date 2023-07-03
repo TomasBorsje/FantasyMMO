@@ -77,7 +77,7 @@ public class EntityHurtEntityListener implements Listener {
             PlayerData playerData = PlayerHandler.instance.getPlayerData(player);
 
             // Damage the player
-            playerData.hurt(customAttacker, customAttacker.attackDamage, CustomDamageType.PHYSICAL);
+            playerData.hurt(customAttacker, CustomDamageType.PHYSICAL, customAttacker.attackDamage);
 
             // Apply on hit effects for each buff the custom attacker has
             customAttacker.buffs.forEach((buff) -> {

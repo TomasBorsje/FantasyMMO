@@ -37,13 +37,13 @@ public class BasicManaPotionItem extends AbstractCustomItem implements IUsable, 
     public boolean rightClick(PlayerData pd, ItemStack item) {
         pd.addBuff(new FoodManaRegenBuff(name, durationSec*20, manaPerSec));
         SoundUtil.PlayDrinkSound(pd.player);
-        pd.player.sendMessage(ChatColor.GREEN+"You drank "+name+". (+"+manaPerSec+ChatColor.GREEN+" mana/s)");
+        pd.player.sendMessage(ChatColor.GREEN+"You drank "+name+". (+"+manaPerSec+ChatColor.GREEN+" Mana Regeneration)");
         return true;
     }
 
     @Override
     public String getRightClickDescription() {
-        return ChatColor.WHITE+"Restores "+ChatColor.BLUE+ manaPerSec +ChatColor.WHITE+" mana per second for "+ChatColor.YELLOW+durationSec+ChatColor.WHITE+" seconds.\nRestoration stops upon entering combat.";
+        return ChatColor.WHITE+"Restores "+ChatColor.BLUE+ manaPerSec*durationSec +" Mana"+ChatColor.WHITE+" over "+ChatColor.YELLOW+durationSec+ChatColor.WHITE+" seconds.\nRestoration stops upon entering combat.";
     }
 
     @Override

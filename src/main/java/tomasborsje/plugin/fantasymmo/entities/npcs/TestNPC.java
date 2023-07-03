@@ -5,17 +5,10 @@ import net.minecraft.world.item.Items;
 import org.bukkit.Location;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
-import tomasborsje.plugin.fantasymmo.guis.PurchasableItem;
-import tomasborsje.plugin.fantasymmo.guis.VendorGUI;
-import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
+import tomasborsje.plugin.fantasymmo.core.util.GUIUtil;
+import tomasborsje.plugin.fantasymmo.registries.QuestRegistry;
 
 public class TestNPC extends CustomNPC {
-
-    private final PurchasableItem[] itemsForSale = new PurchasableItem[] {
-            new PurchasableItem(ItemRegistry.MISTWEAVE_ROBE, ItemUtil.Value(0,1,0)),
-            new PurchasableItem(ItemRegistry.RECIPE_SCROLL_SLIME_TO_TRAINING_WAND, ItemUtil.Value(0,5,0)),
-    };
 
     /**
      * Create a new instance of this entity at the given location.
@@ -32,7 +25,8 @@ public class TestNPC extends CustomNPC {
 
     @Override
     public void interact(PlayerData playerData) {
-        // Open GUI if not opened
-        playerData.openGUI(new VendorGUI(playerData, "Test NPC Shop", itemsForSale));
+        // Open quest if not completed
+        boolean questShown = GUIUtil.ShowQuestPromptIfNotCompleted(playerData, QuestRegistry.KILL_FOREST_SLIMES, this.name);
+        if(questShown) { return; }
     }
 }

@@ -16,6 +16,7 @@ public class InventoryCloseListener implements Listener {
             // Get player data
             PlayerData playerData = PlayerHandler.instance.getPlayerData(player);
             // Set the player's current GUI to null
+
             playerData.closeGUI();
         }
     }

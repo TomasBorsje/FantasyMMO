@@ -15,7 +15,6 @@ import java.util.Arrays;
  */
 public class PlayerBossBar {
     private final static float DEGREES = 120;
-    private final static int COMPASS_WIDTH = 72;
     private final static int TOTAL_SIZE = 200;
     private final BossBar bar;
     private final PlayerData playerData;

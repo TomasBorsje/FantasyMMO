@@ -14,7 +14,7 @@ import java.util.List;
  * This must be derived for each quest.
  */
 public abstract class AbstractQuestInstance implements IHasId {
-    protected final IQuestObjective[] objectives;
+    public final IQuestObjective[] objectives;
     private final PlayerData playerData;
     protected String name;
     protected String description;
@@ -22,6 +22,7 @@ public abstract class AbstractQuestInstance implements IHasId {
     protected int xpReward;
     protected int stage = 0;
     protected String id;
+    protected boolean repeatable = false;
     boolean completed = false;
     protected ItemStack[] itemRewards;
     public AbstractQuestInstance(PlayerData pd, IQuestObjective... objectives) {
@@ -31,6 +32,10 @@ public abstract class AbstractQuestInstance implements IHasId {
 
     public int getStage() {
         return stage;
+    }
+
+    public boolean isRepeatable() {
+        return repeatable;
     }
 
     /**

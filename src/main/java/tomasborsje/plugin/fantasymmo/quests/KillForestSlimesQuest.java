@@ -11,9 +11,10 @@ public class KillForestSlimesQuest extends AbstractQuestInstance {
                 new KillEntityObjective("FOREST_SLIME","Forest Slime",3, new Vector(132.5,67,-18.5)));
         id = "KILL_FOREST_SLIMES";
         name = "Slimy Situation";
-        description = "Kill Forest Slimes";
+        description = "I see you've arrived, soldier. You might notice there are a lot of slimes around here.\nAs part of your training, I want you to kill 3 of them.";
         moneyReward = 100;
         xpReward = 1000;
+        repeatable = true;
         itemRewards = new ItemStack[] {
                 ItemRegistry.SLIME_JELLY.createStack(5),
                 ItemRegistry.SLIME_SLUSHY.createStack(),

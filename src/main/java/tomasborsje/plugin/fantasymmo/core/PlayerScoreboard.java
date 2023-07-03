@@ -11,7 +11,10 @@ public class PlayerScoreboard {
     private Scoreboard scoreboard;
     private boolean initialized;
     private Objective display;
-    private Score firstEmpty;
+    private Score titleNewLine;
+    private Score regionNewLine;
+    private Score region;
+    private Score regionLevel;
     private Score money;
     private Score secondEmpty;
     private Score questsHeader;
@@ -54,8 +57,18 @@ public class PlayerScoreboard {
         // TODO: Stop flickering (looks like a whole undertaking, use team scoreboards instead)
 
         // Empty line 1
-        firstEmpty = display.getScore("");
-        firstEmpty.setScore(i--);
+        titleNewLine = display.getScore("");
+        titleNewLine.setScore(i--);
+
+        // Region display
+        region = display.getScore(playerData.currentRegion.getDisplayName());
+        region.setScore(i--);
+        regionLevel = display.getScore(playerData.currentRegion.getLevelDisplay());
+        regionLevel.setScore(i--);
+
+        // Empty line 2
+        regionNewLine = display.getScore(" ");
+        regionNewLine.setScore(i--);
 
         // Money display
         money = display.getScore(ChatColor.WHITE+"Money: " + ChatColor.RESET + TooltipUtil.GetPlayerMoneyString(playerData.getMoney()));
@@ -64,7 +77,7 @@ public class PlayerScoreboard {
         // Show first quest
         if(playerData.activeQuests.size() > 0) {
             // Second empty line
-            secondEmpty = display.getScore(" ");
+            secondEmpty = display.getScore("  ");
             secondEmpty.setScore(i--);
 
             // Quests header
@@ -80,7 +93,7 @@ public class PlayerScoreboard {
         }
 
         // Third empty line
-        thirdEmpty = display.getScore("  ");
+        thirdEmpty = display.getScore("   ");
         thirdEmpty.setScore(i--);
 
         // Show website URL
@@ -92,7 +105,9 @@ public class PlayerScoreboard {
 
     private void resetScores() {
         scoreboard.resetScores(money.getEntry());
-        scoreboard.resetScores(firstEmpty.getEntry());
+        scoreboard.resetScores(titleNewLine.getEntry());
+        scoreboard.resetScores(region.getEntry());
+        scoreboard.resetScores(regionLevel.getEntry());
         if(quest1 != null) {
             scoreboard.resetScores(secondEmpty.getEntry());
             scoreboard.resetScores(questsHeader.getEntry());

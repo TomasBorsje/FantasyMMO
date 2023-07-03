@@ -15,15 +15,16 @@ import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
-import tomasborsje.plugin.fantasymmo.quests.KillForestSlimesQuest;
-import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
+import tomasborsje.plugin.fantasymmo.handlers.RegionHandler;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
+import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PlayerData implements IBuffable {
@@ -57,10 +58,12 @@ public class PlayerData implements IBuffable {
     private int timeSinceLastCombat;
     private PlayerScoreboard scoreboard;
     private PlayerBossBar bossBar;
+    public Region currentRegion;
     public List<String> knownRecipeIds = new ArrayList<>(); // Stores IDs of recipes the player knows
     private @Nullable CustomGUIInstance currentGUI = null; // The currently open GUI
     public final ArrayList<Buff> buffs = new ArrayList<>(); // List of buffs currently active on the player
     public final ArrayList<AbstractQuestInstance> activeQuests = new ArrayList<>(); // List of active quests
+    public HashSet<String> completedQuests = new HashSet<>(); // List of completed quest IDs
     public PlayerData(Player player) {
         this.player = player;
         this.username = player.getName();
@@ -77,10 +80,10 @@ public class PlayerData implements IBuffable {
 
         this.timeSinceLastCombat = COMBAT_COOLDOWN;
 
+        this.currentRegion = RegionHandler.instance.getRegion(player.getLocation());
+
         // Show level to player
         updateExpBar();
-
-        addQuest(new KillForestSlimesQuest(this));
 
         scoreboard = new PlayerScoreboard(this);
         bossBar = new PlayerBossBar(this);
@@ -112,11 +115,31 @@ public class PlayerData implements IBuffable {
      * Adds a quest to the player's active quest list.
      * @param quest The quest to add
      */
-    public void addQuest(AbstractQuestInstance quest) {
-        // If we don't have this quest yet, add it
-        if(activeQuests.stream().noneMatch(q -> q.getCustomId().equals(quest.getCustomId()))) {
+    public boolean addQuest(AbstractQuestInstance quest) {
+        // If we don't have this quest yet and haven't completed it, add it
+        if((!completedQuests.contains(quest.getCustomId()) || quest.isRepeatable()) && !hasQuestActive(quest.getCustomId())) {
             activeQuests.add(quest);
+            return true;
         }
+        return false;
+    }
+
+    /**
+     * Checks if the player has completed a quest.
+     * @param questId The quest ID to check
+     * @return True if the player has completed the quest, false otherwise
+     */
+    public boolean hasCompletedQuest(String questId) {
+        return completedQuests.contains(questId);
+    }
+
+    /**
+     * Returns true if the player has the current quest ID as an active quest.
+     * @param questId The quest ID to check
+     * @return True if the player has the quest, false otherwise
+     */
+    public boolean hasQuestActive(String questId) {
+        return activeQuests.stream().anyMatch(q -> q.getCustomId().equals(questId));
     }
 
     public void openGUI(CustomGUIInstance gui) {
@@ -133,8 +156,10 @@ public class PlayerData implements IBuffable {
     }
 
     public void closeGUI() {
-        this.currentGUI = null;
-        // TODO Figure out how to force close GUI (packet?)
+        if(currentGUI != null) {
+            this.currentGUI = null;
+            this.player.closeInventory();
+        }
     }
 
     public void tick() {
@@ -184,6 +209,15 @@ public class PlayerData implements IBuffable {
             bossBar.render();
         }
 
+        // Every 5 sec, update region
+        if(ticksPlayed % 100 == 0) {
+            Region newRegion = RegionHandler.instance.getRegion(player.getLocation());
+            if(newRegion != currentRegion) {
+                currentRegion = newRegion;
+                player.sendMessage(ChatColor.GRAY + "You entered " + currentRegion.name + ".");
+            }
+        }
+
         // Update xp bar to show level and progress
         // TODO: Don't do this every tick if we can avoid it, only on xp gain
         updateExpBar();
@@ -223,6 +257,9 @@ public class PlayerData implements IBuffable {
                 quest.grantRewards(this);
                 // Remove quest
                 activeQuests.remove(quest);
+                // We still add repeatable quests to the completed quests so we can track numbers in general, etc.
+                completedQuests.add(quest.getCustomId());
+
                 i--;
             }
         }
@@ -234,14 +271,10 @@ public class PlayerData implements IBuffable {
         updateVanillaHealthBarDisplay();
     }
 
-    public void setLevel(int level) {
+    public void setLevelAndExperience(int level, int experience) {
         this.level = level;
-        player.setLevel(level);
-        player.setExp((float)experience / StatCalc.getExperienceForLevel(level));
-    }
-
-    public void setExperience(int experience) {
         this.experience = experience;
+        player.setLevel(level);
         player.setExp((float)experience / StatCalc.getExperienceForLevel(level));
     }
 

@@ -18,6 +18,7 @@ import tomasborsje.plugin.fantasymmo.registries.QuestRegistry;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -68,10 +69,8 @@ public class DatabaseConnection {
 
         try {
             int level = playerDoc.getInteger("level");
-            playerData.setLevel(level);
-
             int experience = playerDoc.getInteger("experience");
-            playerData.setExperience(experience);
+            playerData.setLevelAndExperience(level, experience);
 
             int money = playerDoc.getInteger("money");
             playerData.addMoney(money);
@@ -79,6 +78,10 @@ public class DatabaseConnection {
             List<String> knownRecipes = playerDoc.getList("knownRecipes", String.class);
             // Need to be careful of null values returned if player knows no recipes
             playerData.knownRecipeIds = knownRecipes == null ? new ArrayList<>() : knownRecipes;
+
+            // Load completed quest ids
+            List<String> completedQuestIds = playerDoc.getList("completedQuests", String.class);
+            playerData.completedQuests = completedQuestIds == null ? new HashSet<>() : new HashSet<>(completedQuestIds);
         } catch (Exception e) {
             Bukkit.getLogger().info("Error loading player data for " + username + ": " + e.getMessage());
         }
@@ -125,6 +128,7 @@ public class DatabaseConnection {
         playerDoc.append("experience", playerData.getExperience());
         playerDoc.append("money", playerData.getMoney());
         playerDoc.append("knownRecipes", playerData.knownRecipeIds);
+        playerDoc.append("completedQuests", playerData.completedQuests);
 
         // Transform quests into documents
         List<Document> questInstances = new ArrayList<>();

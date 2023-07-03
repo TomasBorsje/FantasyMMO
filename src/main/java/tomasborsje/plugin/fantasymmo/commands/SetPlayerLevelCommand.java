@@ -23,8 +23,8 @@ public class SetPlayerLevelCommand implements CommandExecutor {
         double percentage = Double.parseDouble(args[2]); // 0-100
 
         PlayerData data = PlayerHandler.instance.getPlayerData(username);
-        data.setLevel(level);
         data.setExperience((int) (StatCalc.getExperienceForLevel(level) * percentage / 100));
+        data.setLevel(level);
 
         return true;
     }

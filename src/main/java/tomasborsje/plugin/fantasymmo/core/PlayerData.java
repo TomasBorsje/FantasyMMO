@@ -237,12 +237,12 @@ public class PlayerData implements IBuffable {
     public void setLevel(int level) {
         this.level = level;
         player.setLevel(level);
-        player.setExp((float)experience / (level * 50));
+        player.setExp((float)experience / StatCalc.getExperienceForLevel(level));
     }
 
     public void setExperience(int experience) {
         this.experience = experience;
-        player.setExp((float)experience / (level * 50));
+        player.setExp((float)experience / StatCalc.getExperienceForLevel(level));
     }
 
     public int getLevel() {

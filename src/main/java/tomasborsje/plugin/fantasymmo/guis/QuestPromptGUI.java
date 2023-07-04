@@ -29,18 +29,21 @@ public class QuestPromptGUI extends CustomGUIInstance {
     @Override
     protected Inventory renderInventory() {
         Inventory inv = super.renderInventory();
+
         // Show accept button with custom name
         ItemStack accept = new ItemStack(Material.GREEN_WOOL, 1);
         ItemMeta acceptMeta = accept.getItemMeta();
         acceptMeta.setDisplayName(ChatColor.GREEN+""+ChatColor.BOLD+"ACCEPT");
         accept.setItemMeta(acceptMeta);
         inv.setItem(ACCEPT_SLOT, accept);
+
         // Show decline button with custom name
         ItemStack decline = new ItemStack(Material.RED_WOOL, 1);
         ItemMeta declineMeta = decline.getItemMeta();
         declineMeta.setDisplayName(ChatColor.RED+""+ChatColor.BOLD+"DECLINE");
         decline.setItemMeta(declineMeta);
         inv.setItem(DECLINE_SLOT, decline);
+
         // Show the quest description as a book
         ItemStack book = new ItemStack(Material.BOOK, 1);
         ItemMeta m = book.getItemMeta();
@@ -48,7 +51,8 @@ public class QuestPromptGUI extends CustomGUIInstance {
         String[] description = quest.getDescription().split("\n");
         List<String> lore = Arrays.stream(description).map(s -> ChatColor.WHITE+s).collect(Collectors.toList());
         lore.add(0, "");
-        // Add objective lists
+
+        // Add objective list
         lore.add("");
         lore.add(ChatColor.YELLOW+"Objectives:");
         lore.add("");
@@ -57,7 +61,8 @@ public class QuestPromptGUI extends CustomGUIInstance {
         }
         // Make each line white and add it to the lore
         m.setLore(lore);
-        m.setDisplayName(ChatColor.YELLOW +""+ ChatColor.UNDERLINE + quest.getName());
+        m.setDisplayName(ChatColor.YELLOW +""+ ChatColor.UNDERLINE + "Quest" + ChatColor.RESET + ChatColor.YELLOW +": "+ quest.getName());
+
         // Set description
         book.setItemMeta(m);
         inv.setItem(DESCRIPTION_SLOT, book);
@@ -67,8 +72,8 @@ public class QuestPromptGUI extends CustomGUIInstance {
         ItemMeta rewardMeta = rewardDisplay.getItemMeta();
         rewardMeta.setDisplayName(ChatColor.YELLOW+"Rewards:");
         List<String> rewardLore = new ArrayList<String>(2);
-        rewardLore.add(ChatColor.GREEN + "" + quest.getXpReward() + " XP");
         rewardLore.add(TooltipUtil.GetValueString(quest.getMoneyReward()));
+        rewardLore.add(ChatColor.GREEN + "" + quest.getXpReward() + " XP");
         // Add item rewards
         if(quest.getItemRewards() != null) {
             rewardLore.add("");

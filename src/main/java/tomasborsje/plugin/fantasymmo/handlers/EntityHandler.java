@@ -3,6 +3,7 @@ package tomasborsje.plugin.fantasymmo.handlers;
 import net.minecraft.world.level.Level;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.registries.EntityRegistry;
@@ -67,6 +68,16 @@ public class EntityHandler {
         EntityHandler.instance.addNPC(customNPC);
 
         return customNPC;
+    }
+
+    /**
+     * Spawns all NPCs in world for the given player.
+     * @param player The player to spawn the NPCs for
+     */
+    public void spawnNPCsForPlayer(Player player) {
+        for(CustomNPC customNPC : customNPCs.values()) {
+            customNPC.spawnForPlayer(player);
+        }
     }
 
     public void removeNPC(int id) {

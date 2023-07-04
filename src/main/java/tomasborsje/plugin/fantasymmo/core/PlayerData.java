@@ -16,6 +16,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
+import tomasborsje.plugin.fantasymmo.core.util.SoundUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
 import tomasborsje.plugin.fantasymmo.handlers.RegionHandler;
@@ -119,6 +120,7 @@ public class PlayerData implements IBuffable {
         // If we don't have this quest yet and haven't completed it, add it
         if((!completedQuests.contains(quest.getCustomId()) || quest.isRepeatable()) && !hasQuestActive(quest.getCustomId())) {
             activeQuests.add(quest);
+            SoundUtil.PlayQuestAcceptSound(player);
             return true;
         }
         return false;
@@ -233,14 +235,49 @@ public class PlayerData implements IBuffable {
 
     /**
      * Progresses each quest the player has using the killed entity, if applicable.
+     *
      * @param killed The entity that was killed
+     * @return True if any quest was progressed, false otherwise
      */
-    public void registerKillForQuests(CustomEntity killed) {
+    public boolean registerKillForQuests(CustomEntity killed) {
         // Attempt progress on each quest with this killed enemy
+        boolean anyQuestProgressed = false;
         for (AbstractQuestInstance quest : activeQuests) {
-            quest.registerKill(killed);
+            // If progress was made, send a message to the player
+            if(quest.registerKill(killed)) {
+                // Only show message if we didn't just complete the quest
+                if(!quest.objectives[quest.objectives.length-1].isCompleted() && quest.objectives[Math.max(quest.getStage()-1, 0)].isCompleted()) {
+                    SoundUtil.PlayQuestProgressSound(player);
+                    player.sendMessage(ChatColor.WHITE + "You progressed the quest " + ChatColor.YELLOW + quest.getName() + ChatColor.WHITE + ".");
+                }
+                anyQuestProgressed = true;
+            }
         }
         checkQuestCompletion();
+        return anyQuestProgressed;
+    }
+
+    /**
+     * Progresses each quest the player has using the interacted npc, if applicable.
+     * @param npc The npc that was interacted with
+     * @return True if any quest was progressed, false otherwise
+     */
+    public boolean registerNPCInteractForQuests(CustomNPC npc) {
+        // Attempt progress on each quest by interacting with this npc
+        boolean anyQuestProgressed = false;
+        for (AbstractQuestInstance quest : activeQuests) {
+            // If progress was made, send a message to the player
+            if(quest.registerNPCInteraction(npc)) {
+                // Only show message if we didn't just complete the quest
+                if(!quest.objectives[quest.objectives.length-1].isCompleted() && quest.objectives[Math.max(quest.getStage()-1, 0)].isCompleted()) {
+                    SoundUtil.PlayQuestProgressSound(player);
+                    player.sendMessage(ChatColor.WHITE + "You progressed the quest " + ChatColor.YELLOW + quest.getName() + ChatColor.WHITE + ".");
+                }
+                anyQuestProgressed = true;
+            }
+        }
+        checkQuestCompletion();
+        return anyQuestProgressed;
     }
 
     /**
@@ -259,6 +296,8 @@ public class PlayerData implements IBuffable {
                 activeQuests.remove(quest);
                 // We still add repeatable quests to the completed quests so we can track numbers in general, etc.
                 completedQuests.add(quest.getCustomId());
+                // Play quest complete sound
+                SoundUtil.PlayQuestCompleteSound(player);
 
                 i--;
             }

@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
@@ -26,7 +27,13 @@ public class PlayerInteractPlayerListener implements Listener {
 
         // If the right-clicked entity is a custom NPC, interact with the NPC
         if(EntityHandler.instance.hasNPC(clickedEntityId)) {
-            EntityHandler.instance.getNPC(clickedEntityId).interact(playerData);
+            CustomNPC npc = EntityHandler.instance.getNPC(clickedEntityId);
+            // Try make quest progress
+            boolean questProgress = playerData.registerNPCInteractForQuests(npc);
+            // If we didn't make progress, interact with the NPC instead
+            if(!questProgress) {
+                npc.interact(playerData);
+            }
         }
         else {
             // Otherwise the clicked player is a real player

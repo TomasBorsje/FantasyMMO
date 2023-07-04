@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 public class PlayerConnectionListener implements Listener {
@@ -12,6 +13,8 @@ public class PlayerConnectionListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         // Load player data as they join
         PlayerHandler.instance.loadPlayerData(event.getPlayer());
+        // Load custom NPCS for the player
+        EntityHandler.instance.spawnNPCsForPlayer(event.getPlayer());
     }
 
     @EventHandler

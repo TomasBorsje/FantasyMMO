@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
+import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
 
@@ -87,6 +88,28 @@ public abstract class AbstractQuestInstance implements IHasId {
                 // Progress to next stage if this objective is now completed
                 if(killObjective.isCompleted()) {
                     // If we just completed the last objective, mark this quest as completed
+                    if(stage == objectives.length - 1) {
+                        completed = true;
+                    }
+                    else {
+                        stage++;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Attempt to progress this quest by interacting with an NPC.
+     * @param npc The NPC that was interacted with.
+     * @return True if progress was made on this quest.
+     */
+    public boolean registerNPCInteraction(CustomNPC npc) {
+        if(getCurrentObjective() instanceof TalkToNPCQuestObjective talkObjective) {
+            if(talkObjective.tryAddProgress(npc)) {
+                if(talkObjective.isCompleted()) {
                     if(stage == objectives.length - 1) {
                         completed = true;
                     }

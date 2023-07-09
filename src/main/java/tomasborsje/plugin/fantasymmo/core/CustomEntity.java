@@ -61,6 +61,15 @@ public abstract class CustomEntity implements IHasId, IBuffable {
         return (float) (nmsEntity.getAttribute(Attributes.MAX_HEALTH).getValue() * currentHealth / maxHealth);
     }
 
+    /**
+     * Completely reset the entity, resetting its health, buffs, etc.
+     * Called when an entity is too far from its spawn point and is leashed back.
+     */
+    public void reset() {
+        this.currentHealth = this.maxHealth;
+        this.removeAllBuffs();
+    }
+
     public abstract LivingEntity getNMSEntity(Location location);
 
     /**

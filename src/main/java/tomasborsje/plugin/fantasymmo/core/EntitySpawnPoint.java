@@ -9,8 +9,8 @@ import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
  * Will spawn a new entity if the current one is dead
  * for a certain amount of time.
  */
-public class NPCSpawner {
-    private final static int SPAWN_DELAY = 20 * 1; // 5 seconds
+public class EntitySpawnPoint {
+    private final static int SPAWN_DELAY = 20 * 15; // 15 seconds
     private final static int DEFAULT_LEASH_RANGE = 30*30; // 30 block range, squared so we don't need to sqrt
     private int spawnTimer = 0;
     private final String npcId;
@@ -19,12 +19,12 @@ public class NPCSpawner {
     private final int leashRange;
     private int leashTimer = 0;
 
-    public NPCSpawner(String npcId, Location spawnLoc, int leashRange) {
+    public EntitySpawnPoint(String npcId, Location spawnLoc, int leashRange) {
         this.npcId = npcId;
         this.spawnLoc = spawnLoc;
         this.leashRange = leashRange*leashRange;
     }
-    public NPCSpawner(String npcId, Location spawnLoc) {
+    public EntitySpawnPoint(String npcId, Location spawnLoc) {
         this.npcId = npcId;
         this.spawnLoc = spawnLoc;
         this.leashRange = DEFAULT_LEASH_RANGE;
@@ -44,18 +44,21 @@ public class NPCSpawner {
                 spawnTimer = 0;
             }
         }
+        // Otherwise, if the entity is alive, see if it's too far away
         else {
             spawnTimer = 0;
             leashTimer++;
             // Every 2 sec, If entity is out of leash range, teleport it back
             if(leashTimer == 40) {
                 leashTimer = 0;
+
+                // Expensive distance calculation, but it's only done every 2 seconds
                 if(nmsEntity.distanceToSqr(spawnLoc.getX(), spawnLoc.getY(), spawnLoc.getZ()) > leashRange) {
                     // Move back to spawn location so players can't kite them away
                     nmsEntity.setPos(spawnLoc.getX(), spawnLoc.getY(), spawnLoc.getZ());
                     nmsEntity.combatTracker.recheckStatus();
                     // Refill their health
-                    entity.currentHealth = entity.maxHealth;
+                    entity.reset();
                 }
             }
         }

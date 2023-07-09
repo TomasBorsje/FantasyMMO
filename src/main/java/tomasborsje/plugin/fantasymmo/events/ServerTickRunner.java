@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import tomasborsje.plugin.fantasymmo.FantasyMMO;
+import tomasborsje.plugin.fantasymmo.entities.npcs.WorldNPCSpawner;
 import tomasborsje.plugin.fantasymmo.handlers.*;
 
 public class ServerTickRunner extends BukkitRunnable {
@@ -20,6 +21,10 @@ public class ServerTickRunner extends BukkitRunnable {
             // Load map handler
             // Needs to be done when the world already exists
             MapHandler.instance.init();
+            // Init world NPCs
+            WorldNPCSpawner.init(world);
+            // Init entity spawner
+            EntitySpawningHandler.instance.init(world);
         }
 
         // Tick players

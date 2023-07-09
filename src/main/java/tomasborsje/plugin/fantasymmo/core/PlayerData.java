@@ -19,6 +19,7 @@ import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.SoundUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUI;
+import tomasborsje.plugin.fantasymmo.handlers.MapHandler;
 import tomasborsje.plugin.fantasymmo.handlers.RegionHandler;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
@@ -29,11 +30,13 @@ import java.util.HashSet;
 import java.util.List;
 
 public class PlayerData implements IBuffable {
+    public static final int MAP_SLOT = 8;
     private final static int VANILLA_MAX_HEALTH = 20;
     private final static int LEVEL_CAP = 100;
     private final static int MONEY_CAP = ItemUtil.Value(100000,0,0); // Gold cap of 100,000 gold
     private final static int COMBAT_COOLDOWN = 20 * 10; // 10 seconds
     private final static float DEFAULT_MOVESPEED = 0.2f;
+
     public final Player player;
     private final String username;
     private long ticksPlayed = 0;
@@ -71,6 +74,10 @@ public class PlayerData implements IBuffable {
 
         this.level = 1;
         this.experience = 0;
+
+        // Set MAP SLOT to special map item
+        ItemStack map = MapHandler.instance.getWorldMap();
+        player.getInventory().setItem(MAP_SLOT, map);
 
         // Recalc stats
         recalculateStats();

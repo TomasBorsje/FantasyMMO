@@ -4,18 +4,23 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import tomasborsje.plugin.fantasymmo.FantasyMMO;
-import tomasborsje.plugin.fantasymmo.handlers.EntitySpawningHandler;
-import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
-import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
-import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
+import tomasborsje.plugin.fantasymmo.handlers.*;
 
 public class ServerTickRunner extends BukkitRunnable {
     private static final int SAVE_INTERVAL = 20 * 60 * 5; // 5 minutes
     private int saveTimer = 0;
+    boolean init = false;
     @Override
     public void run() {
         World world = FantasyMMO.Plugin.getServer().getWorlds().get(0);
         if(world == null) { return; }
+
+        if(!init) {
+            init = true;
+            // Load map handler
+            // Needs to be done when the world already exists
+            MapHandler.instance.init();
+        }
 
         // Tick players
         PlayerHandler.instance.tick(world);

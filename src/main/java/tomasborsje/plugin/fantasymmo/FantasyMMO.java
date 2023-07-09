@@ -1,6 +1,7 @@
 package tomasborsje.plugin.fantasymmo;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.PluginManager;
@@ -11,6 +12,7 @@ import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 import tomasborsje.plugin.fantasymmo.events.*;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
 public class FantasyMMO extends JavaPlugin {
@@ -18,12 +20,26 @@ public class FantasyMMO extends JavaPlugin {
     public static FantasyMMO Plugin = null;
     public static ServerTickRunner serverTick;
     public static DatabaseConnection databaseConnection;
+    public static File dataFolder;
+    public static String motd = "";
+    public static final String version = "0.0.1";
 
     @Override
     public void onEnable() {
         Bukkit.getLogger().info("Enabled FantasyMMO.");
 
         Plugin = this;
+
+        // Build MOTD for server list
+        buildMotd();
+
+        // Store plugin data folder
+        dataFolder = getDataFolder();
+
+        // Create data folder if it doesn't exist
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
 
         // Connect to database
         databaseConnection = new DatabaseConnection();
@@ -39,6 +55,13 @@ public class FantasyMMO extends JavaPlugin {
 
         serverTick = new ServerTickRunner();
         serverTick.runTaskTimer(this,0,1);
+    }
+
+    private void buildMotd() {
+        // Format: FantasyMMO <version> - BETA
+        motd = ChatColor.YELLOW+""+ChatColor.BOLD+"Fantasy"+ChatColor.GOLD+""+ChatColor.BOLD+"MMO "+ChatColor.RESET
+                + ChatColor.WHITE+""+ChatColor.BOLD+version + " - "+ChatColor.BLUE+ChatColor.BOLD+"BETA";
+        motd += "\n"+ChatColor.GRAY+"-- TEST SERVER --";
     }
 
     private void registerEnchantments() {
@@ -59,6 +82,7 @@ public class FantasyMMO extends JavaPlugin {
         pluginManager.registerEvents(new CustomItemUseListener(), this);
         pluginManager.registerEvents(new WorldLoadListener(), this);
         pluginManager.registerEvents(new EntityHurtEntityListener(), this);
+        pluginManager.registerEvents(new EntityReceiveDamageListener(), this);
         pluginManager.registerEvents(new SlimeSplitListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
         pluginManager.registerEvents(new PlayerConnectionListener(), this);
@@ -68,6 +92,8 @@ public class FantasyMMO extends JavaPlugin {
         pluginManager.registerEvents(new InventoryItemClickListener(), this);
         pluginManager.registerEvents(new FoodLevelChangeListener(), this);
         pluginManager.registerEvents(new PlayerCraftListener(), this);
+        pluginManager.registerEvents(new ServerListPingListener(), this);
+        pluginManager.registerEvents(new PlayerDropItemListener(), this);
 
         Bukkit.getLogger().info("Registered event listeners.");
     }

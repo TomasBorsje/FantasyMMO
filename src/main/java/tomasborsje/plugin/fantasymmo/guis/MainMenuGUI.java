@@ -11,7 +11,7 @@ import tomasborsje.plugin.fantasymmo.core.util.GUIUtil;
 import java.util.List;
 
 public class MainMenuGUI extends CustomGUI {
-    private final static int MIDDLE_SLOT = GUIUtil.GetSlot(5, 3);
+    private final static int TITLE_SLOT = GUIUtil.GetSlot(5, 2);
     public MainMenuGUI(PlayerData playerData) {
         super(playerData, 54, "Menu");
     }
@@ -28,14 +28,14 @@ public class MainMenuGUI extends CustomGUI {
         meta.setDisplayName(ChatColor.GOLD+""+ChatColor.BOLD+"FantasyMMO");
         infoBook.setItemMeta(meta);
         // Show the info book in the middle
-        inv.setItem(MIDDLE_SLOT, infoBook);
+        inv.setItem(TITLE_SLOT, infoBook);
 
         return inv;
     }
 
     @Override
     public void onClickSlot(int slot) {
-        if(slot == MIDDLE_SLOT) {
+        if(slot == TITLE_SLOT) {
             playerData.player.sendMessage(ChatColor.GOLD+"Welcome to FantasyMMO!");
         }
     }

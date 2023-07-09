@@ -24,8 +24,8 @@ public class SoundUtil {
     public static void PlayQuestCompleteSound(Player player) {
         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1);
         // Play two delayed sounds
-        scheduler.runTaskLater(FantasyMMO.Plugin, () -> player.playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1.5f), 5);
-        scheduler.runTaskLater(FantasyMMO.Plugin, () -> player.playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1, 2f), 10);
+        scheduler.runTaskLater(FantasyMMO.Plugin, () -> player.playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1.5f), 3);
+        scheduler.runTaskLater(FantasyMMO.Plugin, () -> player.playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1, 2f), 6);
     }
 
     public static void PlayQuestAcceptSound(Player player) {

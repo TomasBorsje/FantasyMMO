@@ -9,6 +9,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
+import tomasborsje.plugin.fantasymmo.guis.MainMenuGUI;
 import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
@@ -16,10 +18,13 @@ import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 /**
  * Handles custom item use events.
  */
-public class CustomItemUseListener implements Listener {
+public class PlayerItemUseListener implements Listener {
 
     @EventHandler
     public void OnPlayerUseItem(PlayerInteractEvent event) {
+
+        // If item is null, return
+        if(event.getItem() == null) { return; }
 
         // Doesn't apply to admins or off-hand items
         if(event.getHand() == EquipmentSlot.OFF_HAND) {
@@ -28,6 +33,16 @@ public class CustomItemUseListener implements Listener {
         }
         // Only handle right clicks
         if(!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) { return; }
+
+        // Get our player data
+        PlayerData playerData = PlayerHandler.instance.loadPlayerData(event.getPlayer());
+
+        // If the used item is the world map, open the info GUI
+        if(event.getItem().hasItemMeta() && event.getItem().getItemMeta().getDisplayName().equals(TooltipUtil.worldMapName)) {
+            // Open the info GUI
+            playerData.openGUI(new MainMenuGUI(playerData));
+            return;
+        }
 
         // Get NMS stack copy
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(event.getItem());
@@ -38,9 +53,6 @@ public class CustomItemUseListener implements Listener {
             //event.setCancelled(true);
             return;
         }
-
-        // Get our player data
-        PlayerData playerData = PlayerHandler.instance.loadPlayerData(event.getPlayer());
 
         // Get the custom item id
         String itemId = nmsStack.getTag().getString("ITEM_ID");

@@ -79,7 +79,7 @@ public class FantasyMMO extends JavaPlugin {
 
     private void registerEventListeners() {
         PluginManager pluginManager = this.getServer().getPluginManager();
-        pluginManager.registerEvents(new CustomItemUseListener(), this);
+        pluginManager.registerEvents(new PlayerItemUseListener(), this);
         pluginManager.registerEvents(new WorldLoadListener(), this);
         pluginManager.registerEvents(new EntityHurtEntityListener(), this);
         pluginManager.registerEvents(new EntityReceiveDamageListener(), this);
@@ -94,6 +94,7 @@ public class FantasyMMO extends JavaPlugin {
         pluginManager.registerEvents(new PlayerCraftListener(), this);
         pluginManager.registerEvents(new ServerListPingListener(), this);
         pluginManager.registerEvents(new PlayerDropItemListener(), this);
+        pluginManager.registerEvents(new ChatMessageListener(), this);
 
         Bukkit.getLogger().info("Registered event listeners.");
     }

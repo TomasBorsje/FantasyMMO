@@ -241,6 +241,15 @@ public class PlayerData implements IBuffable {
     }
 
     /**
+     * Called after a player completely finishes logging in.
+     * Used to update the player's display name, etc.
+     */
+    public void postLogin() {
+        // Set player display name to include rank, level, etc.
+        //PlayerPrefixHandler.instance.setPlayerPrefix(this);
+    }
+
+    /**
      * Progresses each quest the player has using the killed entity, if applicable.
      *
      * @param killed The entity that was killed

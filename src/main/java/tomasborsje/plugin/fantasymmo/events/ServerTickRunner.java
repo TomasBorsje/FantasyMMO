@@ -18,8 +18,9 @@ public class ServerTickRunner extends BukkitRunnable {
 
         if(!init) {
             init = true;
-            // Load map handler
-            // Needs to be done when the world already exists
+            // Load player prefix handler
+            PlayerPrefixHandler.instance.init();
+            // Load map handler, needs to be done when the world already exists
             MapHandler.instance.init();
             // Init world NPCs
             WorldNPCSpawner.init(world);

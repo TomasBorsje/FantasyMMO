@@ -18,6 +18,7 @@ public class TooltipUtil {
     public static final String intelligenceIcon = "☆";
     public static final String healthIcon = "❤";
     public static final String defenseIcon = "\uD83D\uDEE1";
+    public static final String worldMapName = ChatColor.GOLD+""+ChatColor.BOLD+"World Map";
 
     public static final String intelligenceLabel = ChatColor.BLUE + intelligenceIcon + " Intelligence";
     public static final String strengthLabel = ChatColor.RED + strengthIcon + " Strength";
@@ -163,6 +164,11 @@ public class TooltipUtil {
         }
         return item.getRarity().getColor() + item.getName();
     }
+
+    public static String getLevelDisplay(int level) {
+        return ChatColor.WHITE+"["+ChatColor.GOLD+level+ChatColor.WHITE+"] ";
+    }
+
     public static String GetValueString(int value) {
         int gold = Math.floorDiv(value, 10000);
         int silver = Math.floorDiv(value - gold * 10000, 100);

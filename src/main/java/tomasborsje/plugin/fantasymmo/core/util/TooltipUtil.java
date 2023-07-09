@@ -170,7 +170,7 @@ public class TooltipUtil {
 
         return (gold > 0 ? (ChatColor.YELLOW + "◎"+ gold+" ") : "")
                 + (silver > 0 ? ChatColor.GRAY+ "◎" + silver+" " : "")
-                + ChatColor.GOLD + "◎" + copper;
+                + (copper > 0 ? ChatColor.GOLD + "◎" + copper : "");
     }
     public static String GetPlayerMoneyString(int value) {
         int gold = Math.floorDiv(value, 10000);

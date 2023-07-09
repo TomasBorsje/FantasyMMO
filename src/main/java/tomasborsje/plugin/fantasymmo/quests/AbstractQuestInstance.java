@@ -19,6 +19,7 @@ public abstract class AbstractQuestInstance implements IHasId {
     private final PlayerData playerData;
     protected String name;
     protected String description;
+    protected String completionDescription;
     protected int moneyReward;
     protected int xpReward;
     protected int stage = 0;
@@ -68,7 +69,7 @@ public abstract class AbstractQuestInstance implements IHasId {
         return id;
     }
 
-    private IQuestObjective getCurrentObjective() {
+    public IQuestObjective getCurrentObjective() {
         return objectives[stage];
     }
 
@@ -146,6 +147,8 @@ public abstract class AbstractQuestInstance implements IHasId {
     public String getDescription() {
         return description;
     }
+
+    public String getCompletionDescription() { return completionDescription; }
 
     public int getMoneyReward() {
         return moneyReward;

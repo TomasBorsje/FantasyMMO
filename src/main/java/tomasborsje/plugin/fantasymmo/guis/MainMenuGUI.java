@@ -10,7 +10,7 @@ import tomasborsje.plugin.fantasymmo.core.util.GUIUtil;
 
 import java.util.List;
 
-public class MainMenuGUI extends CustomGUIInstance {
+public class MainMenuGUI extends CustomGUI {
     private final static int MIDDLE_SLOT = GUIUtil.GetSlot(5, 3);
     public MainMenuGUI(PlayerData playerData) {
         super(playerData, 54, "Menu");

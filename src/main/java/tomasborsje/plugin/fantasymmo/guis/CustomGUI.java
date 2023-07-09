@@ -11,7 +11,7 @@ import tomasborsje.plugin.fantasymmo.core.PlayerData;
  * This class is abstract, and should be extended for each GUI.
  * Provides methods to render and show the GUI, as well as handle slot clicks.
  */
-public abstract class CustomGUIInstance {
+public abstract class CustomGUI {
 
     protected int size;
     protected String name;
@@ -19,7 +19,7 @@ public abstract class CustomGUIInstance {
     protected Inventory display;
     protected final ItemStack emptyPane = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 
-    public CustomGUIInstance(PlayerData playerData, int size, String inventoryName) {
+    public CustomGUI(PlayerData playerData, int size, String inventoryName) {
         this.playerData = playerData;
         this.size = size;
         this.name = inventoryName;

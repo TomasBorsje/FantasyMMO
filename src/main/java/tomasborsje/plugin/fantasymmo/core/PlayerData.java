@@ -18,7 +18,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.SoundUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
-import tomasborsje.plugin.fantasymmo.guis.CustomGUIInstance;
+import tomasborsje.plugin.fantasymmo.guis.CustomGUI;
 import tomasborsje.plugin.fantasymmo.handlers.RegionHandler;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
@@ -61,7 +61,7 @@ public class PlayerData implements IBuffable {
     private PlayerBossBar bossBar;
     public Region currentRegion;
     public List<String> knownRecipeIds = new ArrayList<>(); // Stores IDs of recipes the player knows
-    private @Nullable CustomGUIInstance currentGUI = null; // The currently open GUI
+    private @Nullable CustomGUI currentGUI = null; // The currently open GUI
     public final ArrayList<Buff> buffs = new ArrayList<>(); // List of buffs currently active on the player
     public final ArrayList<AbstractQuestInstance> activeQuests = new ArrayList<>(); // List of active quests
     public HashSet<String> completedQuests = new HashSet<>(); // List of completed quest IDs
@@ -144,7 +144,7 @@ public class PlayerData implements IBuffable {
         return activeQuests.stream().anyMatch(q -> q.getCustomId().equals(questId));
     }
 
-    public void openGUI(CustomGUIInstance gui) {
+    public void openGUI(CustomGUI gui) {
         if(currentGUI != null) {
             closeGUI();
         }
@@ -153,7 +153,7 @@ public class PlayerData implements IBuffable {
     }
 
     @Nullable
-    public CustomGUIInstance getCurrentGUI() {
+    public CustomGUI getCurrentGUI() {
         return currentGUI;
     }
 
@@ -274,6 +274,8 @@ public class PlayerData implements IBuffable {
                     player.sendMessage(ChatColor.WHITE + "You progressed the quest " + ChatColor.YELLOW + quest.getName() + ChatColor.WHITE + ".");
                 }
                 anyQuestProgressed = true;
+                // Only complete 1 quest per npc interaction
+                break;
             }
         }
         checkQuestCompletion();

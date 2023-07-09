@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.util.GUIUtil;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
@@ -15,50 +16,42 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class QuestPromptGUI extends CustomGUI {
-    private static final int ACCEPT_SLOT = GUIUtil.GetSlot(4, 5);
-    private static final int DECLINE_SLOT = GUIUtil.GetSlot(6, 5);
+public class QuestTurnInGUI extends CustomGUI {
+    private static final int TURN_IN_SLOT = GUIUtil.GetSlot(5, 5);
+    private static final int TURN_IN_SLOT_LEFT = GUIUtil.GetSlot(4, 5);
+    private static final int TURN_IN_SLOT_RIGHT = GUIUtil.GetSlot(6, 5);
     private static final int DESCRIPTION_SLOT = GUIUtil.GetSlot(5, 2);
     private static final int REWARDS_SLOT = GUIUtil.GetSlot(5, 3);
     private final AbstractQuestInstance quest;
-    public QuestPromptGUI(PlayerData playerData, AbstractQuestInstance quest) {
+    private final CustomNPC npc;
+
+    public QuestTurnInGUI(PlayerData playerData, AbstractQuestInstance quest, CustomNPC npc) {
         super(playerData, 54, quest.getName());
         this.quest = quest;
+        this.npc = npc;
     }
 
     @Override
     protected Inventory renderInventory() {
         Inventory inv = super.renderInventory();
 
-        // Show accept button with custom name
-        ItemStack accept = new ItemStack(Material.LIME_CONCRETE, 1);
+        // Show turn in button as 3 different gold blocks
+        ItemStack accept = new ItemStack(Material.GOLD_BLOCK, 1);
         ItemMeta acceptMeta = accept.getItemMeta();
-        acceptMeta.setDisplayName(ChatColor.GREEN+""+ChatColor.BOLD+"ACCEPT");
+        acceptMeta.setDisplayName(ChatColor.GOLD+""+ChatColor.BOLD+"TURN IN");
         accept.setItemMeta(acceptMeta);
-        inv.setItem(ACCEPT_SLOT, accept);
-
-        // Show decline button with custom name
-        ItemStack decline = new ItemStack(Material.RED_CONCRETE, 1);
-        ItemMeta declineMeta = decline.getItemMeta();
-        declineMeta.setDisplayName(ChatColor.RED+""+ChatColor.BOLD+"DECLINE");
-        decline.setItemMeta(declineMeta);
-        inv.setItem(DECLINE_SLOT, decline);
+        inv.setItem(TURN_IN_SLOT, accept);
+        inv.setItem(TURN_IN_SLOT_LEFT, accept);
+        inv.setItem(TURN_IN_SLOT_RIGHT, accept);
 
         // Show the quest description as a book
         ItemStack book = new ItemStack(Material.BOOK, 1);
         ItemMeta m = book.getItemMeta();
         // Split description into newlines
-        String[] description = quest.getDescription().split("\n");
+        String[] description = quest.getCompletionDescription().split("\n");
         List<String> lore = Arrays.stream(description).map(s -> ChatColor.WHITE+s).collect(Collectors.toList());
         lore.add(0, "");
 
-        // Add objective list
-        lore.add("");
-        lore.add(ChatColor.YELLOW+"Objectives:");
-        lore.add("");
-        for(int i = 0; i < quest.objectives.length; i++) {
-            lore.add(ChatColor.WHITE+""+(i+1)+". "+quest.objectives[i].getStatusString());
-        }
         // Make each line white and add it to the lore
         m.setLore(lore);
         m.setDisplayName(ChatColor.YELLOW +""+ ChatColor.UNDERLINE + "Quest" + ChatColor.RESET + ChatColor.YELLOW +": "+ quest.getName());
@@ -90,14 +83,12 @@ public class QuestPromptGUI extends CustomGUI {
 
     @Override
     public void onClickSlot(int slot) {
-        if(slot == ACCEPT_SLOT) {
-            // Accept the quest
-            playerData.addQuest(quest);
-            playerData.closeGUI();
-            playerData.player.sendMessage(ChatColor.WHITE+"You accepted the quest: " +ChatColor.YELLOW+ quest.getName());
-        } else if(slot == DECLINE_SLOT) {
-            // Decline the quest
-            playerData.closeGUI();
+        if(slot == TURN_IN_SLOT || slot == TURN_IN_SLOT_LEFT || slot == TURN_IN_SLOT_RIGHT) {
+            // Try to hand in the quest
+            if(playerData.registerNPCInteractForQuests(this.npc)) {
+                // If we make progress, close the GUI
+                playerData.closeGUI();
+            }
         }
     }
 }

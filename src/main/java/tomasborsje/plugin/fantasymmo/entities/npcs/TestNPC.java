@@ -26,7 +26,7 @@ public class TestNPC extends CustomNPC {
     @Override
     public void interact(PlayerData playerData) {
         // Open quest if not completed
-        boolean questShown = GUIUtil.ShowQuestPromptIfNotCompleted(playerData, QuestRegistry.KILL_FOREST_SLIMES, this.name);
+        boolean questShown = GUIUtil.ShowQuestPromptIfNotCompleted(playerData, QuestRegistry.KILL_FOREST_SLIMES);
         if(questShown) { return; }
     }
 }

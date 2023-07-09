@@ -14,7 +14,7 @@ import tomasborsje.plugin.fantasymmo.recipes.RecipeRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CraftingGUI extends CustomGUIInstance {
+public class CraftingGUI extends CustomGUI {
     private static final ItemStack arrow = CustomHeads.GetCraftingArrowHead();
     List<ICustomRecipe> knownRecipes;
     private final static int LEFT_INGREDIENT_COLUMN = 1;

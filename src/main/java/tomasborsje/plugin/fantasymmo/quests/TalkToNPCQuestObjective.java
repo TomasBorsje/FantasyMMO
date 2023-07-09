@@ -7,11 +7,13 @@ import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import java.util.List;
 
 public class TalkToNPCQuestObjective implements IQuestObjective {
-    public final String npcName;
+    public final String npcId;
     private boolean completed;
+    private final String npcName;
     private final Vector location;
 
-    public TalkToNPCQuestObjective(String npcName, Vector location) {
+    public TalkToNPCQuestObjective(String npcId, String npcName, Vector location) {
+        this.npcId = npcId;
         this.npcName = npcName;
         this.location = location;
     }
@@ -22,16 +24,20 @@ public class TalkToNPCQuestObjective implements IQuestObjective {
     }
 
     public boolean tryAddProgress(CustomNPC npc) {
-        if(npc.name.equals(npcName)) {
+        if(npc.getCustomId().equals(npcId)) {
             completed = true;
             return true;
         }
         return false;
     }
 
+    public boolean isCorrectNPC(CustomNPC npc) {
+        return npc.getCustomId().equals(npcId);
+    }
+
     @Override
     public String getStatusString() {
-        return ChatColor.GRAY+"Talk to "+npcName;
+        return ChatColor.GRAY+"Talk to "+ npcName;
     }
 
     @Override

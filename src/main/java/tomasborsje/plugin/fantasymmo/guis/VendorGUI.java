@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
-public class VendorGUI extends CustomGUIInstance {
+public class VendorGUI extends CustomGUI {
     private final PurchasableItem[] items;
 
     public VendorGUI(PlayerData playerData, String inventoryName, PurchasableItem... items) {

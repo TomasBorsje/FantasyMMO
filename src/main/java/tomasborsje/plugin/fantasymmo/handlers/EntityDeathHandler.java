@@ -22,7 +22,8 @@ public class EntityDeathHandler {
         // If a player killed this, send message
         if(killer instanceof Player player) {
             int xp = deadEntity.getKillXp();
-            int moneyDropped = deadEntity.killMoney;
+            // We add -20 to 20% variation to the money dropped, minimum 1 copper
+            int moneyDropped = (int) Math.max(1, (1+(Math.random()-0.5)*0.2)*deadEntity.killMoney);
 
             player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "You killed " + deadEntity.name +
                     "! (+" + xp + " xp, " + TooltipUtil.GetValueStringItalic(moneyDropped) + ChatColor.GRAY+")");

@@ -22,8 +22,9 @@ public class WorldLoadListener implements Listener {
         }
     }
     void setWorldDefaults(World world) {
-        world.setTime(0);
-        world.setSpawnLocation(-8, 69, 7);
+        world.setTime(6000); // Noon
+        world.setSpawnLocation(21, 88, -10);
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         world.setGameRule(GameRule.DO_ENTITY_DROPS, false);
         world.setGameRule(GameRule.MOB_GRIEFING, false);
         world.setGameRule(GameRule.DO_MOB_LOOT, false);

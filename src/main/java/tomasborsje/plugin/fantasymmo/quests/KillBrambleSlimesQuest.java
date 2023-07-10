@@ -5,17 +5,17 @@ import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 
-public class KillForestSlimesQuest extends AbstractQuestInstance {
-    public KillForestSlimesQuest(PlayerData pd) {
+public class KillBrambleSlimesQuest extends AbstractQuestInstance {
+    public KillBrambleSlimesQuest(PlayerData pd) {
         super(pd,
-                new KillEntityObjective("FOREST_SLIME","Forest Slime",3, new Vector(132.5,67,-18.5)),
+                new KillEntityObjective("BRAMBLE_SLIME","Bramble Slime",10, new Vector(-32,91,26.5)),
                 new TalkToNPCQuestObjective("TEST_NPC", "Test NPC", new Vector(116.5,67,-43.5)));
-        id = "KILL_FOREST_SLIMES";
+        id = "KILL_BRAMBLE_SLIMES";
         name = "Slimy Situation";
-        description = "I see you've arrived, soldier. You might notice there are a lot of slimes around here.\nAs part of your training, I want you to kill 3 of them.";
-        completionDescription = "Good job, soldier. You've proven you know how to fight.\nHere's your reward. You can keep the slushies, I don't exactly want them.";
+        description = "I see you've arrived, recruit. Just in time too.\nThe slimes over in the bramble have been getting out of hand.\nAs part of your training, I want you to go out there and thin their numbers.";
+        completionDescription = "Good job, soldier. You've proven you know how to fight.\nTake these supplies as your reward.";
         moneyReward = 100;
-        xpReward = 1000;
+        xpReward = 200;
         repeatable = true;
         itemRewards = new ItemStack[] {
                 ItemRegistry.SLIME_JELLY.createStack(5),

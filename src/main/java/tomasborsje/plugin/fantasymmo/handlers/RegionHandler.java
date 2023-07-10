@@ -15,7 +15,8 @@ public class RegionHandler {
     private final ArrayList<Region> regions = new ArrayList<>();
     private final Region WILDERNESS = new Region("Wilderness", ChatColor.GREEN, 0, 1, 100);
     private RegionHandler() {
-        regions.add(new Region("Grasslands", ChatColor.GREEN, 1,1, 5, new AABB(120,50,-42, 139, 100, 0)));
+        regions.add(new Region("Verdant Bramble", ChatColor.GREEN, 2,1, 5, new AABB(1,0,-5, -65, 200, 54)));
+        regions.add(new Region("Tutorial Valley", ChatColor.GREEN, 1,1, 5, new AABB(65,0,-50, -73, 200, 69)));
 
         // Sort by priority so higher priority regions are checked first
         regions.sort((o1, o2) -> o2.priority - o1.priority);

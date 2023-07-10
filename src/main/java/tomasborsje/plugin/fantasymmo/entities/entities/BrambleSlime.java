@@ -13,18 +13,18 @@ import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.CustomLootTable;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
-public class ForestSlime extends CustomEntity {
+public class BrambleSlime extends CustomEntity {
     private static final CustomLootTable lootTable =
             new CustomLootTable(ItemRegistry.SLIMEBALL, 0.8);
-    public ForestSlime(Location location) {
+    public BrambleSlime(Location location) {
         super(location);
-        this.name = "Forest Slime";
-        this.id = "FOREST_SLIME";
+        this.name = "Bramble Slime";
+        this.id = "BRAMBLE_SLIME";
         this.level = 1;
         this.currentHealth = 40;
         this.maxHealth = 40;
         this.attackDamage = 5;
-        this.killMoney = ItemUtil.Value(0, 0, 13);
+        this.killMoney = ItemUtil.Value(0, 0, 2);
     }
 
     @Override

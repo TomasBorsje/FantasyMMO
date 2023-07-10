@@ -28,6 +28,10 @@ public class SoundUtil {
         scheduler.runTaskLater(FantasyMMO.Plugin, () -> player.playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1, 2f), 6);
     }
 
+    public static void PlayNPCInteractSound(Player player, float pitch) {
+        player.playSound(player, Sound.ENTITY_VILLAGER_YES, 1, pitch);
+    }
+
     public static void PlayQuestAcceptSound(Player player) {
         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1, 2f);
     }

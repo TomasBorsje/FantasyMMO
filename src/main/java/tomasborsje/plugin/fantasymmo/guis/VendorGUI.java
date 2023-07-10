@@ -1,5 +1,6 @@
 package tomasborsje.plugin.fantasymmo.guis;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
@@ -16,6 +17,13 @@ public class VendorGUI extends CustomGUI {
     @Override
     protected Inventory renderInventory() {
         Inventory inv = super.renderInventory();
+        // Fill borders with gray glass panes
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i > 44) {
+                inv.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
+            }
+        }
+
         // Render each item for sale
         for (int i = 0; i < items.length; i++) {
             int slot = 1 + i % 7 + (i / 7) * 9 + 9;

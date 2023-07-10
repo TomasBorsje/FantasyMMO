@@ -12,8 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import tomasborsje.plugin.fantasymmo.core.enums.FakePlayerSkin;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 
@@ -51,7 +51,7 @@ public class FakePlayerEntity extends ServerPlayer {
         // Set creative mode so this npc doesn't take damage
         this.setGameMode(GameType.CREATIVE);
         // Spawn for every logged in player
-        for (Player player : this.level.players()) {
+        for (Player player : this.level().players()) {
             spawnForPlayer((ServerPlayer) player);
         }
     }
@@ -130,7 +130,7 @@ public class FakePlayerEntity extends ServerPlayer {
         ticksAlive++;
         // Look at nearby players every 5 ticks
         if(ticksAlive % LOOK_TIMER == 0) {
-            this.level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(LOOK_DISTANCE)).forEach(this::lookAtPlayer);
+            this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(LOOK_DISTANCE)).forEach(this::lookAtPlayer);
         }
     }
 }

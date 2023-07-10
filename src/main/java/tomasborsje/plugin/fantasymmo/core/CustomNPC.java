@@ -3,16 +3,18 @@ package tomasborsje.plugin.fantasymmo.core;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.enums.FakePlayerSkin;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasId;
+import tomasborsje.plugin.fantasymmo.core.util.SoundUtil;
 
 public abstract class CustomNPC implements IHasId {
     public String id;
     public String name;
     public Location location;
     protected ItemStack heldItem;
+    protected float voicePitch = 0.7f;
     public Entity nmsEntity;
 
     /**
@@ -74,7 +76,7 @@ public abstract class CustomNPC implements IHasId {
     }
 
     public void interact(PlayerData playerData) {
-        playerData.player.sendMessage("Hello from "+name);
+        SoundUtil.PlayNPCInteractSound(playerData.player, voicePitch);
     }
 
     @Override

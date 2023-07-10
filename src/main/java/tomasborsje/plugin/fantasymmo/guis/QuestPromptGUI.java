@@ -21,8 +21,8 @@ public class QuestPromptGUI extends CustomGUI {
     private static final int DESCRIPTION_SLOT = GUIUtil.GetSlot(5, 2);
     private static final int REWARDS_SLOT = GUIUtil.GetSlot(5, 3);
     private final AbstractQuestInstance quest;
-    public QuestPromptGUI(PlayerData playerData, AbstractQuestInstance quest) {
-        super(playerData, 54, quest.getName());
+    public QuestPromptGUI(PlayerData playerData, AbstractQuestInstance quest, String title) {
+        super(playerData, 54, ChatColor.LIGHT_PURPLE+""+ChatColor.BOLD+title);
         this.quest = quest;
     }
 

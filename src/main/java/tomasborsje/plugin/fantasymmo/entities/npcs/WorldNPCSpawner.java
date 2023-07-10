@@ -16,6 +16,7 @@ public class WorldNPCSpawner {
     /* Starter Zone */
     static {
         worldNPCs.add(new NPCSpawnPoint(new Vector(110.5,70,-128.5), "TEST_NPC"));
+        worldNPCs.add(new NPCSpawnPoint(new Vector(108.5,70,-126.5), "SHOP_NPC"));
     }
 
     public static void init(World world) {

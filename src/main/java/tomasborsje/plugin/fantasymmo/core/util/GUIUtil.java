@@ -24,14 +24,14 @@ public class GUIUtil {
      * @param questRegistryEntry A function that returns the quest to show.
      * @return True if the quest was shown, false otherwise.
      */
-    public static boolean ShowQuestPromptIfNotCompleted(PlayerData player, Function<PlayerData, AbstractQuestInstance> questRegistryEntry) {
+    public static boolean ShowQuestPromptIfNotCompleted(PlayerData player, Function<PlayerData, AbstractQuestInstance> questRegistryEntry, String title) {
         // Get quest
         AbstractQuestInstance quest = questRegistryEntry.apply(player);
         String questId = quest.getCustomId();
         // If player doesn't have the quest, and it's either repeatable or not already done
         if(!player.hasQuestActive(questId) && (!player.hasCompletedQuest(questId) || quest.isRepeatable())) {
             // Show quest if not yet completed
-            player.openGUI(new QuestPromptGUI(player, quest));
+            player.openGUI(new QuestPromptGUI(player, quest, title));
             return true;
         }
         return false;

@@ -21,7 +21,7 @@ public class ItemRegistry {
     public static final ICustomItem MISTWEAVE_ROBE = ITEMS.register(new MistweaveRobe());
     public static final ICustomItem RECIPE_SCROLL_SLIME_TO_TRAINING_WAND = ITEMS.register(new RecipeScrollItem(RecipeRegistry.SLIME_TO_TRAINING_WAND, Rarity.LEGENDARY));
 
-    public static final ICustomItem SLIME_JELLY = ITEMS.register(new BasicHealthFoodItem("SLIME_JELLY", "Slime Jelly","Jelly made from forest slimes.", Rarity.COMMON, Items.SLIME_BALL, ItemUtil.Value(0,0,6), 10, 5));
+    public static final ICustomItem SLIME_JELLY = ITEMS.register(new BasicHealthFoodItem("SLIME_JELLY", "Slime Jelly","Jelly made from wild slimes.", Rarity.COMMON, Items.SLIME_BALL, ItemUtil.Value(0,0,6), 10, 5));
 
     public static final ICustomItem SLIME_SLUSHY = ITEMS.register(new BasicManaPotionItem("SLIME_SLUSHY", "Slime Slushy","A cold and slimy slushy.", CustomColors.SLIME_COLOR, Rarity.COMMON, ItemUtil.Value(0,0,6), 10, 5));
 }

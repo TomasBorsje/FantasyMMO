@@ -377,6 +377,13 @@ public class PlayerData implements IBuffable {
         return !leftover.isEmpty();
     }
 
+    /**
+     * Grants experience to the player, leveling them up if applicable.
+     * Leveling up will restore health and mana and display a message to the player.
+     * If the player reaches max level, a server wide message is displayed.
+     * If the player is already max level, this method does nothing.
+     * @param xp
+     */
     public void gainExperience(int xp) {
         player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 
@@ -394,6 +401,9 @@ public class PlayerData implements IBuffable {
             player.sendMessage(ChatColor.YELLOW+""+ChatColor.BOLD+"DING!" +ChatColor.RESET + " " +
                     ChatColor.YELLOW + "You've reached Level " + level + "!");
             player.playSound(player, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+            // Recalculate stats and fill health + mana
+            recalculateStats();
+            fillHealthAndMana();
             if(level == LEVEL_CAP) {
                 Bukkit.broadcastMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "CONGRATS! "+ChatColor.YELLOW+""+ChatColor.BOLD+username+" has reached Level 100!");
                 experience = 0;

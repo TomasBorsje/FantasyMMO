@@ -12,7 +12,7 @@ public class KillBrambleSlimesQuest extends AbstractQuestInstance {
                 new TalkToNPCQuestObjective("TEST_NPC", "Test NPC", new Vector(116.5,67,-43.5)));
         id = "KILL_BRAMBLE_SLIMES";
         name = "Slimy Situation";
-        description = "I see you've arrived, recruit. Just in time too.\nThe slimes over in the bramble have been getting out of hand.\nAs part of your training, I want you to go out there and thin their numbers.";
+        description = "I see you've arrived, recruit. Just in time.\nThe slimes over in the bramble have been getting out of hand.\nAs part of your training, I want you to go out there and thin their numbers.";
         completionDescription = "Good job, soldier. You've proven you know how to fight.\nTake these supplies as your reward.";
         moneyReward = 100;
         xpReward = 200;

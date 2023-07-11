@@ -5,6 +5,7 @@ import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.FuncRegistry;
 import tomasborsje.plugin.fantasymmo.entities.entities.BrambleSlime;
+import tomasborsje.plugin.fantasymmo.entities.entities.ForestWolf;
 import tomasborsje.plugin.fantasymmo.entities.npcs.ShopNPC;
 import tomasborsje.plugin.fantasymmo.entities.npcs.TestNPC;
 
@@ -16,6 +17,7 @@ public class EntityRegistry {
 
     /* ENEMIES */
     public static final Function<Location, CustomEntity> BRAMBLE_SLIME = ENTITIES.register("BRAMBLE_SLIME", BrambleSlime::new);
+    public static final Function<Location, CustomEntity> FOREST_WOLF = ENTITIES.register("FOREST_WOLF", ForestWolf::new);
 
     /* NPCs */
     public static final Function<Location, CustomNPC> TEST_NPC = NPCS.register("TEST_NPC", TestNPC::new);

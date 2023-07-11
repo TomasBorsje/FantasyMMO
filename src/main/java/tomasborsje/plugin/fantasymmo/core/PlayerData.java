@@ -418,19 +418,22 @@ public class PlayerData implements IBuffable {
         player.setLevel(level);
     }
 
+    /**
+     * Regenerates the player's health and mana, 1 tick's worth.
+     */
     private void regenStats() {
         // Every second, regen
         // Much less regen if the player is in combat
         if(++regenTimer > 20) {
             regenTimer = 0;
 
-            // 3% hp regen out of combat, 3% mana regen at all times
-            float healthRegenAmount = 0.03f;
+            // 1% hp regen out of combat, 3% mana regen at all times
+            float healthRegenAmount = 0.01f;
             float manaRegenAmount = 0.03f;
 
-            // Health regen reduced to 10% in combat
+            // Health regen reduced to 20% in combat
             if(isInCombat()) {
-                healthRegenAmount *= 0.1f;
+                healthRegenAmount *= 0.2f;
             }
 
             // Regen health based on flat amount and multiplier

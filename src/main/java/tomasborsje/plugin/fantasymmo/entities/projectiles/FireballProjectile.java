@@ -8,12 +8,12 @@ import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.CustomProjectile;
 
-public class TrainingWandProjectile extends CustomProjectile {
+public class FireballProjectile extends CustomProjectile {
 
-    public TrainingWandProjectile(Player player, int damage, Location startPos, Vector velocity) {
+    public FireballProjectile(Player player, int damage, Location startPos, Vector velocity) {
         super(player, startPos, velocity);
         this.damage = damage;
-        this.lifetime = 50;
+        this.lifetime = 25;
         this.maxPenetrate = 0;
     }
 

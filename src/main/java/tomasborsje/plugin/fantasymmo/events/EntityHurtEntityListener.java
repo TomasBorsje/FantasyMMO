@@ -20,6 +20,12 @@ public class EntityHurtEntityListener implements Listener {
     @EventHandler
     public void OnEntityHurtEntity(EntityDamageByEntityEvent event) {
 
+        // We use very low damage numbers to trigger mob aggro for our custom attacks, so ignore those
+        if(event.getDamage() < 0.01f) {
+            event.setDamage(0);
+            return;
+        }
+
         // Never allow vanilla health changes
         event.setDamage(0);
 

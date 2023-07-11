@@ -1,13 +1,20 @@
 package tomasborsje.plugin.fantasymmo.handlers;
 
+import org.bukkit.entity.Arrow;
+import tomasborsje.plugin.fantasymmo.core.AbstractCustomArrow;
 import tomasborsje.plugin.fantasymmo.core.CustomProjectile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+/**
+ * Stores custom projectiles and custom arrows.
+ */
 public class ProjectileHandler {
     public static ProjectileHandler instance = new ProjectileHandler();
     private ProjectileHandler() {}
     private final ArrayList<CustomProjectile> projectiles = new ArrayList<>();
+    private final HashMap<Integer, AbstractCustomArrow> arrows = new HashMap<>();
 
     public void tick() {
         // Iterate through projectiles with index
@@ -22,6 +29,22 @@ public class ProjectileHandler {
                 i--;
             }
         }
+    }
+
+    public void registerArrow(Arrow arrow, AbstractCustomArrow customArrow) {
+        arrows.put(arrow.getEntityId(), customArrow);
+    }
+
+    public void unregisterArrow(AbstractCustomArrow arrow) {
+        arrows.remove(arrow.arrowEntity.getEntityId());
+    }
+
+    public AbstractCustomArrow getArrow(Arrow arrow) {
+        return arrows.get(arrow.getEntityId());
+    }
+
+    public AbstractCustomArrow getArrow(int id) {
+        return arrows.get(id);
     }
 
     public void spawnProjectile(CustomProjectile projectile) {

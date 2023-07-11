@@ -38,6 +38,7 @@ public class EntityDeathHandler {
             ItemStack[] droppedLoot = deadEntity.getDroppedLoot(player);
 
             // Add item(s) to player inventory
+            // TODO: Loot sharing, mobs track who hit them etc
             playerData.giveItems(true, deadEntity, droppedLoot);
 
             // Give player money

@@ -13,7 +13,7 @@ import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.*;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
-import tomasborsje.plugin.fantasymmo.entities.projectiles.TrainingWandProjectile;
+import tomasborsje.plugin.fantasymmo.entities.projectiles.FireballProjectile;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 
 public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProvider, IHasDescription, IHasItemScore, IGlowingItem {
@@ -36,7 +36,7 @@ public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProv
         if(playerData.tryConsumeMana(manaCost)) {
             int damage = (int) (playerData.spellDamageMultiplier * this.damage);
             player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.6f, 1.3f);
-            TrainingWandProjectile proj = new TrainingWandProjectile(player, damage, player.getEyeLocation(), player.getEyeLocation().getDirection());
+            FireballProjectile proj = new FireballProjectile(player, damage, player.getEyeLocation(), player.getEyeLocation().getDirection());
             ProjectileHandler.instance.spawnProjectile(proj);
             return true;
         }

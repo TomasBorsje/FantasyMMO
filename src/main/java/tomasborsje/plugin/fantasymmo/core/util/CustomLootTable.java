@@ -7,8 +7,12 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import java.util.ArrayList;
 
 public class CustomLootTable {
+    public static final CustomLootTable EMPTY = new CustomLootTable();
     final ArrayList<LootTableEntry> entries = new ArrayList<>();
 
+    /**
+     * Creates an empty loot table.
+     */
     private CustomLootTable() { }
 
     /**

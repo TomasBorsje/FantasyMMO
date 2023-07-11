@@ -1,8 +1,10 @@
 package tomasborsje.plugin.fantasymmo.core;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R1.util.CraftChatMessage;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -98,6 +100,15 @@ public abstract class CustomEntity implements IHasId, IBuffable {
             onDeath(source, type, damageAmount);
         }
         nmsEntity.setHealth(getScaledEntityHealth());
+
+        // Trigger mob aggro if the source is a player
+        if(source instanceof Player player) {
+            // Create damage source of player attacking this mob
+            DamageSource damageSource = nmsEntity.damageSources().playerAttack(((CraftPlayer) player).getHandle());
+            // Damage the entity a tiny amount to trigger aggro
+            nmsEntity.hurt(damageSource, 0.0001F);
+            // TODO: Threat system
+        }
         return damageAmount;
     }
 

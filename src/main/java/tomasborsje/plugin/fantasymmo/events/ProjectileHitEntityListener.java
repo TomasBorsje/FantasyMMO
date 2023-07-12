@@ -5,7 +5,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import tomasborsje.plugin.fantasymmo.core.AbstractCustomArrow;
+import tomasborsje.plugin.fantasymmo.core.AbstractCustomArrowProjectile;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.handlers.EntityHandler;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
@@ -19,7 +19,7 @@ public class ProjectileHitEntityListener implements Listener {
         // Only handle arrows
         if(proj instanceof Arrow arrowProj) {
             // Get the custom arrow
-            AbstractCustomArrow arrow = ProjectileHandler.instance.getArrow(arrowProj);
+            AbstractCustomArrowProjectile arrow = ProjectileHandler.instance.getArrow(arrowProj);
 
             // Unhandled arrow
             if(arrow == null) {

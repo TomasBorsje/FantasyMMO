@@ -17,7 +17,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescription, IHasItemScore, IGlowingItem, IStatProvider {
-    private final StatBoost stats = new StatBoost(0, 1, 0, 0);
+    private final StatBoost stats = new StatBoost().withIntelligence(1);
     public NoviceSpellblade() {
         this.customId = "NOVICE_SPELLBLADE";
         this.name = "Novice Spellblade";

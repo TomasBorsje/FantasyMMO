@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.core.interfaces;
+package tomasborsje.plugin.fantasymmo.core.enums;
 
 public enum ProfessionType {
     HERBALISM("Herbalism"),

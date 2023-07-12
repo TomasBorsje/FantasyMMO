@@ -14,14 +14,17 @@ import java.util.List;
 
 public class TooltipUtil {
     private static final String empty = "";
-    public static final String strengthIcon = "\uD83D\uDDE1";
     public static final String intelligenceIcon = "☆";
+    public static final String strengthIcon = "\uD83D\uDDE1";
+    public static final String agilityIcon = "\uD83C\uDFF9";
     public static final String healthIcon = "❤";
     public static final String defenseIcon = "\uD83D\uDEE1";
+
     public static final String worldMapName = ChatColor.GOLD+""+ChatColor.BOLD+"World Map";
 
     public static final String intelligenceLabel = ChatColor.BLUE + intelligenceIcon + " Intelligence";
     public static final String strengthLabel = ChatColor.RED + strengthIcon + " Strength";
+    public static final String agilityLabel = ChatColor.YELLOW + agilityIcon + " Agility";
     public static final String healthLabel = ChatColor.GREEN + healthIcon + " Health";
     public static final String defenseLabel = ChatColor.WHITE + defenseIcon + " Defense";
 
@@ -50,6 +53,9 @@ public class TooltipUtil {
             }
             if(stats.health != 0) {
                 tooltip.add(ChatColor.GREEN + healthIcon + " Health: " + ChatColor.WHITE + getSign(stats.health) + stats.health);
+            }
+            if(stats.agility != 0) {
+                tooltip.add(ChatColor.YELLOW + agilityIcon + " Agility: " + ChatColor.WHITE + getSign(stats.agility) + stats.agility);
             }
             if(stats.strength != 0) {
                 tooltip.add(ChatColor.RED + strengthIcon + " Strength: " + ChatColor.WHITE + getSign(stats.strength) + stats.strength);

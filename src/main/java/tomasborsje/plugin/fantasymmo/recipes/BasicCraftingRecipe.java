@@ -3,7 +3,7 @@ package tomasborsje.plugin.fantasymmo.recipes;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
-import tomasborsje.plugin.fantasymmo.core.interfaces.ProfessionType;
+import tomasborsje.plugin.fantasymmo.core.enums.ProfessionType;
 
 public class BasicCraftingRecipe implements ICustomRecipe {
     private final IIngredient[] ingredients;

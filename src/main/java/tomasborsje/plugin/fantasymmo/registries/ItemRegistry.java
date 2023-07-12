@@ -15,10 +15,16 @@ public class ItemRegistry {
     public static final Registry<ICustomItem> ITEMS = new Registry<>();
     public static final ICustomItem SLIMEBALL = ITEMS.register(new GenericItem("SLIMEBALL", "Slimeball", Items.SLIME_BALL, Rarity.JUNK, ItemUtil.Value(0,0,3), "A ball of slime.\nGross..."));
 
-    // Usable items
+    // Weapons & Equipment
     public static final ICustomItem NOVICE_WAND = ITEMS.register(new NoviceWand());
     public static final ICustomItem NOVICE_SPELLBLADE = ITEMS.register(new NoviceSpellblade());
     public static final ICustomItem MISTWEAVE_ROBE = ITEMS.register(new MistweaveRobe());
+    public static final ICustomItem NOVICE_LONGBOW = ITEMS.register(new NoviceLongbow());
+
+    // Arrows
+    public static final ICustomItem SIMPLE_ARROW = ITEMS.register(new SimpleArrow());
+
+    // Consumables
     public static final ICustomItem RECIPE_SCROLL_SLIME_TO_TRAINING_WAND = ITEMS.register(new RecipeScrollItem(RecipeRegistry.SLIME_TO_TRAINING_WAND, Rarity.LEGENDARY));
 
     public static final ICustomItem SLIME_JELLY = ITEMS.register(new BasicHealthFoodItem("SLIME_JELLY", "Slime Jelly","Jelly made from wild slimes.", Rarity.COMMON, Items.SLIME_BALL, ItemUtil.Value(0,0,6), 10, 5));

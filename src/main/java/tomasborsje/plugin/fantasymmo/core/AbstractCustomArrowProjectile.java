@@ -9,11 +9,11 @@ import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 /**
  * Represents a custom arrow fired by a player.
  */
-public abstract class AbstractCustomArrow {
+public abstract class AbstractCustomArrowProjectile {
     public final Arrow arrowEntity;
     protected PlayerData owner;
     protected int damage = 1;
-    public AbstractCustomArrow(Arrow arrowEntity, PlayerData player) {
+    public AbstractCustomArrowProjectile(Arrow arrowEntity, PlayerData player) {
         this.arrowEntity = arrowEntity;
         this.owner = player;
     }

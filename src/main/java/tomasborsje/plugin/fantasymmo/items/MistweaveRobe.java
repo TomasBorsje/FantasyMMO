@@ -14,7 +14,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class MistweaveRobe extends AbstractArmourItem implements IHasDescription, IDyeable, IGlowingItem {
-    static final StatBoost stats = new StatBoost(0, 25, 50, 13);
+    static final StatBoost stats = new StatBoost().withIntelligence(25).withHealth(50).withDefense(13);
     static final Color color = Color.fromRGB(70, 50, 168);
     public MistweaveRobe() {
         this.customId = "MISTWEAVE_ROBE";

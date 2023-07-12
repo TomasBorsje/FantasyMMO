@@ -11,7 +11,7 @@ import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
-import tomasborsje.plugin.fantasymmo.core.interfaces.ProfessionType;
+import tomasborsje.plugin.fantasymmo.core.enums.ProfessionType;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 
 import java.util.List;

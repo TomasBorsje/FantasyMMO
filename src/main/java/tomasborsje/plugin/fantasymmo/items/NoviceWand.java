@@ -17,7 +17,7 @@ import tomasborsje.plugin.fantasymmo.entities.projectiles.FireballProjectile;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 
 public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProvider, IHasDescription, IHasItemScore, IGlowingItem {
-    private final StatBoost heldStats = new StatBoost(0, 3, 0, 0);
+    private final StatBoost heldStats = new StatBoost().withIntelligence(3);
     public NoviceWand() {
         this.customId = "NOVICE_WAND";
         this.name = "Novice Wand";

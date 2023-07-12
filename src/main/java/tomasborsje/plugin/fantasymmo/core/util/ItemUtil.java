@@ -21,6 +21,9 @@ import java.util.List;
 
 public class ItemUtil {
     public static boolean IsCustomItem(ItemStack stack) {
+        if(stack == null) {
+            return false;
+        }
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
         return IsCustomItem(nmsStack);
     }

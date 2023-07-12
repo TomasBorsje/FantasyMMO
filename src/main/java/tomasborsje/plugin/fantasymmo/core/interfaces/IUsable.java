@@ -8,6 +8,7 @@ public interface IUsable {
     public default boolean leftClick(PlayerData playerData, ItemStack item) {return false;};
     public default int getTickCooldown() {return 20;}
     public default boolean isConsumable() { return false; }
+    public default boolean allowDefaultUse() { return false; }
     public default String getLeftClickDescription() {
         return "";
     };

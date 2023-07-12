@@ -1,9 +1,11 @@
 package tomasborsje.plugin.fantasymmo.core.util;
 
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import tomasborsje.plugin.fantasymmo.core.PlayerData;
 
 public class AIUtil {
     /**
@@ -26,5 +28,9 @@ public class AIUtil {
         // Make the entity look around randomly
         // We don't look at players as that is intensive
         entity.goalSelector.addGoal(15, new RandomLookAroundGoal(entity));
+    }
+
+    public static void TriggerAggro(LivingEntity entity, PlayerData player) {
+
     }
 }

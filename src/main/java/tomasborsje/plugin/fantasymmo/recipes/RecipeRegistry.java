@@ -2,7 +2,7 @@ package tomasborsje.plugin.fantasymmo.recipes;
 
 import org.bukkit.inventory.Inventory;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.interfaces.ProfessionType;
+import tomasborsje.plugin.fantasymmo.core.enums.ProfessionType;
 import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.Registry;
 

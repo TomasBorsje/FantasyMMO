@@ -4,6 +4,8 @@ public enum ItemType {
     WAND,
     STAFF,
     SWORD,
+    LONGBOW,
+    SHORTBOW,
     AXE,
     HELMET,
     CHESTPLATE,

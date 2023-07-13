@@ -650,7 +650,7 @@ public class PlayerData implements IBuffable {
             String itemId = nmsStack.getTag().getString("ITEM_ID");
 
             // Get the custom item from the registry
-            ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
+            ICustomItem customItem = ItemRegistry.Get(itemId);
 
             // If it provides stats when equipped as armour, apply those stats
             if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.ARMOUR) {
@@ -676,7 +676,7 @@ public class PlayerData implements IBuffable {
         String itemId = nmsStack.getTag().getString("ITEM_ID");
 
         // Get the custom item from the registry
-        ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
+        ICustomItem customItem = ItemRegistry.Get(itemId);
 
         // If it provides stats when held, apply those stats
         if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.HELD) {

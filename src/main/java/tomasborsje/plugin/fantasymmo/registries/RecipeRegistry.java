@@ -1,10 +1,9 @@
-package tomasborsje.plugin.fantasymmo.recipes;
+package tomasborsje.plugin.fantasymmo.registries;
 
 import org.bukkit.inventory.Inventory;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.enums.ProfessionType;
-import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.Registry;
+import tomasborsje.plugin.fantasymmo.recipes.ICustomRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 // TODO: Split into a registry for each profession
 // Maybe make a new registry class that splits recipes by type internally?
 public class RecipeRegistry {
-    public static final Registry<ICustomRecipe> RECIPES = new Registry<>();
+    private static final Registry<ICustomRecipe> RECIPES = new Registry<>();
 
     // TODO: Profession specific recipes
     public static List<ICustomRecipe> GetCraftableRecipes(Inventory inv) {
@@ -46,9 +45,31 @@ public class RecipeRegistry {
         return knownRecipes;
     }
 
-    public static final ICustomRecipe SLIME_TO_TRAINING_WAND =
-            RECIPES.register(new BasicCraftingRecipe("SLIME_TO_TRAINING_WAND", ProfessionType.BLACKSMITHING, ItemRegistry.NOVICE_WAND, Ingredients.SLIMEBALL.withCount(5)));
+    /**
+     * Registers a recipe to the registry.
+     * @param recipe The recipe to register.
+     * @return The recipe that was registered.
+     */
+    public static ICustomRecipe Register(ICustomRecipe recipe) {
+        RECIPES.register(recipe);
+        return recipe;
+    }
 
-    public static final ICustomRecipe TRAINING_WAND_TO_ROBE =
-            RECIPES.register(new BasicCraftingRecipe("TRAINING_WAND_TO_ROBE", ProfessionType.BLACKSMITHING, ItemRegistry.MISTWEAVE_ROBE, Ingredients.TRAINING_WAND));
+    /**
+     * Gets a recipe by ID.
+     * @param id The ID of the recipe to get.
+     * @return The recipe with the given ID.
+     */
+    public static ICustomRecipe Get(String id) {
+        return RECIPES.get(id);
+    }
+
+    /**
+     * Checks if a recipe exists in the registry.
+     * @param id The ID of the recipe to check.
+     * @return Whether or not the recipe exists.
+     */
+    public static boolean Exists(String id) {
+        return RECIPES.exists(id);
+    }
 }

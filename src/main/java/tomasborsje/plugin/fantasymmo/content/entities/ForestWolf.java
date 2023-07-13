@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.entities.entities;
+package tomasborsje.plugin.fantasymmo.content.entities;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.util.CustomLootTable;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
-import tomasborsje.plugin.fantasymmo.entities.nms.BasicNMSWolf;
+import tomasborsje.plugin.fantasymmo.content.entities.nms.BasicNMSWolf;
 
 public class ForestWolf extends CustomEntity {
     private static final CustomLootTable lootTable = CustomLootTable.EMPTY;

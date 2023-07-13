@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.items;
+package tomasborsje.plugin.fantasymmo.content.items.arrows;
 
 import net.minecraft.world.item.Items;
 import org.bukkit.entity.Arrow;
@@ -7,10 +7,10 @@ import tomasborsje.plugin.fantasymmo.core.AbstractCustomItem;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IHasCustomProjectile;
-import tomasborsje.plugin.fantasymmo.entities.projectiles.SimpleArrowProjectile;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IHasCustomArrow;
+import tomasborsje.plugin.fantasymmo.content.projectiles.SimpleArrowProjectile;
 
-public class SimpleArrow extends AbstractCustomItem implements IHasCustomProjectile {
+public class SimpleArrow extends AbstractCustomItem implements IHasCustomArrow {
 
     public SimpleArrow() {
         super();
@@ -34,5 +34,10 @@ public class SimpleArrow extends AbstractCustomItem implements IHasCustomProject
     @Override
     public AbstractCustomArrowProjectile getCustomArrow(Arrow arrow, PlayerData player) {
         return new SimpleArrowProjectile(arrow, player);
+    }
+
+    @Override
+    public int getDisplayDamage() {
+        return SimpleArrowProjectile.BASE_DAMAGE;
     }
 }

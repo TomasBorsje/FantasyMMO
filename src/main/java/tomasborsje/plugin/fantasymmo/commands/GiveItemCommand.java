@@ -26,12 +26,12 @@ public class GiveItemCommand implements CommandExecutor {
             int count = args.length == 2 ? Integer.parseInt(args[1]) : 1; // Item count is second arg or 1 if not specified
 
             // Check if custom item exists
-            if(!ItemRegistry.ITEMS.exists(itemId)) {
+            if(!ItemRegistry.Exists(itemId)) {
                 player.sendMessage(ChatColor.RED+"No item registered with ID "+itemId);
             }
             else {
                 // Add item to player's inventory
-                ItemStack stack = ItemRegistry.ITEMS.get(itemId).createStack();
+                ItemStack stack = ItemRegistry.Get(itemId).createStack();
                 stack.setAmount(count);
                 player.getInventory().addItem(stack);
                 player.sendMessage(ChatColor.GREEN+"Gave "+ChatColor.WHITE+count+"x "+itemId+"!");

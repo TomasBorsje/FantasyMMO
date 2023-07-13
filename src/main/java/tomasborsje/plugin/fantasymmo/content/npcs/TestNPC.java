@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.entities.npcs;
+package tomasborsje.plugin.fantasymmo.content.npcs;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

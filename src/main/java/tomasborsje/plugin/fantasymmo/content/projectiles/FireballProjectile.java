@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.entities.projectiles;
+package tomasborsje.plugin.fantasymmo.content.projectiles;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;

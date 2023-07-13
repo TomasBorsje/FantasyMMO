@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.entities.entities;
+package tomasborsje.plugin.fantasymmo.content.entities;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,14 +8,14 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomItems;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
-import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 import tomasborsje.plugin.fantasymmo.core.util.CustomLootTable;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class BrambleSlime extends CustomEntity {
     private static final CustomLootTable lootTable =
-            new CustomLootTable(ItemRegistry.SLIMEBALL, 0.8);
+            new CustomLootTable(CustomItems.SLIMEBALL, 0.8);
     public BrambleSlime(Location location) {
         super(location);
         this.name = "Bramble Slime";

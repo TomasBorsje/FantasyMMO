@@ -48,9 +48,9 @@ public class TooltipUtil {
         }
 
         // Add damage indicator if item is an arrow
-        if(item instanceof AbstractCustomArrowProjectile arrow) {
+        if(item instanceof IHasCustomArrow arrow) {
             tooltip.add(empty);
-            tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + arrow.getDamage());
+            tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + arrow.getDisplayDamage());
         }
 
         // Add stats if item gives stats

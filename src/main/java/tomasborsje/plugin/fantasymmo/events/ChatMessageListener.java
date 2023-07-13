@@ -16,6 +16,6 @@ public class ChatMessageListener implements Listener {
         // Get player's playerdata
         PlayerData playerData = PlayerHandler.instance.getPlayerData(event.getPlayer());
         // Add the player's level as a prefix to their message
-        event.setFormat(TooltipUtil.getLevelDisplay(playerData.getLevel()) + event.getPlayer().getDisplayName() + ": " + ChatColor.GREEN + msg);
+        event.setFormat(TooltipUtil.getLevelDisplay(playerData.getLevel()) + ChatColor.GREEN + event.getPlayer().getDisplayName() + ": " + ChatColor.WHITE + msg);
     }
 }

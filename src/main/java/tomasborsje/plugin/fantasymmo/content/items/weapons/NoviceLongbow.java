@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.items;
+package tomasborsje.plugin.fantasymmo.content.items.weapons;
 
 import tomasborsje.plugin.fantasymmo.core.AbstractBowWeapon;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;

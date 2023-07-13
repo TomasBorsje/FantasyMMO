@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.items;
+package tomasborsje.plugin.fantasymmo.content.items.equipment;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;

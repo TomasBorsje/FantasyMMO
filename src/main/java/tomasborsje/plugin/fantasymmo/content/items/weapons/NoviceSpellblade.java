@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.items;
+package tomasborsje.plugin.fantasymmo.content.items.weapons;
 
 import net.minecraft.world.item.Items;
 import org.bukkit.ChatColor;

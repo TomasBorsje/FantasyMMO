@@ -4,13 +4,16 @@ import org.bukkit.Location;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.FuncRegistry;
-import tomasborsje.plugin.fantasymmo.entities.entities.BrambleSlime;
-import tomasborsje.plugin.fantasymmo.entities.entities.ForestWolf;
-import tomasborsje.plugin.fantasymmo.entities.npcs.ShopNPC;
-import tomasborsje.plugin.fantasymmo.entities.npcs.TestNPC;
+import tomasborsje.plugin.fantasymmo.content.entities.BrambleSlime;
+import tomasborsje.plugin.fantasymmo.content.entities.ForestWolf;
+import tomasborsje.plugin.fantasymmo.content.npcs.ShopNPC;
+import tomasborsje.plugin.fantasymmo.content.npcs.TestNPC;
 
 import java.util.function.Function;
 
+/**
+ * TODO: Maybe move this into a holder class?
+ */
 public class EntityRegistry {
     public static final FuncRegistry<CustomEntity> ENTITIES = new FuncRegistry<CustomEntity>();
     public static final FuncRegistry<CustomNPC> NPCS = new FuncRegistry<>();

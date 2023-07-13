@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.entities.nms;
+package tomasborsje.plugin.fantasymmo.content.entities.nms;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

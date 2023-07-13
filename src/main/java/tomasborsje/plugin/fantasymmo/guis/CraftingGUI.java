@@ -9,7 +9,7 @@ import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.util.CustomHeads;
 import tomasborsje.plugin.fantasymmo.recipes.ICustomRecipe;
 import tomasborsje.plugin.fantasymmo.recipes.IIngredient;
-import tomasborsje.plugin.fantasymmo.recipes.RecipeRegistry;
+import tomasborsje.plugin.fantasymmo.registries.RecipeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;

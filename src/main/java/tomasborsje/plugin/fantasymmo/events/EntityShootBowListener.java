@@ -10,7 +10,7 @@ import tomasborsje.plugin.fantasymmo.core.AbstractBowWeapon;
 import tomasborsje.plugin.fantasymmo.core.AbstractCustomArrowProjectile;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
-import tomasborsje.plugin.fantasymmo.core.interfaces.IHasCustomProjectile;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IHasCustomArrow;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
@@ -42,7 +42,7 @@ public class EntityShootBowListener implements Listener {
                 ICustomItem customProjectile = ItemUtil.GetAsCustomItem(consumed);
 
                 // If it's a custom projectile, get its custom arrow projectile
-                if(customProjectile instanceof IHasCustomProjectile hasCustomProjectile) {
+                if(customProjectile instanceof IHasCustomArrow hasCustomProjectile) {
 
                     // Get the custom arrow
                     AbstractCustomArrowProjectile customArrowProjectile = hasCustomProjectile.getCustomArrow(arrow, playerData);
@@ -56,8 +56,6 @@ public class EntityShootBowListener implements Listener {
                         customBow.rightClick(playerData, bow);
                         customBow.modifyFiredArrow(customArrowProjectile, playerData);
                     }
-
-                    playerData.player.sendMessage("You fired a " + customProjectile.getName() + " arrow with a " + bowItem.getName() + " bow");
 
                     // Register arrow with projectile handler
                     ProjectileHandler.instance.registerArrow(arrow, customArrowProjectile);

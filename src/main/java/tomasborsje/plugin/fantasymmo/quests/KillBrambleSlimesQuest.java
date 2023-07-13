@@ -2,8 +2,8 @@ package tomasborsje.plugin.fantasymmo.quests;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomFoods;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 
 public class KillBrambleSlimesQuest extends AbstractQuestInstance {
     public KillBrambleSlimesQuest(PlayerData pd) {
@@ -18,10 +18,10 @@ public class KillBrambleSlimesQuest extends AbstractQuestInstance {
         xpReward = 200;
         repeatable = true;
         itemRewards = new ItemStack[] {
-                ItemRegistry.SLIME_JELLY.createStack(5),
-                ItemRegistry.SLIME_SLUSHY.createStack(),
-                ItemRegistry.SLIME_SLUSHY.createStack(),
-                ItemRegistry.SLIME_SLUSHY.createStack()
+                CustomFoods.SLIME_JELLY.createStack(5),
+                CustomFoods.SLIME_SLUSHY.createStack(),
+                CustomFoods.SLIME_SLUSHY.createStack(),
+                CustomFoods.SLIME_SLUSHY.createStack()
         };
     }
 }

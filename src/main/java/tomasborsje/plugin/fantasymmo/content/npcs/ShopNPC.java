@@ -1,14 +1,16 @@
-package tomasborsje.plugin.fantasymmo.entities.npcs;
+package tomasborsje.plugin.fantasymmo.content.npcs;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.bukkit.Location;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomArrows;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomEquipment;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomRecipeScrolls;
 import tomasborsje.plugin.fantasymmo.core.CustomNPC;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.guis.PurchasableItem;
 import tomasborsje.plugin.fantasymmo.guis.VendorGUI;
-import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 
 public class ShopNPC extends CustomNPC {
 
@@ -30,9 +32,9 @@ public class ShopNPC extends CustomNPC {
         super.interact(playerData);
         // Open quest if not completed
         playerData.openGUI(new VendorGUI(playerData, "Shop NPC's Shop",
-                new PurchasableItem(ItemRegistry.RECIPE_SCROLL_SLIME_TO_TRAINING_WAND, ItemUtil.Value(0,0,25)),
-                new PurchasableItem(ItemRegistry.MISTWEAVE_ROBE, ItemUtil.Value(1,30,25)),
-                new PurchasableItem(ItemRegistry.SIMPLE_ARROW, ItemUtil.Value(0,0,5), 5)
+                new PurchasableItem(CustomRecipeScrolls.RECIPE_SCROLL_SLIME_TO_TRAINING_WAND, ItemUtil.Value(0,0,25)),
+                new PurchasableItem(CustomEquipment.MISTWEAVE_ROBE, ItemUtil.Value(1,30,25)),
+                new PurchasableItem(CustomArrows.SIMPLE_ARROW, ItemUtil.Value(0,0,5), 5)
                 ));
     }
 }

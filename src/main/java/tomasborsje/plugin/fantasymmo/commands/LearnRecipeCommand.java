@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
-import tomasborsje.plugin.fantasymmo.recipes.RecipeRegistry;
+import tomasborsje.plugin.fantasymmo.registries.RecipeRegistry;
 
 public class LearnRecipeCommand implements CommandExecutor {
     @Override
@@ -16,7 +16,7 @@ public class LearnRecipeCommand implements CommandExecutor {
             PlayerData playerData = PlayerHandler.instance.getPlayerData(player);
             String recipeId = args[0];
 
-            if(!RecipeRegistry.RECIPES.exists(recipeId)) {
+            if(!RecipeRegistry.Exists(recipeId)) {
                 player.sendMessage(ChatColor.RED+"Recipe "+recipeId+" does not exist!");
                 return true;
             }

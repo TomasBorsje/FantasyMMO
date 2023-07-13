@@ -1,4 +1,4 @@
-package tomasborsje.plugin.fantasymmo.items;
+package tomasborsje.plugin.fantasymmo.content.items.weapons;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -13,7 +13,7 @@ import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.*;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
-import tomasborsje.plugin.fantasymmo.entities.projectiles.FireballProjectile;
+import tomasborsje.plugin.fantasymmo.content.projectiles.FireballProjectile;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 
 public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProvider, IHasDescription, IHasItemScore, IGlowingItem {

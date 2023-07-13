@@ -2,7 +2,9 @@ package tomasborsje.plugin.fantasymmo.core;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R1.util.CraftChatMessage;
@@ -31,6 +33,7 @@ public abstract class CustomEntity implements IHasId, IBuffable {
     public String id;
     public int level;
     public String name;
+    public final int attackRangeSqr;
     public int attackDamage = 1;
     public int killMoney = 0;
     public final ArrayList<Buff> buffs = new ArrayList<>();
@@ -38,6 +41,10 @@ public abstract class CustomEntity implements IHasId, IBuffable {
     public CustomEntity(Location location) {
         this.nmsEntity = getNMSEntity(location);
         this.nmsEntity.setCustomNameVisible(true);
+
+        // Get the follow range of the entity (used for evading, etc)
+        AttributeInstance attackRangeAttr = nmsEntity.getAttribute(Attributes.FOLLOW_RANGE);
+        this.attackRangeSqr = attackRangeAttr == null ? 0 : (int)(attackRangeAttr.getValue() * attackRangeAttr.getValue());
     }
 
     @Override
@@ -85,6 +92,12 @@ public abstract class CustomEntity implements IHasId, IBuffable {
     public float hurt(Entity source, CustomDamageType type, int damageAmount) {
         // Don't take damage if we're already dead
         if(currentHealth <= 0) {
+            return 0;
+        }
+
+        // Evade damage if the arrow is from too far away
+        if(type == CustomDamageType.ARROW && source.getLocation().distanceSquared(nmsEntity.getBukkitEntity().getLocation()) > this.attackRangeSqr) {
+            source.sendMessage(ChatColor.GRAY+"The "+ChatColor.RED+name+ChatColor.GRAY+" evaded your arrow! (Too far away)");
             return 0;
         }
 

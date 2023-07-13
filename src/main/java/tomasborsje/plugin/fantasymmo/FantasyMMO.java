@@ -79,7 +79,7 @@ public class FantasyMMO extends JavaPlugin {
 
     private void registerEventListeners() {
         PluginManager pluginManager = this.getServer().getPluginManager();
-        pluginManager.registerEvents(new PlayerItemUseListener(), this);
+        pluginManager.registerEvents(new PlayerUseItemListener(), this);
         pluginManager.registerEvents(new WorldLoadListener(), this);
         pluginManager.registerEvents(new EntityHurtEntityListener(), this);
         pluginManager.registerEvents(new EntityReceiveDamageListener(), this);

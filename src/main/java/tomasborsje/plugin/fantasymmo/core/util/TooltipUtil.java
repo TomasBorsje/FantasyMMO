@@ -1,9 +1,7 @@
 package tomasborsje.plugin.fantasymmo.core.util;
 
 import org.bukkit.ChatColor;
-import tomasborsje.plugin.fantasymmo.core.AbstractMeleeWeapon;
-import tomasborsje.plugin.fantasymmo.core.CustomEntity;
-import tomasborsje.plugin.fantasymmo.core.StatBoost;
+import tomasborsje.plugin.fantasymmo.core.*;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.*;
@@ -16,7 +14,7 @@ public class TooltipUtil {
     private static final String empty = "";
     public static final String intelligenceIcon = "☆";
     public static final String strengthIcon = "\uD83D\uDDE1";
-    public static final String agilityIcon = "\uD83C\uDFF9";
+    public static final String focusIcon = "\uD83C\uDFF9";
     public static final String healthIcon = "❤";
     public static final String defenseIcon = "\uD83D\uDEE1";
 
@@ -24,7 +22,7 @@ public class TooltipUtil {
 
     public static final String intelligenceLabel = ChatColor.BLUE + intelligenceIcon + " Intelligence";
     public static final String strengthLabel = ChatColor.RED + strengthIcon + " Strength";
-    public static final String agilityLabel = ChatColor.YELLOW + agilityIcon + " Agility";
+    public static final String focusLabel = ChatColor.YELLOW + focusIcon + " Focus";
     public static final String healthLabel = ChatColor.GREEN + healthIcon + " Health";
     public static final String defenseLabel = ChatColor.WHITE + defenseIcon + " Defense";
 
@@ -43,6 +41,18 @@ public class TooltipUtil {
             tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + meleeWeapon.getDamage());
         }
 
+        // Add damage indicator if item is a bow
+        if(item instanceof AbstractBowWeapon bow) {
+            tooltip.add(empty);
+            tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + bow.getDamage());
+        }
+
+        // Add damage indicator if item is an arrow
+        if(item instanceof AbstractCustomArrowProjectile arrow) {
+            tooltip.add(empty);
+            tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + arrow.getDamage());
+        }
+
         // Add stats if item gives stats
         if(item instanceof IStatProvider statsProvider) {
             tooltip.add(empty);
@@ -54,8 +64,8 @@ public class TooltipUtil {
             if(stats.health != 0) {
                 tooltip.add(ChatColor.GREEN + healthIcon + " Health: " + ChatColor.WHITE + getSign(stats.health) + stats.health);
             }
-            if(stats.agility != 0) {
-                tooltip.add(ChatColor.YELLOW + agilityIcon + " Agility: " + ChatColor.WHITE + getSign(stats.agility) + stats.agility);
+            if(stats.focus != 0) {
+                tooltip.add(ChatColor.YELLOW + focusIcon + " Focus: " + ChatColor.WHITE + getSign(stats.focus) + stats.focus);
             }
             if(stats.strength != 0) {
                 tooltip.add(ChatColor.RED + strengthIcon + " Strength: " + ChatColor.WHITE + getSign(stats.strength) + stats.strength);

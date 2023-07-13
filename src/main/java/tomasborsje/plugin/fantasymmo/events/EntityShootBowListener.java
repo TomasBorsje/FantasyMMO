@@ -32,6 +32,7 @@ public class EntityShootBowListener implements Listener {
 
             // Only handle custom items
             if(!ItemUtil.IsCustomItem(consumed) || !ItemUtil.IsCustomItem(bow)) {
+                event.setCancelled(true);
                 return;
             }
 
@@ -51,6 +52,8 @@ public class EntityShootBowListener implements Listener {
 
                     // If it's a bow, call the arrow fired method of the bow
                     if(bowItem instanceof AbstractBowWeapon customBow) {
+                        // Call on-attack functions
+                        customBow.rightClick(playerData, bow);
                         customBow.modifyFiredArrow(customArrowProjectile, playerData);
                     }
 

@@ -12,6 +12,11 @@ import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 public abstract class AbstractCustomArrowProjectile {
     public final Arrow arrowEntity;
     protected PlayerData owner;
+
+    public int getDamage() {
+        return damage;
+    }
+
     protected int damage = 1;
     public AbstractCustomArrowProjectile(Arrow arrowEntity, PlayerData player) {
         this.arrowEntity = arrowEntity;
@@ -24,7 +29,7 @@ public abstract class AbstractCustomArrowProjectile {
      * @param entity The entity that was hit.
      */
     public void onHitEntity(CustomEntity entity) {
-        entity.hurt(owner.player, CustomDamageType.PHYSICAL, damage);
+        entity.hurt(owner.player, CustomDamageType.ARROW, damage);
     }
 
     /**

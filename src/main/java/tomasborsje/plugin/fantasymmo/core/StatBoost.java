@@ -7,7 +7,7 @@ public class StatBoost {
     public static final StatBoost NONE = new StatBoost();
     public int strength = 0;
     public int intelligence = 0;
-    public int agility = 0;
+    public int focus = 0;
     public int health = 0;
     public int defense = 0;
 
@@ -26,8 +26,8 @@ public class StatBoost {
         return this;
     }
 
-    public StatBoost withAgility(int agility) {
-        this.agility = agility;
+    public StatBoost withFocus(int focus) {
+        this.focus = focus;
         return this;
     }
 

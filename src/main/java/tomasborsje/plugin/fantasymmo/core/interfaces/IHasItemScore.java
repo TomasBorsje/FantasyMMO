@@ -8,7 +8,7 @@ public interface IHasItemScore {
         int score = 1;
         if(this instanceof IStatProvider statsProvider) {
             StatBoost s = statsProvider.getStats();
-            score += s.strength + s.intelligence + s.agility + s.health/5 + s.defense/2;
+            score += s.strength + s.intelligence + s.focus + s.health/5 + s.defense/2;
         }
 
         return score;

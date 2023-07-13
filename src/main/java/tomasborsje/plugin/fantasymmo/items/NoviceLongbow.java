@@ -10,7 +10,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IHasItemScore;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 
 public class NoviceLongbow extends AbstractBowWeapon implements IHasDescription, IHasItemScore, IStatProvider {
-    private final StatBoost stats = new StatBoost().withAgility(3);
+    private final StatBoost stats = new StatBoost().withFocus(3);
     public NoviceLongbow() {
         super();
         this.rarity = Rarity.COMMON;

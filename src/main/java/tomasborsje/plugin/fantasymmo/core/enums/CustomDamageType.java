@@ -3,7 +3,8 @@ package tomasborsje.plugin.fantasymmo.core.enums;
 import org.bukkit.ChatColor;
 
 public enum CustomDamageType {
-    PHYSICAL(ChatColor.YELLOW),
+    PHYSICAL(ChatColor.GOLD),
+    ARROW(ChatColor.YELLOW),
     FALL(ChatColor.WHITE),
     MAGIC(ChatColor.LIGHT_PURPLE),
     TRUE(ChatColor.WHITE);

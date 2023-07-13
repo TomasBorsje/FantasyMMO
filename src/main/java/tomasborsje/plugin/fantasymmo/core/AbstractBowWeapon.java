@@ -5,8 +5,6 @@ import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
 
 public abstract class AbstractBowWeapon extends AbstractCustomItem implements IUsable {
-    public final boolean instantFire = false;
-    public final boolean infiniteAmmo = false;
     protected int damage = 1;
 
     public AbstractBowWeapon() {

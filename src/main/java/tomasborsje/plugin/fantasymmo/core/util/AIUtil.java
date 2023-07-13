@@ -5,7 +5,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import tomasborsje.plugin.fantasymmo.core.PlayerData;
 
 public class AIUtil {
     /**
@@ -30,7 +29,9 @@ public class AIUtil {
         entity.goalSelector.addGoal(15, new RandomLookAroundGoal(entity));
     }
 
-    public static void TriggerAggro(LivingEntity entity, PlayerData player) {
-
+    public static void SetFollowRadius(LivingEntity entity, double radius) {
+        if(entity.getAttribute(Attributes.FOLLOW_RANGE) != null) {
+            entity.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(radius);
+        }
     }
 }

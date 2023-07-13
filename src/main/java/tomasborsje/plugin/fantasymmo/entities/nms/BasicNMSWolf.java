@@ -1,6 +1,7 @@
 package tomasborsje.plugin.fantasymmo.entities.nms;
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -20,6 +21,7 @@ public class BasicNMSWolf extends Wolf {
         super(EntityType.WOLF, level);
 
         AIUtil.Reset(this);
+        AIUtil.SetFollowRadius(this, 20);
 
         // Leap at our target
         this.goalSelector.addGoal(1, new LeapAtTargetGoal(this, LEAP_HEIGHT));
@@ -30,5 +32,10 @@ public class BasicNMSWolf extends Wolf {
 
         // Add a target goal to make the wolf target nearby players that attack it
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+    }
+
+    @Override
+    public double getMeleeAttackRangeSqr(LivingEntity entityLiving) {
+        return 2*2;
     }
 }

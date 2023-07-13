@@ -18,14 +18,13 @@ import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 /**
  * Handles custom item use events.
  */
-public class PlayerItemUseListener implements Listener {
+public class PlayerUseItemListener implements Listener {
 
     @EventHandler
     public void OnPlayerUseItem(PlayerInteractEvent event) {
 
         // Only handle right clicks
-        if(!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-            return; }
+        if(!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) { return; }
 
         ItemStack usedStack = event.getItem();
 
@@ -37,11 +36,6 @@ public class PlayerItemUseListener implements Listener {
 
         // Get our player data
         PlayerData playerData = PlayerHandler.instance.loadPlayerData(event.getPlayer());
-
-        if(customItem instanceof AbstractBowWeapon bow && !bow.instantFire) {
-            bow.rightClick(playerData, event.getItem());
-            return;
-        }
 
         // Doesn't apply to offhand items
         if(event.getHand() == EquipmentSlot.OFF_HAND) {
@@ -56,6 +50,10 @@ public class PlayerItemUseListener implements Listener {
             return;
         }
 
+        // If it's a bow, allow the event
+        if(customItem instanceof AbstractBowWeapon) {
+            return;
+        }
 
         // Check if it implements IUsable
         if(customItem instanceof IUsable usableItem && playerData.useCooldown == 0) {

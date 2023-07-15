@@ -34,14 +34,14 @@ public class ItemUtil {
         if (nbt == null) {
             return false;
         }
-        return nbt.contains("ITEM_ID") && ItemRegistry.Exists(nbt.getString("ITEM_ID"));
+        return nbt.contains("ITEM_ID") && ItemRegistry.ITEMS.exists(nbt.getString("ITEM_ID"));
     }
 
     public static ICustomItem GetAsCustomItem(ItemStack stack) {
         if(!IsCustomItem(stack)) {
             throw new IllegalArgumentException("ItemStack is not a custom item!");
         }
-        return ItemRegistry.Get(GetCustomId(stack));
+        return ItemRegistry.ITEMS.get(GetCustomId(stack));
     }
 
     /**

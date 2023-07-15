@@ -8,5 +8,5 @@ import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
  * Holds all custom arrow items.
  */
 public class CustomArrows {
-    public static final ICustomItem SIMPLE_ARROW = ItemRegistry.Register(new SimpleArrow());
+    public static final ICustomItem SIMPLE_ARROW = ItemRegistry.ITEMS.register(new SimpleArrow());
 }

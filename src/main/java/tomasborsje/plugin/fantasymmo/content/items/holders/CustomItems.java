@@ -12,5 +12,6 @@ import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
  * These are items that don't do anything on their own.
  */
 public class CustomItems {
-    public static final ICustomItem SLIMEBALL = ItemRegistry.Register(new GenericItem("SLIMEBALL", "Slimeball", Items.SLIME_BALL, Rarity.JUNK, ItemUtil.Value(0,0,3), "A ball of slime.\nGross..."));
+    public static final ICustomItem SLIMEBALL = ItemRegistry.ITEMS.register(new GenericItem("SLIMEBALL", "Slimeball", Items.SLIME_BALL, Rarity.JUNK, ItemUtil.Value(0, 0, 3), "A ball of slime.\nGross..."));
+
 }

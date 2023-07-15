@@ -8,14 +8,17 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomFoods;
 import tomasborsje.plugin.fantasymmo.content.items.holders.CustomItems;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
+import tomasborsje.plugin.fantasymmo.core.util.AIUtil;
 import tomasborsje.plugin.fantasymmo.core.util.CustomLootTable;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class BrambleSlime extends CustomEntity {
     private static final CustomLootTable lootTable =
-            new CustomLootTable(CustomItems.SLIMEBALL, 0.8);
+            new CustomLootTable(CustomItems.SLIMEBALL, 0.8)
+                    .addEntry(CustomFoods.SLIME_JELLY, 0.2);
     public BrambleSlime(Location location) {
         super(location);
         this.name = "Bramble Slime";
@@ -32,6 +35,7 @@ public class BrambleSlime extends CustomEntity {
         Level level = ((CraftWorld)location.getWorld()).getHandle();
         Slime slime = new Slime(EntityType.SLIME, level);
         slime.setSize(2, true);
+        AIUtil.DisableKnockback(slime);
         slime.setPos(location.getX(), location.getY(), location.getZ());
 
         return slime;

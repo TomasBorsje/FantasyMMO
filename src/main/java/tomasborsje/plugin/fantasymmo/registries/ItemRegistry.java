@@ -12,16 +12,18 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
  * @see CustomWeapons
  */
 public class ItemRegistry {
-    private static final Registry<ICustomItem> ITEMS = new Registry<>();
-    public static ICustomItem Register(ICustomItem item) {
-        ITEMS.register(item);
-        return item;
-    }
-    public static ICustomItem Get(String id) {
-        return ITEMS.get(id);
-    }
+    public static final Registry<ICustomItem> ITEMS = new Registry<>();
 
-    public static boolean Exists(String id) {
-        return ITEMS.exists(id);
-    }
+//    public static ICustomItem Register(ICustomItem item) {
+//        System.out.println("Registering item: " + item.getCustomId());
+//        ITEMS.register(item);
+//        return item;
+//    }
+//    public static ICustomItem Get(String id) {
+//        return ITEMS.get(id);
+//    }
+//
+//    public static boolean Exists(String id) {
+//        return ITEMS.exists(id);
+//    }
 }

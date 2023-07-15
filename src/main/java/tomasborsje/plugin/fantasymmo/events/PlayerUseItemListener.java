@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.AbstractBowWeapon;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IHasTrackedCooldown;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
@@ -57,6 +58,15 @@ public class PlayerUseItemListener implements Listener {
 
         // Check if it implements IUsable
         if(customItem instanceof IUsable usableItem && playerData.useCooldown == 0) {
+            // If the item has a specific cooldown, check it isn't on cooldown and can actually be used
+            if(customItem instanceof IHasTrackedCooldown cooldownSource) {
+                // If the cooldown is still active, cancel the event
+                if(!playerData.tryAddCooldown(cooldownSource)) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
             // Cast to IUsable and use the item
             boolean success = usableItem.rightClick(playerData, event.getItem());
             if(success) {

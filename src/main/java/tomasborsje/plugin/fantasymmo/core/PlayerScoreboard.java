@@ -1,126 +1,117 @@
 package tomasborsje.plugin.fantasymmo.core;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.scoreboard.*;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
-import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 
+import static org.bukkit.Bukkit.getServer;
+
+/**
+ * Scoreboard class that handles the display of the GUI on the right side of the screen.
+ */
 public class PlayerScoreboard {
     private PlayerData playerData;
-    private Scoreboard scoreboard;
-    private boolean initialized;
-    private Objective display;
-    private Score titleNewLine;
-    private Score regionNewLine;
-    private Score region;
-    private Score regionLevel;
-    private Score money;
-    private Score secondEmpty;
-    private Score questsHeader;
-    private Score thirdEmpty;
-    private Score websiteURL;
-    private Score quest1;
-    private Score quest1Progress;
+    int i = 99;
+    int emptyLineCount = 0;
 
     public PlayerScoreboard(PlayerData playerData) {
         this.playerData = playerData;
-
-        // Init scoreboard from ScoreboardManager
-        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        // Init display objective
-        display = scoreboard.registerNewObjective("display", Criteria.DUMMY,ChatColor.YELLOW+""+ChatColor.BOLD+"Fantasy"+ChatColor.GOLD+""+ChatColor.BOLD+"MMO");
-        display.setDisplaySlot(DisplaySlot.SIDEBAR);
-        render();
-        initialized = true;
     }
 
     /**
      * Re-renders the scoreboard and shows it to the player.
      */
     public void render() {
-        if(initialized) {
-            resetScores();
+        // Reset counting vars
+        i = 99;
+        emptyLineCount = 0;
+
+        // Alias
+        Player p = playerData.player;
+
+        // Get or create scoreboard
+        if(p.getScoreboard().equals(getServer().getScoreboardManager().getMainScoreboard())) p.setScoreboard(getServer().getScoreboardManager().getNewScoreboard());
+        Scoreboard score = p.getScoreboard();
+        Objective objective = score.getObjective(p.getName()) == null ? score.registerNewObjective(p.getName(), "dummy") : score.getObjective(p.getName());
+
+        // Set display name of the scoreboard
+        objective.setDisplayName(ChatColor.YELLOW+""+ChatColor.BOLD+"Fantasy"+ChatColor.GOLD+ChatColor.BOLD+"MMO");
+
+        // -- Rows of the scoreboard --
+        addEmptyLine(objective); // Empty line
+
+        // Money
+        replaceScore(objective, i--, ChatColor.WHITE+"Money: "+ TooltipUtil.GetPlayerMoneyString(playerData.getMoney()));
+        addEmptyLine(objective);
+
+        // Cooldown indicators
+        if(!playerData.cooldowns.isEmpty()) {
+            replaceScore(objective, i--, ChatColor.WHITE+"Cooldowns:");
         }
-        // Uses the following format
-        // TITLE
-        //
-        // Money: 0
-        //
-        // Quests:
-        // Quest1
-        // - Quest1 Progress
-
-        // ---- CODE ----
-        int i = 15;
-
-        // TODO: Stop flickering (looks like a whole undertaking, use team scoreboards instead)
-
-        // Empty line 1
-        titleNewLine = display.getScore("");
-        titleNewLine.setScore(i--);
-
-        // Region display
-        region = display.getScore(playerData.currentRegion.getDisplayName());
-        region.setScore(i--);
-        regionLevel = display.getScore(playerData.currentRegion.getLevelDisplay());
-        regionLevel.setScore(i--);
-
-        // Empty line 2
-        regionNewLine = display.getScore(" ");
-        regionNewLine.setScore(i--);
-
-        // Money display
-        money = display.getScore(ChatColor.WHITE+"Money: " + ChatColor.RESET + TooltipUtil.GetPlayerMoneyString(playerData.getMoney()));
-        money.setScore(i--);
-
-        // Show first quest
-        if(playerData.activeQuests.size() > 0) {
-            // Second empty line
-            secondEmpty = display.getScore("  ");
-            secondEmpty.setScore(i--);
-
-            // Quests header
-            questsHeader = display.getScore(ChatColor.GOLD+"Quest:");
-            questsHeader.setScore(i--);
-
-            AbstractQuestInstance quest = playerData.activeQuests.get(0);
-            quest1 = display.getScore(ChatColor.WHITE+quest.getName());
-            quest1.setScore(i--);
-
-            quest1Progress = display.getScore(ChatColor.GRAY+"- "+quest.getQuestStatus());
-            quest1Progress.setScore(i--);
+        for(CooldownInstance cd : playerData.cooldowns) {
+            replaceScore(objective, i--, cd.getDisplayString());
+        }
+        if(!playerData.cooldowns.isEmpty()) {
+            addEmptyLine(objective);
         }
 
-        // Third empty line
-        thirdEmpty = display.getScore("   ");
-        thirdEmpty.setScore(i--);
 
-        // Show website URL
-        websiteURL = display.getScore(ChatColor.GOLD+"www.fantasymmo.com");
-        websiteURL.setScore(i--);
+        // Website URL
+        replaceScore(objective, i--, ChatColor.GOLD+"www.fantasymmo.co.nz");
 
-        playerData.player.setScoreboard(scoreboard);
+        // Replace all empty lines afterwards
+        for(int j = i; j > 50; j--) {
+            if(getEntryFromScore(objective, j) != null) {
+                replaceScore(objective, j, "");
+            }
+        }
+        replaceScore(objective, 99, "");
+
+        // Show it to the player
+        if(objective.getDisplaySlot() != DisplaySlot.SIDEBAR) objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        p.setScoreboard(score);
     }
 
-    private void resetScores() {
-        scoreboard.resetScores(money.getEntry());
-        scoreboard.resetScores(titleNewLine.getEntry());
-        scoreboard.resetScores(region.getEntry());
-        scoreboard.resetScores(regionLevel.getEntry());
-        if(quest1 != null) {
-            scoreboard.resetScores(secondEmpty.getEntry());
-            scoreboard.resetScores(questsHeader.getEntry());
-            scoreboard.resetScores(quest1.getEntry());
-            scoreboard.resetScores(quest1Progress.getEntry());
+    void addConditionalEmptyLine(Objective objective, boolean show) {
+        emptyLineCount++;
+        if(show) {
+            replaceScore(objective, i--, " ".repeat(emptyLineCount));
+        }
+        else{
+            replaceScore(objective, 99, " ".repeat(emptyLineCount));
         }
     }
 
-    /**
-     * Get the scoreboard.
-     * @return The player's scoreboard
-     */
-    public Scoreboard getScoreboard() {
-        return scoreboard;
+    void addEmptyLine(Objective objective) {
+        emptyLineCount++;
+        replaceScore(objective, i--, " ".repeat(emptyLineCount));
+    }
+
+    /* Code below adapted from https://www.spigotmc.org/threads/scoreboard-flickering.213720/ */
+    public static String getEntryFromScore(Objective o, int score) {
+        if(o == null) return null;
+        if(!hasScoreTaken(o, score)) return null;
+        for (String s : o.getScoreboard().getEntries()) {
+            if(o.getScore(s).getScore() == score) return o.getScore(s).getEntry();
+        }
+        return null;
+    }
+
+    public static boolean hasScoreTaken(Objective o, int score) {
+        for (String s : o.getScoreboard().getEntries()) {
+            if(o.getScore(s).getScore() == score) return true;
+        }
+        return false;
+    }
+
+    public static void replaceScore(Objective o, int score, String name) {
+        if(hasScoreTaken(o, score)) {
+            if(getEntryFromScore(o, score).equalsIgnoreCase(name)) return;
+            if(!(getEntryFromScore(o, score).equalsIgnoreCase(name))) o.getScoreboard().resetScores(getEntryFromScore(o, score));
+        }
+        o.getScore(name).setScore(score);
     }
 }

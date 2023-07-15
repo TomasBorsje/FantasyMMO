@@ -4,8 +4,6 @@ import net.minecraft.world.item.Item;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.buffs.FoodHealthRegenBuff;
-import tomasborsje.plugin.fantasymmo.core.AbstractCustomItem;
-import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
@@ -18,8 +16,9 @@ public class BasicHealthFoodItem extends AbstractCustomItem implements IUsable, 
     private final String description;
 
     public BasicHealthFoodItem(String id, String name, String description, Rarity rarity, Item baseItem, int value, int durationSec, int healthPerSec) {
-        this.description = description;
         this.customId = id;
+        this.description = description;
+
         this.name = name;
         this.rarity = rarity;
         this.baseItem = baseItem;

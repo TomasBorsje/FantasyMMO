@@ -10,5 +10,5 @@ import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
  */
 public class CustomRecipeScrolls {
     public static final ICustomItem RECIPE_SCROLL_SLIME_TO_TRAINING_WAND =
-            ItemRegistry.Register(new RecipeScrollItem(CustomRecipes.SLIME_TO_TRAINING_WAND, Rarity.LEGENDARY));
+            ItemRegistry.ITEMS.register(new RecipeScrollItem(CustomRecipes.SLIME_TO_TRAINING_WAND, Rarity.LEGENDARY));
 }

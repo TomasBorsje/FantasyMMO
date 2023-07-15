@@ -9,11 +9,13 @@ import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomWeapons;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IHasTrackedCooldown;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.SoundUtil;
@@ -63,9 +65,11 @@ public class PlayerData implements IBuffable {
     private PlayerScoreboard scoreboard;
     private PlayerBossBar bossBar;
     public Region currentRegion;
-    public List<String> knownRecipeIds = new ArrayList<>(); // Stores IDs of recipes the player knows
     private @Nullable CustomGUI currentGUI = null; // The currently open GUI
+    public List<String> knownRecipeIds = new ArrayList<>(); // Stores IDs of recipes the player knows
     public final ArrayList<Buff> buffs = new ArrayList<>(); // List of buffs currently active on the player
+    // TODO: Load and unload cooldowns when player joins and leaves
+    public final ArrayList<CooldownInstance> cooldowns = new ArrayList<>(); // List of cooldowns currently active on the player
     public final ArrayList<AbstractQuestInstance> activeQuests = new ArrayList<>(); // List of active quests
     public HashSet<String> completedQuests = new HashSet<>(); // List of completed quest IDs
     public PlayerData(Player player) {
@@ -81,6 +85,9 @@ public class PlayerData implements IBuffable {
 
         // Recalc stats
         recalculateStats();
+
+        // TODO: Fix these static fields not being called???
+        giveItem(CustomWeapons.NOVICE_WAND.createStack());
 
         // Start with max health and mana
         this.currentHealth = maxHealth;
@@ -114,9 +121,37 @@ public class PlayerData implements IBuffable {
         var leftoverItems = player.getInventory().addItem(items);
 
         if(!leftoverItems.isEmpty()) {
-            // TODO: Send item in mail
+            // TODO: Send item in mail/stash
             return;
         }
+    }
+
+    /**
+     * Returns if a specified cooldown source/ability is currently on cooldown.
+     * @param cooldownSource The cooldown source to check
+     * @return If the cooldown source is on cooldown
+     */
+    public boolean isOnCooldown(IHasTrackedCooldown cooldownSource) {
+        for(CooldownInstance cooldownInstance : cooldowns) {
+            if(cooldownSource.getCooldownId().equals(cooldownInstance.getCooldownId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Tries to add a cooldown to the player. Returns if the cooldown was successfully added,
+     * e.g. the ability was successfully used.
+     * @param cooldownSource The cooldown source to add
+     * @return If the cooldown was successfully added / the ability was used
+     */
+    public boolean tryAddCooldown(IHasTrackedCooldown cooldownSource) {
+        if(!isOnCooldown(cooldownSource)) {
+            cooldowns.add(new CooldownInstance(cooldownSource));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -173,6 +208,17 @@ public class PlayerData implements IBuffable {
 
     public void tick() {
         ticksPlayed++;
+
+        // Tick each cooldown so the remaining duration decreases
+        for (int i = 0; i < cooldowns.size(); i++) {
+            CooldownInstance cooldown = cooldowns.get(i);
+            cooldown.tick();
+            if(cooldown.isExpired()) {
+                cooldowns.remove(i);
+                i--;
+            }
+        }
+
         // Tick each item in inventory if possible, etc
         recalculateStats();
 
@@ -650,7 +696,7 @@ public class PlayerData implements IBuffable {
             String itemId = nmsStack.getTag().getString("ITEM_ID");
 
             // Get the custom item from the registry
-            ICustomItem customItem = ItemRegistry.Get(itemId);
+            ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
 
             // If it provides stats when equipped as armour, apply those stats
             if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.ARMOUR) {
@@ -676,7 +722,7 @@ public class PlayerData implements IBuffable {
         String itemId = nmsStack.getTag().getString("ITEM_ID");
 
         // Get the custom item from the registry
-        ICustomItem customItem = ItemRegistry.Get(itemId);
+        ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
 
         // If it provides stats when held, apply those stats
         if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.HELD) {

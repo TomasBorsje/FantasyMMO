@@ -8,5 +8,5 @@ import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
  * Holds all custom equipment items.
  */
 public class CustomEquipment {
-    public static final ICustomItem MISTWEAVE_ROBE = ItemRegistry.Register(new MistweaveRobe());
+    public static final ICustomItem MISTWEAVE_ROBE = ItemRegistry.ITEMS.register(new MistweaveRobe());
 }

@@ -35,27 +35,34 @@ public class TooltipUtil {
             tooltip.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Item Score " + itemLevelProvider.getItemScore());
         }
 
+        boolean hasDamage = false;
+
         // Add damage indicator if item is melee weapon
         if(item instanceof AbstractMeleeWeapon meleeWeapon) {
             tooltip.add(empty);
             tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + meleeWeapon.getDamage());
+            hasDamage = true;
         }
 
         // Add damage indicator if item is a bow
         if(item instanceof AbstractBowWeapon bow) {
             tooltip.add(empty);
             tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + bow.getDamage());
+            hasDamage = true;
         }
 
         // Add damage indicator if item is an arrow
         if(item instanceof IHasCustomArrow arrow) {
             tooltip.add(empty);
             tooltip.add(ChatColor.GOLD + "Damage: " + ChatColor.WHITE + arrow.getDisplayDamage());
+            hasDamage = true;
         }
 
         // Add stats if item gives stats
         if(item instanceof IStatProvider statsProvider) {
-            tooltip.add(empty);
+            if(!hasDamage) {
+                tooltip.add(empty);
+            }
 
             StatBoost stats = statsProvider.getStats();
             if(stats.defense != 0) {

@@ -1,5 +1,6 @@
 package tomasborsje.plugin.fantasymmo.core;
 
+import org.bukkit.ChatColor;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 
 /**
@@ -83,4 +84,11 @@ public abstract class Buff {
     public void onHitEnemy(IBuffable buffHolder, IBuffable victim) { }
     public void onHitAlly(PlayerData buffHolder, PlayerData ally) { }
     public void onReceiveDamage(IBuffable buffHolder, IBuffable attacker, int damage) { }
+
+    public String getDisplayString() {
+        int seconds = this.ticksLeft / 20;
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+        return String.format("%s "+ ChatColor.GRAY+"(%d:%02d)", this.name, minutes, seconds);
+    }
 }

@@ -47,9 +47,28 @@ public class PlayerScoreboard {
         replaceScore(objective, i--, ChatColor.WHITE+"Money: "+ TooltipUtil.GetPlayerMoneyString(playerData.getMoney()));
         addEmptyLine(objective);
 
+        // Current quest display
+        if(playerData.getCurrentQuest() != null) {
+            replaceScore(objective, i--, ChatColor.YELLOW+"Quests:");
+            replaceScore(objective, i--, ChatColor.WHITE+playerData.getCurrentQuest().getName());
+            replaceScore(objective, i--, ChatColor.GRAY+"- "+playerData.getCurrentQuest().getQuestStatus());
+            addEmptyLine(objective);
+        }
+
+        // Buff indicators
+        if(!playerData.buffs.isEmpty()) {
+            replaceScore(objective, i--, ChatColor.YELLOW+"Buffs:");
+        }
+        for(Buff buff : playerData.buffs) {
+            replaceScore(objective, i--, buff.getDisplayString());
+        }
+        if(!playerData.buffs.isEmpty()) {
+            addEmptyLine(objective);
+        }
+
         // Cooldown indicators
         if(!playerData.cooldowns.isEmpty()) {
-            replaceScore(objective, i--, ChatColor.WHITE+"Cooldowns:");
+            replaceScore(objective, i--, ChatColor.YELLOW+"Cooldowns:");
         }
         for(CooldownInstance cd : playerData.cooldowns) {
             replaceScore(objective, i--, cd.getDisplayString());
@@ -58,11 +77,11 @@ public class PlayerScoreboard {
             addEmptyLine(objective);
         }
 
-
         // Website URL
         replaceScore(objective, i--, ChatColor.GOLD+"www.fantasymmo.co.nz");
 
-        // Replace all empty lines afterwards
+
+        // Replace all leftover lines afterwards
         for(int j = i; j > 50; j--) {
             if(getEntryFromScore(objective, j) != null) {
                 replaceScore(objective, j, "");

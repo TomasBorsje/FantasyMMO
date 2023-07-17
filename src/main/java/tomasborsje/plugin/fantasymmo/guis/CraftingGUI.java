@@ -111,7 +111,7 @@ public class CraftingGUI extends CustomGUI {
 
         // Craft and set in cursor slot
         ItemStack output = recipe.craft(playerInv);
-        playerData.giveItem(output);
+        playerData.giveItems(output);
 
         playerData.player.sendMessage(ChatColor.LIGHT_PURPLE + "You crafted " + output.getItemMeta().getDisplayName() + ChatColor.LIGHT_PURPLE + "!");
 

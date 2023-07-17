@@ -9,9 +9,11 @@ import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import tomasborsje.plugin.fantasymmo.content.items.holders.CustomArrows;
 import tomasborsje.plugin.fantasymmo.content.items.holders.CustomWeapons;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
+import tomasborsje.plugin.fantasymmo.core.enums.PlayerRank;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
@@ -20,6 +22,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.core.util.SoundUtil;
 import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
+import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUI;
 import tomasborsje.plugin.fantasymmo.handlers.MapHandler;
 import tomasborsje.plugin.fantasymmo.handlers.RegionHandler;
@@ -62,6 +65,7 @@ public class PlayerData implements IBuffable {
     private int money; // The player's money, in copper
     private int regenTimer = 0;
     private int timeSinceLastCombat;
+    public PlayerRank rank = PlayerRank.NORMAL;
     private PlayerScoreboard scoreboard;
     private PlayerBossBar bossBar;
     public Region currentRegion;
@@ -87,7 +91,9 @@ public class PlayerData implements IBuffable {
         recalculateStats();
 
         // TODO: Fix these static fields not being called???
-        giveItem(CustomWeapons.NOVICE_WAND.createStack());
+        // Use classloader or class references in itemregistry...
+        giveItems(CustomWeapons.NOVICE_WAND.createStack());
+        giveItems(CustomArrows.SIMPLE_ARROW.createStack());
 
         // Start with max health and mana
         this.currentHealth = maxHealth;
@@ -109,7 +115,7 @@ public class PlayerData implements IBuffable {
      * they will receive the leftover items in the mail.
      * @param items The item stacks to give
      */
-    public void giveItem(ItemStack... items) {
+    public void giveItems(ItemStack... items) {
         // Print a received message for each item
         for (ItemStack item : items) {
             if(item.hasItemMeta()) {
@@ -166,6 +172,13 @@ public class PlayerData implements IBuffable {
             return true;
         }
         return false;
+    }
+
+    public AbstractQuestInstance getCurrentQuest() {
+        if(activeQuests.isEmpty()) {
+            return null;
+        }
+        return activeQuests.get(0);
     }
 
     /**
@@ -793,6 +806,10 @@ public class PlayerData implements IBuffable {
             buff.onRemove(this);
         }
         this.buffs.clear();
+    }
+
+    public String getChatDisplayName() {
+        return rank.getPrefix() + TooltipUtil.getLevelDisplay(level) + rank.getColor() + player.getDisplayName();
     }
 
     public boolean hasGUIOpen() {

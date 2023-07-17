@@ -45,7 +45,7 @@ public class VendorGUI extends CustomGUI {
         // Try to consume the player's money
         if(playerData.tryConsumeMoney(item.getPrice())) {
             // Create a new item and give it to the player
-            playerData.giveItem(item.getPurchasedItemStack());
+            playerData.giveItems(item.getPurchasedItemStack());
         }
     }
 }

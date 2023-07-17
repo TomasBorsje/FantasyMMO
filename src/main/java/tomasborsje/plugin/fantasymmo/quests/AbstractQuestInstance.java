@@ -132,7 +132,7 @@ public abstract class AbstractQuestInstance implements IHasId {
         p.addMoney(moneyReward);
         p.gainExperience(xpReward);
         if(itemRewards.length > 0) {
-            p.giveItem(itemRewards);
+            p.giveItems(itemRewards);
         }
     }
 

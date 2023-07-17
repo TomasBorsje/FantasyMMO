@@ -14,6 +14,7 @@ import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.enums.PlayerRank;
 import tomasborsje.plugin.fantasymmo.registries.QuestRegistry;
 import tomasborsje.plugin.fantasymmo.quests.AbstractQuestInstance;
 
@@ -72,6 +73,8 @@ public class DatabaseConnection {
             int experience = playerDoc.getInteger("experience");
             playerData.setLevelAndExperience(level, experience);
 
+            playerData.rank = PlayerRank.valueOf(playerDoc.getString("rank"));
+
             int money = playerDoc.getInteger("money");
             playerData.addMoney(money);
 
@@ -129,6 +132,7 @@ public class DatabaseConnection {
         playerDoc.append("money", playerData.getMoney());
         playerDoc.append("knownRecipes", playerData.knownRecipeIds);
         playerDoc.append("completedQuests", playerData.completedQuests);
+        playerDoc.append("rank", playerData.rank.name());
 
         // Transform quests into documents
         List<Document> questInstances = new ArrayList<>();

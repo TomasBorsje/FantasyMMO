@@ -33,7 +33,7 @@ public class ShopNPC extends CustomNPC {
         // Open quest if not completed
         playerData.openGUI(new VendorGUI(playerData, "Shop NPC's Shop",
                 new PurchasableItem(CustomRecipeScrolls.RECIPE_SCROLL_SLIME_TO_TRAINING_WAND, ItemUtil.Value(0,0,25)),
-                new PurchasableItem(CustomEquipment.MISTWEAVE_ROBE, ItemUtil.Value(1,30,25)),
+                new PurchasableItem(CustomEquipment.MISTWEAVE_ROBE, ItemUtil.Value(2,0,0)),
                 new PurchasableItem(CustomArrows.SIMPLE_ARROW, ItemUtil.Value(0,0,5), 5)
                 ));
     }

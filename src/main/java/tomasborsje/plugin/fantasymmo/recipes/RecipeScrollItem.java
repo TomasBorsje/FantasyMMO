@@ -69,7 +69,7 @@ public class RecipeScrollItem extends AbstractCustomItem implements IUsable, IHa
 
     @Override
     public String getDescription() {
-        String description = ChatColor.LIGHT_PURPLE+""+ChatColor.BOLD+"Unlocks the following recipe:\n";
+        String description = ChatColor.LIGHT_PURPLE+""+ChatColor.BOLD+ChatColor.UNDERLINE+"Unlocks the following recipe:\n";
         // Add item display name and lore
         description += TooltipUtil.getItemDisplayName(recipe.getOutputItem())+"\n";
         List<String> itemLore = TooltipUtil.getTooltip(recipe.getOutputItem());
@@ -77,7 +77,7 @@ public class RecipeScrollItem extends AbstractCustomItem implements IUsable, IHa
             description += line+"\n";
         }
         // Add material list
-        description += "\n" + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD +  "Required materials:\n";
+        description += "\n" + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "Required materials:\n";
         for (IIngredient ingredient : recipe.getIngredients()) {
             description += ChatColor.WHITE+""+ingredient.getRequiredCount() +"x "+ingredient.getIngredientName();
         }

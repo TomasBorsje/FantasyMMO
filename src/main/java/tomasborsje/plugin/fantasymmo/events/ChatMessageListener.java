@@ -5,7 +5,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
 public class ChatMessageListener implements Listener {
@@ -16,6 +15,6 @@ public class ChatMessageListener implements Listener {
         // Get player's playerdata
         PlayerData playerData = PlayerHandler.instance.getPlayerData(event.getPlayer());
         // Add the player's level as a prefix to their message
-        event.setFormat(TooltipUtil.getLevelDisplay(playerData.getLevel()) + ChatColor.GREEN + event.getPlayer().getDisplayName() + ": " + ChatColor.WHITE + msg);
+        event.setFormat(playerData.getChatDisplayName() + ": " + ChatColor.WHITE + msg);
     }
 }

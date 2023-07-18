@@ -14,24 +14,24 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.util.ArmorTrims;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
-public class SolarPhoenixHood extends AbstractArmourItem implements IGlowingItem, IHasDescription, IHasArmourTrim {
+public class SolarPhoenixBoots extends AbstractArmourItem implements IGlowingItem, IHasDescription, IHasArmourTrim {
     private final static int itemScore = 500;
-    private static final StatBoost stats = new StatBoost(itemScore, ItemType.HELMET, MMOClass.MAGE).withIntelligence().withHealth().withDefense();
-    public SolarPhoenixHood() {
-        this.customId = "SOLAR_PHOENIX_HOOD";
-        this.name = "Solar Phoenix Hood";
+    private static final StatBoost stats = new StatBoost(itemScore, ItemType.BOOTS, MMOClass.MAGE).withIntelligence().withHealth().withDefense();
+    public SolarPhoenixBoots() {
+        this.customId = "SOLAR_PHOENIX_BOOTS";
+        this.name = "Solar Phoenix Boots";
         this.value = ItemUtil.Value(23, 1, 89);
         this.rarity = Rarity.LEGENDARY;
     }
 
     @Override
     public Item getBaseItem() {
-        return Items.GOLDEN_HELMET;
+        return Items.GOLDEN_BOOTS;
     }
 
     @Override
     public ItemType getType() {
-        return ItemType.HELMET;
+        return ItemType.BOOTS;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SolarPhoenixHood extends AbstractArmourItem implements IGlowingItem
 
     @Override
     public String getDescription() {
-        return "Delicately crafted from the feathers of the Solar Phoenix.\nImbued with the power of the sun.";
+        return "Fiery boots, charred with phoenix ashes.\nImbued with the power of the sun.";
     }
 
     @Override

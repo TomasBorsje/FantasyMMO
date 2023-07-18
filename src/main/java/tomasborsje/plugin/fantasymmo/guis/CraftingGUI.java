@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.util.CustomHeads;
+import tomasborsje.plugin.fantasymmo.core.util.ItemGainReason;
 import tomasborsje.plugin.fantasymmo.recipes.ICustomRecipe;
 import tomasborsje.plugin.fantasymmo.recipes.IIngredient;
 import tomasborsje.plugin.fantasymmo.registries.RecipeRegistry;
@@ -111,9 +112,7 @@ public class CraftingGUI extends CustomGUI {
 
         // Craft and set in cursor slot
         ItemStack output = recipe.craft(playerInv);
-        playerData.giveItems(output);
-
-        playerData.player.sendMessage(ChatColor.LIGHT_PURPLE + "You crafted " + output.getItemMeta().getDisplayName() + ChatColor.LIGHT_PURPLE + "!");
+        playerData.giveItems(ItemGainReason.CRAFT, output);
 
         // Re-Render, so recipe outputs update
         playerData.openGUI(this);

@@ -7,6 +7,7 @@ import tomasborsje.plugin.fantasymmo.core.AbstractArmourItem;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
+import tomasborsje.plugin.fantasymmo.core.enums.MMOClass;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IDyeable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
@@ -14,7 +15,8 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class MistweaveRobe extends AbstractArmourItem implements IHasDescription, IDyeable, IGlowingItem {
-    static final StatBoost stats = new StatBoost().withIntelligence(25).withHealth(50).withDefense(13);
+    private static final int itemScore = 115;
+    static final StatBoost stats = new StatBoost(itemScore, ItemType.CHESTPLATE, MMOClass.MAGE).withIntelligence().withHealth().withDefense();
     static final Color color = Color.fromRGB(70, 50, 168);
     public MistweaveRobe() {
         this.customId = "MISTWEAVE_ROBE";
@@ -50,5 +52,10 @@ public class MistweaveRobe extends AbstractArmourItem implements IHasDescription
     @Override
     public Color getColor() {
         return color;
+    }
+
+    @Override
+    public int getItemScore() {
+        return itemScore;
     }
 }

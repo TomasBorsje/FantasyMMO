@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.util.ItemGainReason;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class VendorGUI extends CustomGUI {
@@ -45,7 +46,7 @@ public class VendorGUI extends CustomGUI {
         // Try to consume the player's money
         if(playerData.tryConsumeMoney(item.getPrice())) {
             // Create a new item and give it to the player
-            playerData.giveItems(item.getPurchasedItemStack());
+            playerData.giveItems(ItemGainReason.PURCHASE, item.getPurchasedItemStack());
         }
     }
 }

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
+import tomasborsje.plugin.fantasymmo.core.util.ItemGainReason;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 
 /**
@@ -39,7 +40,7 @@ public class EntityDeathHandler {
 
             // Add item(s) to player inventory
             // TODO: Loot sharing, mobs track who hit them etc
-            playerData.giveItems(droppedLoot);
+            playerData.giveItems(ItemGainReason.LOOT, droppedLoot);
 
             // Give player money
             playerData.addMoney(moneyDropped);

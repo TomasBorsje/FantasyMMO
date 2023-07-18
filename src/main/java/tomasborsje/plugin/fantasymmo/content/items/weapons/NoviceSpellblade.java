@@ -9,6 +9,7 @@ import tomasborsje.plugin.fantasymmo.core.CustomEntity;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
+import tomasborsje.plugin.fantasymmo.core.enums.MMOClass;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
@@ -17,7 +18,8 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescription, IHasItemScore, IGlowingItem, IStatProvider {
-    private final StatBoost stats = new StatBoost().withIntelligence(1);
+    private final int itemScore = 10;
+    private final StatBoost stats = new StatBoost(itemScore, ItemType.WAND, MMOClass.MAGE).withIntelligence();
     public NoviceSpellblade() {
         this.customId = "NOVICE_SPELLBLADE";
         this.name = "Novice Spellblade";
@@ -56,5 +58,10 @@ public class NoviceSpellblade extends AbstractMeleeWeapon implements IHasDescrip
     public String getAttackDescription() {
         return "Strike an enemy to gain "+ ChatColor.BLUE+"Celerity I"+ChatColor.WHITE+",\n" +
                 "increasing "+ ChatColor.BLUE+"Mana Regeneration"+ChatColor.WHITE+" by 2 for "+ChatColor.YELLOW+"10"+ChatColor.WHITE+" seconds.";
+    }
+
+    @Override
+    public int getItemScore() {
+        return itemScore;
     }
 }

@@ -17,10 +17,7 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.IBuffable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasTrackedCooldown;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
-import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
-import tomasborsje.plugin.fantasymmo.core.util.SoundUtil;
-import tomasborsje.plugin.fantasymmo.core.util.StatCalc;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
+import tomasborsje.plugin.fantasymmo.core.util.*;
 import tomasborsje.plugin.fantasymmo.guis.CustomGUI;
 import tomasborsje.plugin.fantasymmo.handlers.MapHandler;
 import tomasborsje.plugin.fantasymmo.handlers.RegionHandler;
@@ -108,11 +105,11 @@ public class PlayerData implements IBuffable {
      * they will receive the leftover items in the mail.
      * @param items The item stacks to give
      */
-    public void giveItems(ItemStack... items) {
+    public void giveItems(ItemGainReason reason, ItemStack... items) {
         // Print a received message for each item
         for (ItemStack item : items) {
             if(item.hasItemMeta()) {
-                player.sendMessage(ChatColor.GRAY + "You received " + item.getAmount() + "x " + item.getItemMeta().getDisplayName() + ChatColor.GRAY + ".");
+                player.sendMessage(ChatColor.GRAY + "You "+reason.chatMessage+" " + item.getAmount() + "x " + item.getItemMeta().getDisplayName() + ChatColor.GRAY + ".");
             }
         }
 
@@ -123,6 +120,10 @@ public class PlayerData implements IBuffable {
             // TODO: Send item in mail/stash
             return;
         }
+    }
+
+    public void giveItems(ItemStack... items) {
+        giveItems(ItemGainReason.DEFAULT, items);
     }
 
     /**

@@ -26,12 +26,13 @@ public class TabCompleteCommandListener implements Listener {
             }
             // Otherwise show all the item ids
             else {
+                String lastWord = buffer.substring(buffer.lastIndexOf(" ") + 1).toUpperCase();
                 // Load item ids if not cached yet
                 if (itemIdCache == null) {
                     itemIdCache = ItemRegistry.ITEMS.getAllValues().stream()
                             .map(item -> item.get().getCustomId()).collect(Collectors.toList());
                 }
-                event.setCompletions(itemIdCache);
+                event.setCompletions(itemIdCache.stream().filter(id -> id.startsWith(lastWord)).collect(Collectors.toList()));
             }
         }
     }

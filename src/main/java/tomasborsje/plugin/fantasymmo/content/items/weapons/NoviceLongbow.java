@@ -4,13 +4,15 @@ import tomasborsje.plugin.fantasymmo.core.AbstractBowWeapon;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
+import tomasborsje.plugin.fantasymmo.core.enums.MMOClass;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasDescription;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasItemScore;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IStatProvider;
 
 public class NoviceLongbow extends AbstractBowWeapon implements IHasDescription, IHasItemScore, IStatProvider {
-    private final StatBoost stats = new StatBoost().withFocus(3);
+    private final int itemScore = 10;
+    private final StatBoost stats = new StatBoost(itemScore, ItemType.LONGBOW, MMOClass.ARCHER).withFocus();
     public NoviceLongbow() {
         super();
         this.rarity = Rarity.COMMON;
@@ -43,5 +45,10 @@ public class NoviceLongbow extends AbstractBowWeapon implements IHasDescription,
     @Override
     public EquipType getEquipType() {
         return EquipType.HELD;
+    }
+
+    @Override
+    public int getItemScore() {
+        return 0;
     }
 }

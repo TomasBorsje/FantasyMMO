@@ -12,7 +12,6 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasTrackedCooldown;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IUsable;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
-import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
 import tomasborsje.plugin.fantasymmo.guis.MainMenuGUI;
 import tomasborsje.plugin.fantasymmo.handlers.PlayerHandler;
 
@@ -27,7 +26,18 @@ public class PlayerUseItemListener implements Listener {
         // Only handle right clicks
         if(!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) { return; }
 
+        // Get our player data
+        PlayerData playerData = PlayerHandler.instance.loadPlayerData(event.getPlayer());
+
+        // Grab the item stack that was used
         ItemStack usedStack = event.getItem();
+
+        // If the used item is the world map, open the info GUI
+        if(usedStack.hasItemMeta() && usedStack.getItemMeta().getDisplayName().contains("World Map")) {
+            // Open the info GUI
+            playerData.openGUI(new MainMenuGUI(playerData));
+            return;
+        }
 
         // Don't apply to non-custom items
         if(!ItemUtil.IsCustomItem(usedStack)) { return; }
@@ -35,19 +45,9 @@ public class PlayerUseItemListener implements Listener {
         // Get the custom item
         ICustomItem customItem = ItemUtil.GetAsCustomItem(usedStack);
 
-        // Get our player data
-        PlayerData playerData = PlayerHandler.instance.loadPlayerData(event.getPlayer());
-
         // Doesn't apply to offhand items
         if(event.getHand() == EquipmentSlot.OFF_HAND) {
             event.setCancelled(true);
-            return;
-        }
-
-        // If the used item is the world map, open the info GUI
-        if(usedStack.hasItemMeta() && usedStack.getItemMeta().getDisplayName().equals(TooltipUtil.worldMapName)) {
-            // Open the info GUI
-            playerData.openGUI(new MainMenuGUI(playerData));
             return;
         }
 

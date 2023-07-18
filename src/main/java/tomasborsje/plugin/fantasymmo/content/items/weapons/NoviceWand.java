@@ -10,19 +10,18 @@ import tomasborsje.plugin.fantasymmo.core.AbstractCustomItem;
 import tomasborsje.plugin.fantasymmo.core.PlayerData;
 import tomasborsje.plugin.fantasymmo.core.StatBoost;
 import tomasborsje.plugin.fantasymmo.core.enums.ItemType;
+import tomasborsje.plugin.fantasymmo.core.enums.MMOClass;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.*;
 import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 import tomasborsje.plugin.fantasymmo.content.projectiles.FireballProjectile;
 import tomasborsje.plugin.fantasymmo.handlers.ProjectileHandler;
 
-public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProvider, IHasDescription, IHasItemScore, IGlowingItem, IHasTrackedCooldown {
-    private final StatBoost heldStats = new StatBoost().withIntelligence(3);
+public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProvider, IHasDescription, IHasItemScore, IGlowingItem {
+    private final int itemScore = 10;
+    private final StatBoost heldStats = new StatBoost(itemScore, ItemType.WAND, MMOClass.MAGE).withIntelligence();
     private final int manaCost = 10;
     private final int damage = 20;
-    private final String abilityId = "FIREBALL";
-    private final String abilityName = ChatColor.RED+"Fireball";
-    private final int abilityCooldown = 30;
     public NoviceWand() {
         this.customId = "NOVICE_WAND";
         this.name = "Novice Wand";
@@ -87,17 +86,7 @@ public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProv
     }
 
     @Override
-    public String getCooldownName() {
-        return abilityName;
-    }
-
-    @Override
-    public String getCooldownId() {
-        return abilityId;
-    }
-
-    @Override
-    public int getCooldownDuration() {
-        return abilityCooldown;
+    public int getItemScore() {
+        return itemScore;
     }
 }

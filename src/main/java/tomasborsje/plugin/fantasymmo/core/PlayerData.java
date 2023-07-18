@@ -109,7 +109,7 @@ public class PlayerData implements IBuffable {
         // Print a received message for each item
         for (ItemStack item : items) {
             if(item.hasItemMeta()) {
-                player.sendMessage(ChatColor.GRAY + "You "+reason.chatMessage+" " + item.getAmount() + "x " + item.getItemMeta().getDisplayName() + ChatColor.GRAY + ".");
+                player.sendMessage(ChatColor.GRAY + "You "+reason.chatMessage+" " +ChatColor.WHITE+ item.getAmount() + "x " + item.getItemMeta().getDisplayName() + ChatColor.GRAY + ".");
             }
         }
 

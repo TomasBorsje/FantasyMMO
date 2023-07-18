@@ -17,8 +17,8 @@ import tomasborsje.plugin.fantasymmo.core.util.ItemUtil;
 
 public class BrambleSlime extends CustomEntity {
     private static final CustomLootTable lootTable =
-            new CustomLootTable(CustomItems.SLIMEBALL, 0.8)
-                    .addEntry(CustomFoods.SLIME_JELLY, 0.2);
+            new CustomLootTable(CustomItems.SLIMEBALL.get(), 0.8)
+                    .addEntry(CustomFoods.SLIME_JELLY.get(), 0.2);
     public BrambleSlime(Location location) {
         super(location);
         this.name = "Bramble Slime";

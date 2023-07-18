@@ -7,6 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -14,6 +15,7 @@ import tomasborsje.plugin.fantasymmo.FantasyMMO;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IDyeable;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IGlowingItem;
+import tomasborsje.plugin.fantasymmo.core.interfaces.IHasArmourTrim;
 import tomasborsje.plugin.fantasymmo.enchantments.GlowEnchantment;
 import tomasborsje.plugin.fantasymmo.registries.ItemRegistry;
 
@@ -41,7 +43,7 @@ public class ItemUtil {
         if(!IsCustomItem(stack)) {
             throw new IllegalArgumentException("ItemStack is not a custom item!");
         }
-        return ItemRegistry.ITEMS.get(GetCustomId(stack));
+        return ItemRegistry.ITEMS.get(GetCustomId(stack)).get();
     }
 
     /**
@@ -94,11 +96,12 @@ public class ItemUtil {
         meta.setLore(lore); // Set tooltip lore
         meta.setDisplayName(displayName); // Set colored name
         meta.setUnbreakable(true); // Unbreakable, we don't want durability bars (or do we?)
-        // TODO: Durability?
+        // Hide vanilla tooltip displays
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_DYE);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
 
         // Add glow enchantment if marked
         if(item instanceof IGlowingItem) {
@@ -107,6 +110,10 @@ public class ItemUtil {
         // Add leather armour dye if dyeable
         if(item instanceof IDyeable dyeable) {
             ((LeatherArmorMeta)meta).setColor(dyeable.getColor());
+        }
+        // Add armor trim if armor
+        if(item instanceof IHasArmourTrim armour) {
+            ((ArmorMeta)meta).setTrim(armour.getArmourTrim());
         }
 
         newStack.setItemMeta(meta);

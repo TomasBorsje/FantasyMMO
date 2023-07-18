@@ -19,8 +19,8 @@ public class RecipeRegistry {
 
         // For each recipe, if it can be crafted, save it
         for(var recipe : RECIPES.getAllValues()) {
-            if(recipe.canCraft(inv)) {
-                craftableRecipes.add(recipe);
+            if(recipe.get().canCraft(inv)) {
+                craftableRecipes.add(recipe.get());
             }
         }
 
@@ -38,7 +38,7 @@ public class RecipeRegistry {
         // For each recipe, if the player knows it by ID, save it
         for(String recipeId : data.knownRecipeIds) {
             if(RECIPES.exists(recipeId)) {
-                knownRecipes.add(RECIPES.get(recipeId));
+                knownRecipes.add(RECIPES.get(recipeId).get());
             }
         }
 
@@ -61,7 +61,7 @@ public class RecipeRegistry {
      * @return The recipe with the given ID.
      */
     public static ICustomRecipe Get(String id) {
-        return RECIPES.get(id);
+        return RECIPES.get(id).get();
     }
 
     /**

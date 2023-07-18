@@ -4,6 +4,7 @@ import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.util.TooltipUtil;
+import tomasborsje.plugin.fantasymmo.registries.RegistryEntry;
 
 /**
  * Represents a crafting ingredient that checks if an item has a specific ITEM_ID NBT tag.
@@ -12,18 +13,6 @@ public class GenericIngredient implements IIngredient {
     private final String itemID;
     private final String ingredientName;
     private final int requiredCount;
-
-    /**
-     * Creates a new ingredient requiring 1 item with a specific ID.
-     *
-     * @param itemID The ID of the item.
-     * @param ingredientName The name of the ingredient.
-     */
-    private GenericIngredient(String itemID, String ingredientName) {
-        this.itemID = itemID;
-        this.ingredientName = ingredientName;
-        this.requiredCount = 1;
-    }
 
     public GenericIngredient withCount(int count) {
         return new GenericIngredient(itemID, ingredientName, count);
@@ -47,9 +36,9 @@ public class GenericIngredient implements IIngredient {
         this.ingredientName = TooltipUtil.getItemDisplayName(item);
         this.requiredCount = requiredCount;
     }
-    public GenericIngredient(ICustomItem item) {
-        this.itemID = item.getCustomId();
-        this.ingredientName = TooltipUtil.getItemDisplayName(item);
+    public GenericIngredient(RegistryEntry<ICustomItem> item) {
+        this.itemID = item.get().getCustomId();
+        this.ingredientName = TooltipUtil.getItemDisplayName(item.get());
         this.requiredCount = 1;
     }
 

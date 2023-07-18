@@ -6,9 +6,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import tomasborsje.plugin.fantasymmo.core.CustomEntity;
-import tomasborsje.plugin.fantasymmo.core.CustomProjectile;
+import tomasborsje.plugin.fantasymmo.core.CustomPlayerHeadProjectile;
 
-public class FireballProjectile extends CustomProjectile {
+public class FireballProjectile extends CustomPlayerHeadProjectile {
 
     public FireballProjectile(Player player, int damage, Location startPos, Vector velocity) {
         super(player, startPos, velocity);

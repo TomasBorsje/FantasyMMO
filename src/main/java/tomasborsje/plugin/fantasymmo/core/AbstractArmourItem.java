@@ -1,6 +1,7 @@
 package tomasborsje.plugin.fantasymmo.core;
 
 import org.bukkit.inventory.ItemStack;
+import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.Rarity;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 import tomasborsje.plugin.fantasymmo.core.interfaces.IHasItemScore;
@@ -26,6 +27,11 @@ public abstract class AbstractArmourItem implements ICustomItem, IStatProvider, 
     @Override
     public Rarity getRarity() {
         return rarity;
+    }
+
+    @Override
+    public EquipType getEquipType() {
+        return EquipType.ARMOUR;
     }
 
     @Override

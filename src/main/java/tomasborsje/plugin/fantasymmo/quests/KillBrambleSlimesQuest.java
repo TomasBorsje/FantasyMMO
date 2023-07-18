@@ -18,10 +18,10 @@ public class KillBrambleSlimesQuest extends AbstractQuestInstance {
         xpReward = 200;
         repeatable = true;
         itemRewards = new ItemStack[] {
-                CustomFoods.SLIME_JELLY.createStack(5),
-                CustomFoods.SLIME_SLUSHY.createStack(),
-                CustomFoods.SLIME_SLUSHY.createStack(),
-                CustomFoods.SLIME_SLUSHY.createStack()
+                CustomFoods.SLIME_JELLY.get().createStack(5),
+                CustomFoods.SLIME_SLUSHY.get().createStack(),
+                CustomFoods.SLIME_SLUSHY.get().createStack(),
+                CustomFoods.SLIME_SLUSHY.get().createStack()
         };
     }
 }

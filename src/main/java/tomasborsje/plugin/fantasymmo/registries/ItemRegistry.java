@@ -1,7 +1,7 @@
 package tomasborsje.plugin.fantasymmo.registries;
 
-import tomasborsje.plugin.fantasymmo.content.items.holders.CustomItems;
-import tomasborsje.plugin.fantasymmo.content.items.holders.CustomWeapons;
+import org.bukkit.Bukkit;
+import tomasborsje.plugin.fantasymmo.content.items.holders.*;
 import tomasborsje.plugin.fantasymmo.core.Registry;
 import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
 
@@ -12,18 +12,22 @@ import tomasborsje.plugin.fantasymmo.core.interfaces.ICustomItem;
  * @see CustomWeapons
  */
 public class ItemRegistry {
+    // Class that actually holds all the items
     public static final Registry<ICustomItem> ITEMS = new Registry<>();
 
-//    public static ICustomItem Register(ICustomItem item) {
-//        System.out.println("Registering item: " + item.getCustomId());
-//        ITEMS.register(item);
-//        return item;
-//    }
-//    public static ICustomItem Get(String id) {
-//        return ITEMS.get(id);
-//    }
-//
-//    public static boolean Exists(String id) {
-//        return ITEMS.exists(id);
-//    }
+    // Awful static class references required for the specific item holders to be compiled
+    static {
+        try {
+            Class.forName(CustomArrows.class.getCanonicalName());
+            Class.forName(CustomEquipment.class.getName());
+            Class.forName(CustomFoods.class.getName());
+            Class.forName(CustomItems.class.getName());
+            Class.forName(CustomRecipes.class.getName());
+            Class.forName(CustomRecipeScrolls.class.getName());
+            Class.forName(CustomWeapons.class.getName());
+        } catch (ClassNotFoundException e) {
+            Bukkit.getLogger().warning("Yo, "+e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -61,7 +61,7 @@ public class PlayerUseItemListener implements Listener {
             // If the item has a specific cooldown, check it isn't on cooldown and can actually be used
             if(customItem instanceof IHasTrackedCooldown cooldownSource) {
                 // If the cooldown is still active, cancel the event
-                if(!playerData.tryAddCooldown(cooldownSource)) {
+                if(playerData.isOnCooldown(cooldownSource)) {
                     event.setCancelled(true);
                     return;
                 }
@@ -70,8 +70,12 @@ public class PlayerUseItemListener implements Listener {
             // Cast to IUsable and use the item
             boolean success = usableItem.rightClick(playerData, event.getItem());
             if(success) {
+                // Set item-specific cooldown if applicable
+                if(customItem instanceof IHasTrackedCooldown cooldownSource) {
+                    playerData.tryAddCooldown(cooldownSource);
+                }
 
-                // Set cooldown if item has a cooldown
+                // Set global cooldown if item has a cooldown
                 if(usableItem.getTickCooldown() > 0) {
                     playerData.useCooldown = usableItem.getTickCooldown();
                     event.getPlayer().setCooldown(event.getItem().getType(), usableItem.getTickCooldown());

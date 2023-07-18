@@ -48,12 +48,15 @@ public class PlayerScoreboard {
         addEmptyLine(objective);
 
         // Current quest display
+        replaceScore(objective, i--, ChatColor.YELLOW+"Quests:");
         if(playerData.getCurrentQuest() != null) {
-            replaceScore(objective, i--, ChatColor.YELLOW+"Quests:");
             replaceScore(objective, i--, ChatColor.WHITE+playerData.getCurrentQuest().getName());
             replaceScore(objective, i--, ChatColor.GRAY+"- "+playerData.getCurrentQuest().getQuestStatus());
-            addEmptyLine(objective);
         }
+        else {
+            replaceScore(objective, i--, ChatColor.WHITE+"None");
+        }
+        addEmptyLine(objective);
 
         // Buff indicators
         if(!playerData.buffs.isEmpty()) {

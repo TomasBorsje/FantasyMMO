@@ -31,7 +31,7 @@ public class GiveItemCommand implements CommandExecutor {
             }
             else {
                 // Add item to player's inventory
-                ItemStack stack = ItemRegistry.ITEMS.get(itemId).createStack();
+                ItemStack stack = ItemRegistry.ITEMS.get(itemId).get().createStack();
                 stack.setAmount(count);
                 player.getInventory().addItem(stack);
                 player.sendMessage(ChatColor.GREEN+"Gave "+ChatColor.WHITE+count+"x "+itemId+"!");

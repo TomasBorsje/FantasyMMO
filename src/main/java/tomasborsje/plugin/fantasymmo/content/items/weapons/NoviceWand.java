@@ -22,7 +22,7 @@ public class NoviceWand extends AbstractCustomItem implements IUsable, IStatProv
     private final int damage = 20;
     private final String abilityId = "FIREBALL";
     private final String abilityName = ChatColor.RED+"Fireball";
-    private final int abilityCooldown = 150;
+    private final int abilityCooldown = 30;
     public NoviceWand() {
         this.customId = "NOVICE_WAND";
         this.name = "Novice Wand";

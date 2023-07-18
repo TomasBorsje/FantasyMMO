@@ -86,7 +86,7 @@ public abstract class Buff {
     public void onReceiveDamage(IBuffable buffHolder, IBuffable attacker, int damage) { }
 
     public String getDisplayString() {
-        int seconds = this.ticksLeft / 20;
+        int seconds = this.ticksLeft / 20 + 1;
         int minutes = seconds / 60;
         seconds = seconds % 60;
         return String.format("%s "+ ChatColor.GRAY+"(%d:%02d)", this.name, minutes, seconds);

@@ -30,6 +30,7 @@ public abstract class AbstractCustomArrowProjectile {
      */
     public void onHitEntity(CustomEntity entity) {
         entity.hurt(owner.player, CustomDamageType.ARROW, damage);
+        owner.markCombat();
     }
 
     /**

@@ -9,8 +9,6 @@ import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import tomasborsje.plugin.fantasymmo.content.items.holders.CustomArrows;
-import tomasborsje.plugin.fantasymmo.content.items.holders.CustomWeapons;
 import tomasborsje.plugin.fantasymmo.core.enums.CustomDamageType;
 import tomasborsje.plugin.fantasymmo.core.enums.EquipType;
 import tomasborsje.plugin.fantasymmo.core.enums.PlayerRank;
@@ -89,11 +87,6 @@ public class PlayerData implements IBuffable {
 
         // Recalc stats
         recalculateStats();
-
-        // TODO: Fix these static fields not being called???
-        // Use classloader or class references in itemregistry...
-        giveItems(CustomWeapons.NOVICE_WAND.createStack());
-        giveItems(CustomArrows.SIMPLE_ARROW.createStack());
 
         // Start with max health and mana
         this.currentHealth = maxHealth;
@@ -709,7 +702,7 @@ public class PlayerData implements IBuffable {
             String itemId = nmsStack.getTag().getString("ITEM_ID");
 
             // Get the custom item from the registry
-            ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
+            ICustomItem customItem = ItemRegistry.ITEMS.get(itemId).get();
 
             // If it provides stats when equipped as armour, apply those stats
             if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.ARMOUR) {
@@ -735,7 +728,7 @@ public class PlayerData implements IBuffable {
         String itemId = nmsStack.getTag().getString("ITEM_ID");
 
         // Get the custom item from the registry
-        ICustomItem customItem = ItemRegistry.ITEMS.get(itemId);
+        ICustomItem customItem = ItemRegistry.ITEMS.get(itemId).get();
 
         // If it provides stats when held, apply those stats
         if(customItem instanceof IStatProvider statsProvider && statsProvider.getEquipType() == EquipType.HELD) {

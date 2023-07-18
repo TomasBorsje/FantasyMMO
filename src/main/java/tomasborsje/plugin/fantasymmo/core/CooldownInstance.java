@@ -40,7 +40,8 @@ public class CooldownInstance {
      * @return The cooldown display string
      */
     public String getDisplayString() {
-        int seconds = this.ticksRemaining / 20;
+        // We add 1 to seconds so that the lowest display is 0:01
+        int seconds = this.ticksRemaining / 20 + 1;
         int minutes = seconds / 60;
         seconds = seconds % 60;
         return String.format("%s "+ChatColor.GRAY+"(%d:%02d)", this.cooldownDisplayName, minutes, seconds);

@@ -13,6 +13,16 @@ public class StatCalc {
         return (int) ((Math.pow(level/0.70710678118, 2) * 0.1) + 30);
     }
 
+    /**
+     * Returns the mana regen per second at the given level.
+     * @param level The level to get the mana regen for.
+     * @return The mana regen per second at the given level.
+     */
+    public static int getManaRegenAtLevel(int level) {
+        // Linear curve with 1 mana per sec at level 1, and 20 mana per sec at level 100
+        return (int) (level * 0.19 + 1);
+    }
+
     public static int getExperienceForLevel(int level) {
         return level * 50;
     }

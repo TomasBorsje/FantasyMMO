@@ -480,9 +480,9 @@ public class PlayerData implements IBuffable {
         if(++regenTimer > 20) {
             regenTimer = 0;
 
-            // 1% hp regen out of combat, 3% mana regen at all times
+            // 1% hp regen out of combat, flat mana value regen not based on max mana
             float healthRegenAmount = 0.01f;
-            float manaRegenAmount = 0.03f;
+            float manaRegenAmount = StatCalc.getManaRegenAtLevel(level);
 
             // Health regen reduced to 20% in combat
             if(isInCombat()) {
@@ -490,10 +490,10 @@ public class PlayerData implements IBuffable {
             }
 
             // Regen health based on flat amount and multiplier
-            heal((int) ((maxHealth*healthRegenAmount+healthRegenFlat)*healthRegenMultiplier));
+            heal((int) ((maxHealth*healthRegenAmount)*healthRegenMultiplier+healthRegenFlat));
 
             // Regen mana based on flat amount and multiplier
-            currentMana += (int)((maxMana*manaRegenAmount+manaRegenFlat)*manaRegenMultiplier);
+            currentMana += (int)((manaRegenAmount)*manaRegenMultiplier+manaRegenFlat);
         }
     }
 

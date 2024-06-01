@@ -25,7 +25,7 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 
 public class DatabaseConnection {
-    private final String connectionString = "***REMOVED***";
+    private final String connectionString = "";
     private final ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
     private final MongoClientSettings settings = MongoClientSettings.builder()
             .applyConnectionString(new ConnectionString(connectionString))
